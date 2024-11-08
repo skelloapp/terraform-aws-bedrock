@@ -22,7 +22,7 @@ provider "opensearch" {
   healthcheck = false
 }
 
-module "genai-bedrock" {
+module "bedrock" {
   source = "../.." # local example
   create_kb = false
   create_default_kb = false

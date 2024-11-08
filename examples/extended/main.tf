@@ -18,11 +18,11 @@ provider "awscc" {
 }
 
 provider "opensearch" {
-  url         = module.genai-bedrock.default_collection[0].collection_endpoint 
+  url         = module.bedrock.default_collection[0].collection_endpoint 
   healthcheck = false
 }
 
-module "genai-bedrock" {
+module "bedrock" {
   source = "../.." # local example
   create_kb = true
   create_default_kb = true

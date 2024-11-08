@@ -20,7 +20,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_genai-bedrock"></a> [genai-bedrock](#module\_genai-bedrock) | ../.. | n/a |
+| <a name="module_bedrock"></a> [bedrock](#module\_bedrock) | ../.. | n/a |
 
 ## Resources
 
