@@ -24,6 +24,11 @@ Pull Requests (PRs) submitted against this repository undergo a series of static
 
 It is a best practice to perform these checks locally prior to submitting a pull request.
 
+## Customizing static and functional test
+
+Details about the static and functional test can be found at `./project_automation/{test-name}/entrypoint.sh`.
+TIPS: **do not** modify the `./project_automation/{test-name}/entrypoint.sh`, instead use the helper script located at `.config/{test-name}/`
+
 ## Checks Performed
 
 - TFLint
@@ -62,29 +67,26 @@ terraform validate
 ### tflint
 
 ```sh
-tflint --init
-tflint
+tflint --init --config ${PROJECT_PATH}/.config/.tflint.hcl
+tflint --force --config ${PROJECT_PATH}/.config/.tflint.hcl
 ```
 
 ### tfsec
 
 ```sh
-tfsec .
+tfsec . --config-file ${PROJECT_PATH}/.config/.tfsec.yml
 ```
 
 ### Markdown Lint
 
 ```sh
-mdl .header.md
+mdl --config ${PROJECT_PATH}/.config/.mdlrc .header.md examples/*/.header.md
 ```
 
 ### Checkov
 
 ```sh
-terraform init
-terraform plan -out tf.plan
-terraform show -json tf.plan  > tf.json
-checkov
+checkov --config-file ${PROJECT_PATH}/.config/.checkov.yml
 ```
 
 ### Terratest
@@ -106,5 +108,5 @@ go test -timeout 45m
 
 ```sh
 # from the root of the repository
-terraform-docs --lockfile=false ./
+terraform-docs --config ${PROJECT_PATH}/.config/.terraform-docs.yaml --lockfile=false ./
 ```
