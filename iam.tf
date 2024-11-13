@@ -1,19 +1,21 @@
 # – IAM – 
 
 resource "aws_iam_role" "agent_role" {
-  assume_role_policy = data.aws_iam_policy_document.agent_trust.json
+  count              = var.create_agent ? 1 : 0
+  assume_role_policy = data.aws_iam_policy_document.agent_trust[0].json
   name_prefix        = var.name_prefix
 }
 
 resource "aws_iam_role_policy" "agent_policy" {
-  policy = data.aws_iam_policy_document.agent_permissions.json
-  role   = aws_iam_role.agent_role.id
+  count  = var.create_agent ? 1 : 0
+  policy = data.aws_iam_policy_document.agent_permissions[0].json
+  role   = aws_iam_role.agent_role[0].id
 }
 
 resource "aws_iam_role_policy" "kb_policy" {
-  count  = var.create_kb ? 1 : 0
+  count  = var.create_kb && var.create_agent ? 1 : 0
   policy = data.aws_iam_policy_document.knowledge_base_permissions[0].json
-  role   = aws_iam_role.agent_role.id
+  role   = aws_iam_role.agent_role[0].id
 }
 
 # Define the IAM role for Amazon Bedrock Knowledge Base

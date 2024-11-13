@@ -52,12 +52,13 @@ locals {
 }
 
 resource "awscc_bedrock_agent" "bedrock_agent" {
+  count                       = var.create_agent ? 1 : 0
   agent_name                  = "${random_string.solution_prefix.result}-${var.agent_name}"
   foundation_model            = var.foundation_model
   instruction                 = var.instruction
   description                 = var.agent_description
   idle_session_ttl_in_seconds = var.idle_session_ttl
-  agent_resource_role_arn     = aws_iam_role.agent_role.arn
+  agent_resource_role_arn     = aws_iam_role.agent_role[0].arn
   customer_encryption_key_arn = var.kms_key_arn
   tags                        = var.tags
   prompt_override_configuration = var.prompt_override == false ? null : {

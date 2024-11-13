@@ -11,6 +11,12 @@ variable "agent_name" {
   default     = "TerraformBedrockAgents"
 }
 
+variable "create_agent" {
+  description = "Whether or not to deploy an agent."
+  type        = bool
+  default     = true
+}
+
 variable "foundation_model" {
   description = "The foundation model for the Bedrock agent."
   type        = string
