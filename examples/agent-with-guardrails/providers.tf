@@ -23,3 +23,16 @@ terraform {
     }
   }
 }
+
+provider "aws" {
+  region = var.region
+}
+
+provider "awscc" {
+  region = var.region
+}
+
+provider "opensearch" {
+  url         = "n/a"
+  healthcheck = false
+}
