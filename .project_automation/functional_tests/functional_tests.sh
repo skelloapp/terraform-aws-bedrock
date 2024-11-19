@@ -7,7 +7,10 @@ PROJECT_TYPE_PATH=${BASE_PATH}/projecttype
 
 echo "Starting Functional Tests"
 cd ${PROJECT_PATH}
+echo "---------------------------------------------------------------------------"
 git log --max-count=1
+echo "---------------------------------------------------------------------------"
+
 
 #********** Terraform Test **********
 

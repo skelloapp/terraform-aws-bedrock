@@ -9,7 +9,11 @@ echo "Starting Static Tests"
 
 #********** Terraform Validate *************
 cd ${PROJECT_PATH}
+
+echo "---------------------------------------------------------------------------"
 git log --max-count=1
+echo "---------------------------------------------------------------------------"
+
 terraform init -no-color
 terraform validate -no-color
 if [ $? -eq 0 ]
@@ -22,8 +26,8 @@ fi
 
 #********** tflint ********************
 echo 'Starting tflint'
-tflint --init --config ${PROJECT_PATH}/.config/.tflint.hcl
-MYLINT=$(tflint --force --config ${PROJECT_PATH}/.config/.tflint.hcl)
+tflint --no-color --init --config ${PROJECT_PATH}/.config/.tflint.hcl
+MYLINT=$(tflint --no-color --force --config ${PROJECT_PATH}/.config/.tflint.hcl)
 if [ -z "$MYLINT" ]
 then
     echo "Success - tflint found no linting issues!"
@@ -35,7 +39,7 @@ fi
 
 #********** tfsec *********************
 echo 'Starting tfsec'
-MYTFSEC=$(tfsec . --config-file ${PROJECT_PATH}/.config/.tfsec.yml --custom-check-dir ${PROJECT_PATH}/.config/.tfsec)
+MYTFSEC=$(tfsec . --no-color --config-file ${PROJECT_PATH}/.config/.tfsec.yml --custom-check-dir ${PROJECT_PATH}/.config/.tfsec)
 if [[ $MYTFSEC == *"No problems detected!"* ]];
 then
     echo "Success - tfsec found no security issues!"
