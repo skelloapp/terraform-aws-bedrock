@@ -104,16 +104,16 @@ resource "awscc_bedrock_guardrail" "guardrail" {
   }
   sensitive_information_policy_config = {
     pii_entities_config = var.pii_entities_config
-    regexes_config = var.regexes_config
+    regexes_config      = var.regexes_config
   }
   word_policy_config = {
     managed_word_lists_config = var.managed_word_lists_config
-    words_config = var.words_config
+    words_config              = var.words_config
   }
   topic_policy_config = var.topics_config == null ? null : {
     topics_config = var.topics_config
   }
-  tags = var.guardrail_tags
+  tags        = var.guardrail_tags
   kms_key_arn = var.guardrail_kms_key_arn
 
 }
