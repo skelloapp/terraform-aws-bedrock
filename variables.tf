@@ -121,7 +121,7 @@ variable "override_lambda_arn" {
   default     = null
 }
 
-# – Inference Configuration – 
+# – Inference Configuration –
 
 variable "temperature" {
   description = "The likelihood of the model selecting higher-probability options while generating a response."
@@ -177,6 +177,92 @@ variable "max_length" {
     error_message = "The max_length must be between 0 and 4096."
   }
 }
+
+# – Guardrails –
+
+variable "create_guardrail" {
+  description = "Whether or not to create a guardrail."
+  type        = bool
+  default     = false
+}
+
+variable "guardrail_name" {
+  description = "The name of the guardrail."
+  type        = string
+  default     = "TerraformBedrockGuardrail"
+}
+
+variable "blocked_input_messaging" {
+  description = "Messaging for when violations are detected in text."
+  type        = string
+  default     = "Blocked input"
+}
+
+variable "blocked_outputs_messaging" {
+  description = "Messaging for when violations are detected in text."
+  type        = string
+  default     = "Blocked output"
+}
+
+variable "guardrail_description" {
+  description = "Description of the guardrail."
+  type        = string
+  default     = null
+}
+
+variable "filters_config" {
+  description = "List of content filter configs in content policy."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "pii_entities_config" {
+  description = "List of entities."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "regexes_config" {
+  description = "List of regex."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "managed_word_lists_config" {
+  description = "A config for the list of managed words."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "words_config" {
+  description = "List of custom word configs."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "topics_config" {
+  description = "List of topic configs in topic policy"
+  type        = list( object({
+                  name       = string
+                  examples   = list(string)
+                  type       = string
+                  definition = string
+                }))
+  default     = null
+}
+
+variable "guardrail_tags" {
+  description = "A map of tags keys and values for the knowledge base."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "guardrail_kms_key_arn" {
+  description = "KMS encryption key to use for the guardrail."
+  type        = string
+  default     = null
+}
+
 
 # – Knowledge Base –
 
@@ -311,7 +397,29 @@ variable "endpoint" {
   default     = null
 }
 
-# – MongoDB Atlas Configuration – 
+variable "kb_monitoring_arn" {
+  description = "The ARN of the target for delivery of knowledge base application logs"
+  type        = string
+  default     = null
+}
+
+variable "create_kb_log_group" {
+  description = "Whether or not to create a log group for the knowledge base."
+  type        = bool
+  default     = false
+}
+
+variable "kb_log_group_retention_in_days" {
+  description = "The retention period of the knowledge base log group."
+  type        = number
+  default     = 0
+  validation {
+    condition     = contains([1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1096, 1827, 2192, 2557, 2922, 3288, 3653, 0], var.kb_log_group_retention_in_days)
+    error_message = "The provided retention period is not a valid CloudWatch logs retention period"
+  }
+}
+
+# – MongoDB Atlas Configuration –
 
 variable "create_mongo_config" {
   description = "Whether or not to use MongoDB Atlas configuration"
@@ -327,7 +435,7 @@ variable "endpoint_service_name" {
 
 
 # – Opensearch Serverless Configuration –
-# the default vector database 
+# the default vector database
 
 variable "create_opensearch_config" {
   description = "Whether or not to use Opensearch Serverless configuration"
@@ -335,7 +443,7 @@ variable "create_opensearch_config" {
   default     = false
 }
 
-# – Pinecone Configuration – 
+# – Pinecone Configuration –
 
 variable "create_pinecone_config" {
   description = "Whether or not to use Pinecone configuration"
@@ -355,7 +463,7 @@ variable "namespace" {
   default     = null
 }
 
-# – RDS Configuration – 
+# – RDS Configuration –
 
 variable "create_rds_config" {
   description = "Whether or not to use RDS configuration"
@@ -419,7 +527,7 @@ variable "skip_resource_in_use" {
   default     = null
 }
 
-# – Action Group Executor – 
+# – Action Group Executor –
 
 variable "custom_control" {
   description = "Custom control of action execution."
