@@ -27,7 +27,7 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.1"
+  version = "0.0.2"
   create_kb = true
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
