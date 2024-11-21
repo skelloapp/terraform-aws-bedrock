@@ -242,13 +242,13 @@ variable "words_config" {
 
 variable "topics_config" {
   description = "List of topic configs in topic policy"
-  type        = list( object({
-                  name       = string
-                  examples   = list(string)
-                  type       = string
-                  definition = string
-                }))
-  default     = null
+  type = list(object({
+    name       = string
+    examples   = list(string)
+    type       = string
+    definition = string
+  }))
+  default = null
 }
 
 variable "guardrail_tags" {
@@ -286,6 +286,12 @@ variable "create_default_kb" {
 
 variable "kb_s3_data_source" {
   description = "The S3 data source ARN for the knowledge base."
+  type        = string
+  default     = null
+}
+
+variable "kb_s3_data_source_kms_arn" {
+  description = "The ARN of the KMS key used to encrypt S3 content"
   type        = string
   default     = null
 }

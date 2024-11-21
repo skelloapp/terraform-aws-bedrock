@@ -110,7 +110,7 @@ resource "opensearch_index" "default_oss_index" {
   number_of_replicas             = "0"
   index_knn                      = true
   index_knn_algo_param_ef_search = "512"
-    mappings                       = <<-EOF
+  mappings                       = <<-EOF
     {
       "properties": {
         "bedrock-knowledge-base-default-vector": {
