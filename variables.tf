@@ -613,35 +613,3 @@ variable "api_schema_s3_object_key" {
   type        = string
   default     = null
 }
-
-# – Function Schema –
-
-variable "function_name" {
-  description = "Name for a resource."
-  type        = string
-  default     = null
-}
-
-variable "function_description" {
-  description = "Description of function."
-  type        = string
-  default     = null
-}
-
-variable "function_parameters_description" {
-  description = "Description of function parameter."
-  type        = string
-  default     = null
-}
-
-variable "function_parameters_required" {
-  description = "If a parameter is required for a function call."
-  type        = bool
-  default     = false
-}
-
-variable "function_parameters_type" {
-  description = "Parameter type."
-  type        = string
-  default     = null
-}
