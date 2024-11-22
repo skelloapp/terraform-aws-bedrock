@@ -35,17 +35,6 @@ locals {
       custom_control = var.custom_control
       lambda         = var.lambda_action_group_executor
     }
-    function_schema = {
-      functions = [{
-        name        = var.function_name
-        description = var.function_description
-        parameters = {
-          description = var.function_parameters_description
-          required    = var.function_parameters_required
-          type        = var.function_parameters_type
-        }
-      }]
-    }
   }
   action_group_result = [for count in local.counter_action_group : local.action_group_value]
 
@@ -104,16 +93,16 @@ resource "awscc_bedrock_guardrail" "guardrail" {
   }
   sensitive_information_policy_config = {
     pii_entities_config = var.pii_entities_config
-    regexes_config = var.regexes_config
+    regexes_config      = var.regexes_config
   }
   word_policy_config = {
     managed_word_lists_config = var.managed_word_lists_config
-    words_config = var.words_config
+    words_config              = var.words_config
   }
   topic_policy_config = var.topics_config == null ? null : {
     topics_config = var.topics_config
   }
-  tags = var.guardrail_tags
+  tags        = var.guardrail_tags
   kms_key_arn = var.guardrail_kms_key_arn
 
 }
