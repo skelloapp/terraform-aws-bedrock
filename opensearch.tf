@@ -75,6 +75,7 @@ resource "aws_opensearchserverless_access_policy" "data_policy" {
           ]
           Permission = [
             "aoss:UpdateIndex",
+            "aoss:DeleteIndex",
             "aoss:DescribeIndex",
             "aoss:ReadDocument",
             "aoss:WriteDocument",
@@ -88,6 +89,7 @@ resource "aws_opensearchserverless_access_policy" "data_policy" {
           ]
           Permission = [
             "aoss:DescribeCollectionItems",
+            "aoss:DeleteCollectionItems",
             "aoss:CreateCollectionItems",
             "aoss:UpdateCollectionItems"
           ]
