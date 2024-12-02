@@ -148,3 +148,9 @@ resource "opensearch_index" "default_oss_index" {
   force_destroy                  = true
   depends_on                     = [time_sleep.wait_before_index_creation, aws_opensearchserverless_access_policy.data_policy[0]]
 }
+
+resource "time_sleep" "wait_after_index_creation" {
+  count           = var.create_default_kb ? 1 : 0
+  depends_on      = [ opensearch_index.default_oss_index[0] ]
+  create_duration = "60s" # Wait for 60 seconds before creating the index
+}
