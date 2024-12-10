@@ -205,6 +205,7 @@ No modules.
 | [aws_opensearchserverless_security_policy.nw_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_security_policy) | resource |
 | [aws_opensearchserverless_security_policy.security_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_security_policy) | resource |
 | [awscc_bedrock_agent.bedrock_agent](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent) | resource |
+| [awscc_bedrock_agent_alias.bedrock_agent_alias](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent_alias) | resource |
 | [awscc_bedrock_data_source.knowledge_base_web_crawler](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
 | [awscc_bedrock_guardrail.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_guardrail) | resource |
 | [awscc_bedrock_guardrail_version.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_guardrail_version) | resource |
@@ -238,12 +239,17 @@ No modules.
 | <a name="input_action_group_description"></a> [action\_group\_description](#input\_action\_group\_description) | Description of the action group. | `string` | `null` | no |
 | <a name="input_action_group_name"></a> [action\_group\_name](#input\_action\_group\_name) | Name of the action group. | `string` | `null` | no |
 | <a name="input_action_group_state"></a> [action\_group\_state](#input\_action\_group\_state) | State of the action group. | `string` | `null` | no |
+| <a name="input_agent_alias_description"></a> [agent\_alias\_description](#input\_agent\_alias\_description) | Description of the agent alias. | `string` | `null` | no |
+| <a name="input_agent_alias_name"></a> [agent\_alias\_name](#input\_agent\_alias\_name) | The name of the guardrail. | `string` | `"TerraformBedrockAgentAlias"` | no |
+| <a name="input_agent_alias_tags"></a> [agent\_alias\_tags](#input\_agent\_alias\_tags) | Tag bedrock agent alias resource. | `map(string)` | `null` | no |
 | <a name="input_agent_description"></a> [agent\_description](#input\_agent\_description) | A description of agent. | `string` | `null` | no |
+| <a name="input_agent_id"></a> [agent\_id](#input\_agent\_id) | Agent identifier. | `string` | `null` | no |
 | <a name="input_agent_name"></a> [agent\_name](#input\_agent\_name) | The name of your agent. | `string` | `"TerraformBedrockAgents"` | no |
 | <a name="input_api_schema_payload"></a> [api\_schema\_payload](#input\_api\_schema\_payload) | String OpenAPI Payload. | `string` | `null` | no |
 | <a name="input_api_schema_s3_bucket_name"></a> [api\_schema\_s3\_bucket\_name](#input\_api\_schema\_s3\_bucket\_name) | A bucket in S3. | `string` | `null` | no |
 | <a name="input_api_schema_s3_object_key"></a> [api\_schema\_s3\_object\_key](#input\_api\_schema\_s3\_object\_key) | An object key in S3. | `string` | `null` | no |
 | <a name="input_base_prompt_template"></a> [base\_prompt\_template](#input\_base\_prompt\_template) | Defines the prompt template with which to replace the default prompt template. | `string` | `null` | no |
+| <a name="input_bedrock_agent_version"></a> [bedrock\_agent\_version](#input\_bedrock\_agent\_version) | Agent version. | `string` | `null` | no |
 | <a name="input_blocked_input_messaging"></a> [blocked\_input\_messaging](#input\_blocked\_input\_messaging) | Messaging for when violations are detected in text. | `string` | `"Blocked input"` | no |
 | <a name="input_blocked_outputs_messaging"></a> [blocked\_outputs\_messaging](#input\_blocked\_outputs\_messaging) | Messaging for when violations are detected in text. | `string` | `"Blocked output"` | no |
 | <a name="input_collection_arn"></a> [collection\_arn](#input\_collection\_arn) | The ARN of the collection. | `string` | `null` | no |
@@ -252,6 +258,7 @@ No modules.
 | <a name="input_crawler_scope"></a> [crawler\_scope](#input\_crawler\_scope) | The scope that a web crawl job will be restricted to. | `string` | `null` | no |
 | <a name="input_create_ag"></a> [create\_ag](#input\_create\_ag) | Whether or not to create an action group. | `bool` | `false` | no |
 | <a name="input_create_agent"></a> [create\_agent](#input\_create\_agent) | Whether or not to deploy an agent. | `bool` | `true` | no |
+| <a name="input_create_agent_alias"></a> [create\_agent\_alias](#input\_create\_agent\_alias) | Whether or not to create an agent alias. | `bool` | `false` | no |
 | <a name="input_create_default_kb"></a> [create\_default\_kb](#input\_create\_default\_kb) | Whether or not to create the default knowledge base. | `bool` | `false` | no |
 | <a name="input_create_guardrail"></a> [create\_guardrail](#input\_create\_guardrail) | Whether or not to create a guardrail. | `bool` | `false` | no |
 | <a name="input_create_kb"></a> [create\_kb](#input\_create\_kb) | Whether or not to attach a knowledge base. | `bool` | `false` | no |
