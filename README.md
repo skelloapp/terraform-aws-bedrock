@@ -37,11 +37,17 @@ module "bedrock" {
 
 ### Knowledge Base - Data Sources
 
-Data sources are the various repositories or systems from which information is extracted and ingested into the knowledge base. These sources provide the raw content that will be processed, indexed, and made available for querying within the knowledge base system. Data sources can include various types of systems such as document management systems, databases, file storage systems, and content management platforms. Supported Data Sources include Amazon S3 buckets and Web Crawlers.
+Data sources are the various repositories or systems from which information is extracted and ingested into the knowledge base. These sources provide the raw content that will be processed, indexed, and made available for querying within the knowledge base system. Data sources can include various types of systems such as document management systems, databases, file storage systems, and content management platforms. Suuported Data Sources include Amazon S3 buckets, Web Crawlers, SharePoint sites, Salesforce instances, and Confluence spaces.
 
 - Amazon S3. You can either create a new data source by passing in the existing data source arn to the input variable `kb_s3_data_source` or create a new one by setting `create_s3_data_source` to true.
 
 - Web Crawler. You can create a new web crawler data source by setting the `create_web_crawler` input variable to true and passing in the necessary variables for urls, scope, etc.
+
+- SharePoint. You can create a new SharePoint data source by setting the `create_sharepoint` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
+
+- Salesforce. You can create a new Salesforce data source by setting the `create_salesforce` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
+
+- Confluence. You can create a new Confluence data source by setting the `create_confluence` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
 
 ## Agents
 
