@@ -343,6 +343,7 @@ variable "kb_s3_data_source_kms_arn" {
 }
 
 # – Web Crawler Data Source – 
+
 variable "create_web_crawler" {
   description = "Whether or not create a web crawler data source."
   type        = bool
@@ -377,6 +378,101 @@ variable "seed_urls" {
   description = "A list of web urls."
   type        = list(object({url = string}))
   default     = []
+}
+
+# – Confluence Data Source – 
+
+variable "create_confluence" {
+  description = "Whether or not create a Confluence data source."
+  type        = bool
+  default     = false
+}
+
+variable "pattern_object_filter_list" {
+  description = "List of pattern object information."
+  type        = list(object({
+    exclusion_filters = optional(list(string))
+    inclusion_filters = optional(list(string))
+    object_type       = optional(string)
+
+  }))
+  default     = []
+}
+
+variable "crawl_filter_type" {
+  description = "The crawl filter type."
+  type        = string
+  default     = null
+}
+
+variable "auth_type" {
+  description = "The supported authentication type."
+  type        = string
+  default     = null
+}
+
+variable "confluence_credentials_secret_arn" {
+  description = "The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your Confluence instance URL."
+  type        = string
+  default     = null
+}
+
+variable "host_type" {
+  description = "The supported host type, whether online/cloud or server/on-premises."
+  type        = string
+  default     = null
+}
+
+variable "host_url" {
+  description = "The host URL or instance URL."
+  type        = string
+  default     = null
+}
+
+# – Sharepoint Data Source – 
+
+variable "create_sharepoint" {
+  description = "Whether or not create a Share Point data source."
+  type        = bool
+  default     = false
+}
+
+variable "share_point_credentials_secret_arn" {
+  description = "The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your SharePoint site/sites."
+  type        = string
+  default     = null
+}
+
+variable "share_point_domain" {
+  description = "The domain of your SharePoint instance or site URL/URLs."
+  type        = string
+  default     = null
+}
+
+variable "share_point_site_urls" {
+  description = "A list of one or more SharePoint site URLs."
+  type        = list(string)
+  default     = []
+}
+
+variable "tenant_id" {
+  description = "The identifier of your Microsoft 365 tenant."
+  type        = string
+  default     = null
+}
+
+# – Salesforce Data Source –
+
+variable "create_salesforce" {
+  description = "Whether or not create a Salesforce data source."
+  type        = bool
+  default     = false
+}
+
+variable "salesforce_credentials_secret_arn" {
+  description = "The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your Salesforce instance URL."
+  type        = string
+  default     = null
 }
 
 # – Knowledge base – 

@@ -105,3 +105,84 @@ resource "awscc_bedrock_data_source" "knowledge_base_web_crawler" {
     }
   }
 }
+
+# – Knowledge Base Confluence Data Source
+resource "awscc_bedrock_data_source" "knowledge_base_confluence" {
+  count             = var.create_confluence ? 1 : 0
+  knowledge_base_id = var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : var.existing_kb
+  name              = "${random_string.solution_prefix.result}-${var.kb_name}DataSourceConfluence"
+  data_source_configuration = {
+    type = "CONFLUENCE"
+    confluence_configuration = {
+        crawler_configuration = {
+            filter_configuration = {
+                pattern_object_filter = {
+                    filters = var.pattern_object_filter_list
+                }
+                type = var.crawl_filter_type
+            }
+
+        }
+        source_configuration = {
+            auth_type = var.auth_type
+            credentials_secret_arn = var.confluence_credentials_secret_arn
+            host_type = var.host_type
+            host_url = var.host_url
+
+        }
+    }
+  }
+}
+
+# – Knowledge Base Sharepoint Data Source
+resource "awscc_bedrock_data_source" "knowledge_base_sharepoint" {
+  count             = var.create_sharepoint ? 1 : 0
+  knowledge_base_id = var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : var.existing_kb
+  name              = "${random_string.solution_prefix.result}-${var.kb_name}DataSourceSharepoint"
+    data_source_configuration = {
+    type = "SHAREPOINT"
+    share_point_configuration = { 
+        crawler_configuration = {
+            filter_configuration = {
+                pattern_object_filter ={
+                    filters = var.pattern_object_filter_list
+                }
+                type = var.crawl_filter_type
+            }
+        }
+        source_configuration = {
+            auth_type = var.auth_type
+            credentials_secret_arn = var.share_point_credentials_secret_arn
+            domain = var.share_point_domain
+            host_type = var.host_type
+            site_urls = var.share_point_site_urls
+            tenant_id = var.tenant_id
+        }
+    }
+    }
+}
+
+# – Knowledge Base Salesforce Data Source
+resource "awscc_bedrock_data_source" "knowledge_base_salesforce" {
+  count             = var.create_salesforce ? 1 : 0
+  knowledge_base_id = var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : var.existing_kb
+  name              = "${random_string.solution_prefix.result}-${var.kb_name}DataSourceSalesforce"
+  data_source_configuration = {
+    type = "SALESFORCE"
+    salesforce_configuration = {
+        crawler_configuration = {
+            filter_configuration = {
+                pattern_object_filter = {
+                    filters = var.pattern_object_filter_list
+                }
+                type = var.crawl_filter_type
+            }
+        }
+        source_configuration = {
+            auth_type = var.auth_type
+            credentials_secret_arn = var.salesforce_credentials_secret_arn
+            host_url = var.host_url 
+        }
+    }
+  }
+}
