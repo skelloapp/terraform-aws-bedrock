@@ -172,7 +172,7 @@ resource "aws_iam_role_policy" "guardrail_policy" {
       }
     ]
   })
-  role = aws_iam_role.bedrock_knowledge_base_role[0].name
+  role = aws_iam_role.agent_role[0].id
 }
 
 # Action Group Policies
@@ -197,5 +197,5 @@ resource "aws_iam_role_policy" "action_group_policy" {
       }
     ]
   })
-  role = aws_iam_role.bedrock_knowledge_base_role[0].name
+  role = aws_iam_role.agent_role[0].id
 }
