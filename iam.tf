@@ -172,7 +172,7 @@ resource "aws_iam_role_policy" "guardrail_policy" {
       }
     ]
   })
-  role = split("/", provider::aws::arn_parse(awscc_bedrock_agent.bedrock_agent[0].agent_resource_role_arn).resource)[1]
+  role = aws_iam_role.bedrock_knowledge_base_role[0].name
 }
 
 # Action Group Policies
@@ -197,5 +197,5 @@ resource "aws_iam_role_policy" "action_group_policy" {
       }
     ]
   })
-  role = split("/", provider::aws::arn_parse(awscc_bedrock_agent.bedrock_agent[0].agent_resource_role_arn).resource)[1]
+  role = aws_iam_role.bedrock_knowledge_base_role[0].name
 }
