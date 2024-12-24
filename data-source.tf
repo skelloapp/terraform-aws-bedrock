@@ -41,6 +41,8 @@ resource "aws_bedrockagent_data_source" "knowledge_base_ds" {
     type = "S3"
     s3_configuration {
       bucket_arn = var.kb_s3_data_source == null ? awscc_s3_bucket.s3_data_source[0].arn : var.kb_s3_data_source # Create an S3 bucket or reference existing
+      bucket_owner_account_id = var.bucket_owner_account_id
+      inclusion_prefixes = var.s3_inclusion_prefixes
     }
   }
 }
