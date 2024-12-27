@@ -114,8 +114,8 @@ module "bedrock" {
   create_kb = false
   create_default_kb = false
   create_guardrail = true
-  blocked_input = "I can provide general info about products and services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
-  blocked_output = "I can provide general info about products and services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
+  blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
+  blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   filters_config = [
       {
         input_strength  = "MEDIUM"
