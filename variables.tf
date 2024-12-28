@@ -344,6 +344,18 @@ variable "kb_s3_data_source_kms_arn" {
   default     = null
 }
 
+variable "bucket_owner_account_id" {
+  description = "Bucket account owner ID for the S3 bucket."
+  type        = string
+  default     = null
+}
+
+variable "s3_inclusion_prefixes" {
+  description = "List of S3 prefixes that define the object containing the data sources."
+  type        = list(string)
+  default     = null
+}
+
 # – Web Crawler Data Source – 
 
 variable "create_web_crawler" {
