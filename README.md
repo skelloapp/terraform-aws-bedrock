@@ -357,10 +357,10 @@ No modules.
 | <a name="input_blocked_input_messaging"></a> [blocked\_input\_messaging](#input\_blocked\_input\_messaging) | Messaging for when violations are detected in text. | `string` | `"Blocked input"` | no |
 | <a name="input_blocked_outputs_messaging"></a> [blocked\_outputs\_messaging](#input\_blocked\_outputs\_messaging) | Messaging for when violations are detected in text. | `string` | `"Blocked output"` | no |
 | <a name="input_breakpoint_percentile_threshold"></a> [breakpoint\_percentile\_threshold](#input\_breakpoint\_percentile\_threshold) | The dissimilarity threshold for splitting chunks. | `number` | `null` | no |
+| <a name="input_bucket_owner_account_id"></a> [bucket\_owner\_account\_id](#input\_bucket\_owner\_account\_id) | Bucket account owner ID for the S3 bucket. | `string` | `null` | no |
 | <a name="input_chunking_strategy"></a> [chunking\_strategy](#input\_chunking\_strategy) | Knowledge base can split your source data into chunks. A chunk refers to an excerpt from a data source that is returned when the knowledge base that it belongs to is queried. You have the following options for chunking your data. If you opt for NONE, then you may want to pre-process your files by splitting them up such that each file corresponds to a chunk. | `string` | `null` | no |
 | <a name="input_chunking_strategy_max_tokens"></a> [chunking\_strategy\_max\_tokens](#input\_chunking\_strategy\_max\_tokens) | The maximum number of tokens to include in a chunk. | `number` | `null` | no |
 | <a name="input_chunking_strategy_overlap_percentage"></a> [chunking\_strategy\_overlap\_percentage](#input\_chunking\_strategy\_overlap\_percentage) | The percentage of overlap between adjacent chunks of a data source. | `number` | `null` | no |
-| <a name="input_bucket_owner_account_id"></a> [bucket\_owner\_account\_id](#input\_bucket\_owner\_account\_id) | Bucket account owner ID for the S3 bucket. | `string` | `null` | no |
 | <a name="input_collection_arn"></a> [collection\_arn](#input\_collection\_arn) | The ARN of the collection. | `string` | `null` | no |
 | <a name="input_collection_name"></a> [collection\_name](#input\_collection\_name) | The name of the collection. | `string` | `null` | no |
 | <a name="input_confluence_credentials_secret_arn"></a> [confluence\_credentials\_secret\_arn](#input\_confluence\_credentials\_secret\_arn) | The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your Confluence instance URL. | `string` | `null` | no |
@@ -450,8 +450,8 @@ No modules.
 | <a name="input_rate_limit"></a> [rate\_limit](#input\_rate\_limit) | Rate of web URLs retrieved per minute. | `number` | `null` | no |
 | <a name="input_regexes_config"></a> [regexes\_config](#input\_regexes\_config) | List of regex. | `list(map(string))` | `null` | no |
 | <a name="input_resource_arn"></a> [resource\_arn](#input\_resource\_arn) | The ARN of the vector store. | `string` | `null` | no |
-| <a name="input_s3_location_uri"></a> [s3\_location\_uri](#input\_s3\_location\_uri) | A location for storing content from data sources temporarily as it is processed by custom components in the ingestion pipeline. | `string` | `null` | no |
 | <a name="input_s3_inclusion_prefixes"></a> [s3\_inclusion\_prefixes](#input\_s3\_inclusion\_prefixes) | List of S3 prefixes that define the object containing the data sources. | `list(string)` | `null` | no |
+| <a name="input_s3_location_uri"></a> [s3\_location\_uri](#input\_s3\_location\_uri) | A location for storing content from data sources temporarily as it is processed by custom components in the ingestion pipeline. | `string` | `null` | no |
 | <a name="input_salesforce_credentials_secret_arn"></a> [salesforce\_credentials\_secret\_arn](#input\_salesforce\_credentials\_secret\_arn) | The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your Salesforce instance URL. | `string` | `null` | no |
 | <a name="input_seed_urls"></a> [seed\_urls](#input\_seed\_urls) | A list of web urls. | `list(object({url = string}))` | `[]` | no |
 | <a name="input_semantic_buffer_size"></a> [semantic\_buffer\_size](#input\_semantic\_buffer\_size) | The buffer size. | `number` | `null` | no |
