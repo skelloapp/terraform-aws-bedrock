@@ -80,7 +80,6 @@ resource "aws_bedrockagent_data_source" "knowledge_base_ds" {
       inclusion_prefixes = var.s3_inclusion_prefixes
     }
   }
-  vector_ingestion_configuration = var.create_vector_ingestion_configuration == false ? null : local.vector_ingestion_configuration
 }
 
 resource "aws_cloudwatch_log_group" "knowledge_base_cwl" {
