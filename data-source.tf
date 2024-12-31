@@ -2,6 +2,41 @@ locals {
   create_cwl      = var.create_default_kb && var.create_kb_log_group
   create_delivery = local.create_cwl || var.kb_monitoring_arn != null
   create_s3_data_source = var.create_default_kb == true || var.create_s3_data_source == true
+  vector_ingestion_configuration = {
+    chunking_configuration = var.chunking_strategy == null ? null : {
+      chunking_strategy = var.chunking_strategy
+      fixed_size_chunking_configuration = {
+        max_tokens = var.chunking_strategy_max_tokens
+        overlap_percentage = var.chunking_strategy_overlap_percentage
+      }
+      hierarchical_chunking_configuration = var.heirarchical_overlap_tokens == null && var.level_configurations_list == null ? null : {
+        level_configurations = var.level_configurations_list
+        overlap_tokens = var.heirarchical_overlap_tokens
+      }
+      semantic_chunking_configuration = var.breakpoint_percentile_threshold == null && var.semantic_buffer_size == null && var.semantic_max_tokens ? null : {
+        breakpoint_percentile_threshold = var.breakpoint_percentile_threshold
+        buffer_size = var.semantic_buffer_size
+        max_tokens = var.semantic_max_tokens 
+      }
+    }
+    custom_transformation_configuration = var.create_custom_tranformation_config == false ? null : {
+      intermediate_storage = {
+        s3_location = {
+          uri = var.s3_location_uri
+        }
+      }
+      transformations = var.transformations_list
+    }
+    parsing_configuration = var.create_parsing_configuration == false ? null : {
+      bedrock_foundation_model_configuration = {
+        model_arn = var.parsing_config_model_arn
+        parsing_prompt = {
+          parsing_prompt_text = var.parsing_prompt_text
+        }
+      }
+      parsing_strategy = var.parsing_strategy
+    }
+  }
 }
 
 # - Knowledge Base S3 Data Source –
@@ -106,6 +141,7 @@ resource "awscc_bedrock_data_source" "knowledge_base_web_crawler" {
       }
     }
   }
+  vector_ingestion_configuration = var.create_vector_ingestion_configuration == false ? null : local.vector_ingestion_configuration
 }
 
 # – Knowledge Base Confluence Data Source
@@ -123,17 +159,16 @@ resource "awscc_bedrock_data_source" "knowledge_base_confluence" {
                 }
                 type = var.crawl_filter_type
             }
-
         }
         source_configuration = {
             auth_type = var.auth_type
             credentials_secret_arn = var.confluence_credentials_secret_arn
             host_type = var.host_type
             host_url = var.host_url
-
         }
     }
   }
+  vector_ingestion_configuration = var.create_vector_ingestion_configuration == false ? null : local.vector_ingestion_configuration
 }
 
 # – Knowledge Base Sharepoint Data Source
@@ -161,7 +196,8 @@ resource "awscc_bedrock_data_source" "knowledge_base_sharepoint" {
             tenant_id = var.tenant_id
         }
     }
-    }
+  }
+  vector_ingestion_configuration = var.create_vector_ingestion_configuration == false ? null : local.vector_ingestion_configuration
 }
 
 # – Knowledge Base Salesforce Data Source
@@ -187,4 +223,5 @@ resource "awscc_bedrock_data_source" "knowledge_base_salesforce" {
         }
     }
   }
+  vector_ingestion_configuration = var.create_vector_ingestion_configuration == false ? null : local.vector_ingestion_configuration
 }
