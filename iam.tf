@@ -199,3 +199,61 @@ resource "aws_iam_role_policy" "action_group_policy" {
   })
   role = aws_iam_role.agent_role[0].id
 }
+
+# Application Inference Profile Policies
+
+# Define the IAM role for Application Inference Profile
+resource "aws_iam_role" "application_inference_profile_role" {
+  count = var.create_app_inference_profile ? 1 : 0
+  name  = "ApplicationInferenceProfile-${random_string.solution_prefix.result}"
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "bedrock.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "app_inference_profile_policy" {
+  count = var.create_app_inference_profile ? 1 : 0
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+              "bedrock:InvokeModel*",
+              "bedrock:CreateInferenceProfile"
+          ],
+          "Resource": [
+              "arn:aws:bedrock:*::foundation-model/*",
+              "arn:aws:bedrock:*:*:inference-profile/*",
+              "arn:aws:bedrock:*:*:application-inference-profile/*"
+          ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+              "bedrock:GetInferenceProfile",
+              "bedrock:ListInferenceProfiles",
+              "bedrock:DeleteInferenceProfile",
+              "bedrock:TagResource",
+              "bedrock:UntagResource",
+              "bedrock:ListTagsForResource"
+          ],
+          "Resource": [
+              "arn:aws:bedrock:*:*:inference-profile/*",
+              "arn:aws:bedrock:*:*:application-inference-profile/*"
+          ]
+        }
+    ]
+  })
+  role = aws_iam_role.application_inference_profile_role[0].id
+}
