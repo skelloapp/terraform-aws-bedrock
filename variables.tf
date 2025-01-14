@@ -952,3 +952,35 @@ variable "prompt_version_tags" {
   type        = map(string)
   default     = null
 }
+
+# – Application Inference Profile –
+
+variable "create_app_inference_profile" {
+  description = "Whether or not to create an application inference profile."
+  type        = bool
+  default     = false
+}
+
+variable "app_inference_profile_name" {
+  description = "The name of your application inference profile."
+  type        = string
+  default     = "AppInferenceProfile"
+}
+
+variable "app_inference_profile_description" {
+  description = "A description of application inference profile."
+  type        = string
+  default     = null
+}
+
+variable "app_inference_profile_model_source" {
+  description = "Source arns for a custom inference profile to copy its regional load balancing config from. This can either be a foundation model or predefined inference profile ARN."
+  type        = string
+  default     = null
+}
+
+variable "app_inference_profile_tags" {
+  description = "A map of tag keys and values for application inference profile."
+  type        = list(map(string))
+  default     = null
+}
