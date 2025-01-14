@@ -137,7 +137,7 @@ resource "awscc_bedrock_flow_alias" "flow_alias" {
   description = var.flow_alias_description
   routing_configuration = [
     {
-      flow_version = var.flow_version != null ? var.flow_version : awscc_bedrock_flow_version.flow_version.version
+      flow_version = var.flow_version != null ? var.flow_version : awscc_bedrock_flow_version.flow_version[0].version
     }
   ]
 }
