@@ -285,7 +285,7 @@ resource "aws_iam_role_policy" "custom_model_policy" {
         ],
         "Condition": {
           "StringEquals": {
-            "aws:PrincipalAccount": "${local.account_id}"
+            "aws:PrincipalAccount": local.account_id
           }
         }
       },
@@ -301,7 +301,7 @@ resource "aws_iam_role_policy" "custom_model_policy" {
           
         "Condition": {
           "StringEquals": {
-            "aws:PrincipalAccount": "${local.account_id}"
+            "aws:PrincipalAccount": local.account_id
           }
         }
       },
@@ -316,7 +316,7 @@ resource "aws_iam_role_policy" "custom_model_policy" {
         "Resource": var.custom_model_output_uri == null ? "arn:aws:s3:::${awscc_s3_bucket.custom_model_output[0].id}/*" : "arn:aws:s3:::${var.custom_model_output_uri}/*",
         "Condition": {
           "StringEquals": {
-            "aws:PrincipalAccount": "${local.account_id}"
+            "aws:PrincipalAccount": local.account_id
           }
         }
       },
