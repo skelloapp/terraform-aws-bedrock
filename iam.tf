@@ -257,3 +257,70 @@ resource "aws_iam_role_policy" "app_inference_profile_policy" {
   })
   role = aws_iam_role.application_inference_profile_role[0].id
 }
+
+# Custom model 
+
+resource "aws_iam_role" "custom_model_role" {
+  count              = var.create_custom_model ? 1 : 0
+  assume_role_policy = data.aws_iam_policy_document.custom_model_trust[0].json
+  name_prefix        = "CustomModelRole"
+}
+
+resource "aws_iam_role_policy" "custom_model_policy" {
+  count = var.create_custom_model ? 1 : 0
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket",
+          "kms:Decrypt"
+        ],
+        "Resource": [
+          "arn:aws:s3:::${var.custom_model_training_uri}",
+          "arn:aws:s3:::${var.custom_model_training_uri}/*",
+        ],
+        "Condition": {
+          "StringEquals": {
+            "aws:PrincipalAccount": local.account_id
+          }
+        }
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket",
+          "kms:Decrypt"
+        ],
+        "Resource": var.custom_model_output_uri == null ? "arn:aws:s3:::${awscc_s3_bucket.custom_model_output[0].id}/" : "arn:aws:s3:::${var.custom_model_output_uri}",
+          
+        "Condition": {
+          "StringEquals": {
+            "aws:PrincipalAccount": local.account_id
+          }
+        }
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket",
+          "kms:Decrypt"
+        ],
+        "Resource": var.custom_model_output_uri == null ? "arn:aws:s3:::${awscc_s3_bucket.custom_model_output[0].id}/*" : "arn:aws:s3:::${var.custom_model_output_uri}/*",
+        "Condition": {
+          "StringEquals": {
+            "aws:PrincipalAccount": local.account_id
+          }
+        }
+      },
+    ]
+  })
+  role = aws_iam_role.custom_model_role[0].id
+}

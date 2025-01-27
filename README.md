@@ -314,6 +314,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [aws_bedrock_custom_model.custom_model](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrock_custom_model) | resource |
 | [aws_bedrockagent_data_source.knowledge_base_ds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_data_source) | resource |
 | [aws_cloudwatch_log_group.knowledge_base_cwl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_iam_policy.bedrock_kb_s3_decryption_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -322,10 +323,12 @@ No modules.
 | [aws_iam_role.agent_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.application_inference_profile_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.bedrock_knowledge_base_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.custom_model_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.action_group_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.agent_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.app_inference_profile_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.bedrock_kb_oss](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.custom_model_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.guardrail_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.kb_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.bedrock_kb_s3_decryption_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -357,14 +360,17 @@ No modules.
 | [awscc_logs_delivery_destination.knowledge_base_log_destination](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_destination) | resource |
 | [awscc_logs_delivery_source.knowledge_base_log_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_source) | resource |
 | [awscc_opensearchserverless_collection.default_collection](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/opensearchserverless_collection) | resource |
+| [awscc_s3_bucket.custom_model_output](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/s3_bucket) | resource |
 | [awscc_s3_bucket.s3_data_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/s3_bucket) | resource |
 | [opensearch_index.default_oss_index](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/index) | resource |
 | [random_string.solution_prefix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [time_sleep.wait_after_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_before_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
+| [aws_bedrock_foundation_model.model_identifier](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/bedrock_foundation_model) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.agent_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.agent_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.custom_model_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.knowledge_base_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
@@ -410,6 +416,7 @@ No modules.
 | <a name="input_create_agent_alias"></a> [create\_agent\_alias](#input\_create\_agent\_alias) | Whether or not to create an agent alias. | `bool` | `false` | no |
 | <a name="input_create_app_inference_profile"></a> [create\_app\_inference\_profile](#input\_create\_app\_inference\_profile) | Whether or not to create an application inference profile. | `bool` | `false` | no |
 | <a name="input_create_confluence"></a> [create\_confluence](#input\_create\_confluence) | Whether or not create a Confluence data source. | `bool` | `false` | no |
+| <a name="input_create_custom_model"></a> [create\_custom\_model](#input\_create\_custom\_model) | Whether or not to create a custom model. | `bool` | `false` | no |
 | <a name="input_create_custom_tranformation_config"></a> [create\_custom\_tranformation\_config](#input\_create\_custom\_tranformation\_config) | Whether or not to create a custom transformation configuration. | `bool` | `false` | no |
 | <a name="input_create_default_kb"></a> [create\_default\_kb](#input\_create\_default\_kb) | Whether or not to create the default knowledge base. | `bool` | `false` | no |
 | <a name="input_create_flow_alias"></a> [create\_flow\_alias](#input\_create\_flow\_alias) | Whether or not to create a flow alias resource. | `bool` | `false` | no |
@@ -430,7 +437,16 @@ No modules.
 | <a name="input_create_web_crawler"></a> [create\_web\_crawler](#input\_create\_web\_crawler) | Whether or not create a web crawler data source. | `bool` | `false` | no |
 | <a name="input_credentials_secret_arn"></a> [credentials\_secret\_arn](#input\_credentials\_secret\_arn) | The ARN of the secret in Secrets Manager that is linked to your database | `string` | `null` | no |
 | <a name="input_custom_control"></a> [custom\_control](#input\_custom\_control) | Custom control of action execution. | `string` | `null` | no |
+| <a name="input_custom_model_hyperparameters"></a> [custom\_model\_hyperparameters](#input\_custom\_model\_hyperparameters) | Parameters related to tuning the custom model. | `map(string)` | <pre>{<br>  "batchSize": "1",<br>  "epochCount": "2",<br>  "learningRate": "0.00001",<br>  "learningRateWarmupSteps": "10"<br>}</pre> | no |
+| <a name="input_custom_model_id"></a> [custom\_model\_id](#input\_custom\_model\_id) | The base model id for a custom model. | `string` | `"amazon.titan-text-express-v1"` | no |
+| <a name="input_custom_model_job_name"></a> [custom\_model\_job\_name](#input\_custom\_model\_job\_name) | A name for the model customization job. | `string` | `"custom-model-job"` | no |
+| <a name="input_custom_model_kms_key_id"></a> [custom\_model\_kms\_key\_id](#input\_custom\_model\_kms\_key\_id) | The custom model is encrypted at rest using this key. Specify the key ARN. | `string` | `null` | no |
+| <a name="input_custom_model_name"></a> [custom\_model\_name](#input\_custom\_model\_name) | Name for the custom model. | `string` | `"custom-model"` | no |
+| <a name="input_custom_model_output_uri"></a> [custom\_model\_output\_uri](#input\_custom\_model\_output\_uri) | The S3 URI where the output data is stored for custom model. | `string` | `null` | no |
+| <a name="input_custom_model_tags"></a> [custom\_model\_tags](#input\_custom\_model\_tags) | A map of tag keys and values for the custom model. | `map(string)` | `null` | no |
+| <a name="input_custom_model_training_uri"></a> [custom\_model\_training\_uri](#input\_custom\_model\_training\_uri) | The S3 URI where the training data is stored for custom model. | `string` | `null` | no |
 | <a name="input_customer_encryption_key_arn"></a> [customer\_encryption\_key\_arn](#input\_customer\_encryption\_key\_arn) | A KMS key ARN. | `string` | `null` | no |
+| <a name="input_customization_type"></a> [customization\_type](#input\_customization\_type) | The customization type. Valid values: FINE\_TUNING, CONTINUED\_PRE\_TRAINING. | `string` | `"FINE_TUNING"` | no |
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | Name of the database. | `string` | `null` | no |
 | <a name="input_default_variant"></a> [default\_variant](#input\_default\_variant) | Name for a variant. | `string` | `null` | no |
 | <a name="input_endpoint"></a> [endpoint](#input\_endpoint) | Database endpoint | `string` | `null` | no |

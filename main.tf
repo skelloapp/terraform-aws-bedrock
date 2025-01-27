@@ -147,3 +147,43 @@ resource "awscc_bedrock_flow_version" "flow_version" {
   flow_arn    = var.flow_arn
   description = var.flow_version_description
 }
+
+# – Custom Model – 
+
+resource "aws_bedrock_custom_model" "custom_model" {
+  count = var.create_custom_model ? 1 : 0
+  custom_model_name     = "${random_string.solution_prefix.result}-${var.custom_model_name}"
+  job_name              = "${random_string.solution_prefix.result}-${var.custom_model_job_name}"
+  base_model_identifier = data.aws_bedrock_foundation_model.model_identifier[0].model_arn
+  role_arn              = aws_iam_role.custom_model_role[0].arn
+  custom_model_kms_key_id = var.custom_model_kms_key_id
+  customization_type = var.customization_type
+  hyperparameters = var.custom_model_hyperparameters
+  output_data_config {
+    s3_uri = var.custom_model_output_uri == null ? "s3://${awscc_s3_bucket.custom_model_output[0].id}/" : "s3://${var.custom_model_output_uri}"
+  }
+  training_data_config {
+    s3_uri = "s3://${var.custom_model_training_uri}"
+  }
+  tags = var.custom_model_tags
+}
+
+resource "awscc_s3_bucket" "custom_model_output" {
+  count = var.custom_model_output_uri == null ? 1 : 0
+  bucket_name = "${random_string.solution_prefix.result}-${var.custom_model_name}-output-bucket"
+  public_access_block_configuration = {
+    block_public_acls       = true
+    block_public_policy     = true
+    ignore_public_acls      = true
+    restrict_public_buckets = true
+  }
+  bucket_encryption = {
+    server_side_encryption_configuration = [{
+      bucket_key_enabled = true
+      server_side_encryption_by_default = {
+        sse_algorithm     = var.kb_s3_data_source_kms_arn == null ? "AES256" : "aws:kms"
+        kms_master_key_id = var.kb_s3_data_source_kms_arn
+      }
+    }]
+  }
+}

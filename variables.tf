@@ -1022,3 +1022,75 @@ variable "flow_version_description" {
   type        = string
   default     = null
 }
+
+# – Custom Model – 
+
+variable "create_custom_model" {
+  description = "Whether or not to create a custom model."
+  type        = bool
+  default     = false
+}
+
+variable "custom_model_id" {
+  description = "The base model id for a custom model."
+  type        = string
+  default     = "amazon.titan-text-express-v1"
+}
+
+variable "custom_model_name" {
+  description = "Name for the custom model."
+  type        = string
+  default     = "custom-model"
+}
+
+variable "custom_model_job_name" {
+  description = "A name for the model customization job."
+  type        = string
+  default     = "custom-model-job"
+}
+
+variable "custom_model_kms_key_id" {
+  description = "The custom model is encrypted at rest using this key. Specify the key ARN."
+  type        = string
+  default     = null
+}
+
+variable "customization_type" {
+  description = "The customization type. Valid values: FINE_TUNING, CONTINUED_PRE_TRAINING."
+  type        = string
+  default     = "FINE_TUNING"
+
+  validation {
+    condition     = var.customization_type == "FINE_TUNING" || var.customization_type == "CONTINUED_PRE_TRAINING"
+    error_message = "Customization type valid values are FINE_TUNING or CONTINUED_PRE_TRAINING."
+  }
+}
+
+variable "custom_model_hyperparameters" {
+  description = "Parameters related to tuning the custom model."
+  type        = map(string)
+  default     = {
+    "epochCount"              = "2"
+    "batchSize"               = "1"
+    "learningRate"            = "0.00001"
+    "learningRateWarmupSteps" = "10"
+  }
+}
+
+variable "custom_model_tags" {
+  description = "A map of tag keys and values for the custom model."
+  type        = map(string)
+  default     = null
+}
+
+variable "custom_model_output_uri" {
+  description = "The S3 URI where the output data is stored for custom model."
+  type        = string
+  default     = null
+}
+
+variable "custom_model_training_uri" {
+  description = "The S3 URI where the training data is stored for custom model."
+  type        = string
+  default     = null
+}
