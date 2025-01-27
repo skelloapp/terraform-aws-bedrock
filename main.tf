@@ -152,8 +152,8 @@ resource "awscc_bedrock_flow_version" "flow_version" {
 
 resource "aws_bedrock_custom_model" "custom_model" {
   count = var.create_custom_model ? 1 : 0
-  custom_model_name     = var.custom_model_name
-  job_name              = var.custom_model_job_name
+  custom_model_name     = "${random_string.solution_prefix.result}-${var.custom_model_name}"
+  job_name              = "${random_string.solution_prefix.result}-${var.custom_model_job_name}"
   base_model_identifier = data.aws_bedrock_foundation_model.model_identifier[0].model_arn
   role_arn              = aws_iam_role.custom_model_role[0].arn
   custom_model_kms_key_id = var.custom_model_kms_key_id
@@ -170,7 +170,7 @@ resource "aws_bedrock_custom_model" "custom_model" {
 
 resource "awscc_s3_bucket" "custom_model_output" {
   count = var.custom_model_output_uri == null ? 1 : 0
-  bucket_name = "${random_string.solution_prefix.result}-custom-model-output-bucket"
+  bucket_name = "${random_string.solution_prefix.result}-${var.custom_model_name}-output-bucket"
   public_access_block_configuration = {
     block_public_acls       = true
     block_public_policy     = true
