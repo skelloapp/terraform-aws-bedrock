@@ -1040,7 +1040,7 @@ variable "custom_model_id" {
 variable "custom_model_name" {
   description = "Name for the custom model."
   type        = string
-  default     = "custom_model"
+  default     = "custom-model"
 }
 
 variable "custom_model_job_name" {

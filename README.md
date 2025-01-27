@@ -441,7 +441,7 @@ No modules.
 | <a name="input_custom_model_id"></a> [custom\_model\_id](#input\_custom\_model\_id) | The base model id for a custom model. | `string` | `"amazon.titan-text-express-v1"` | no |
 | <a name="input_custom_model_job_name"></a> [custom\_model\_job\_name](#input\_custom\_model\_job\_name) | A name for the model customization job. | `string` | `"custom-model-job"` | no |
 | <a name="input_custom_model_kms_key_id"></a> [custom\_model\_kms\_key\_id](#input\_custom\_model\_kms\_key\_id) | The custom model is encrypted at rest using this key. Specify the key ARN. | `string` | `null` | no |
-| <a name="input_custom_model_name"></a> [custom\_model\_name](#input\_custom\_model\_name) | Name for the custom model. | `string` | `"custom_model"` | no |
+| <a name="input_custom_model_name"></a> [custom\_model\_name](#input\_custom\_model\_name) | Name for the custom model. | `string` | `"custom-model"` | no |
 | <a name="input_custom_model_output_uri"></a> [custom\_model\_output\_uri](#input\_custom\_model\_output\_uri) | The S3 URI where the output data is stored for custom model. | `string` | `null` | no |
 | <a name="input_custom_model_tags"></a> [custom\_model\_tags](#input\_custom\_model\_tags) | A map of tag keys and values for the custom model. | `map(string)` | `null` | no |
 | <a name="input_custom_model_training_uri"></a> [custom\_model\_training\_uri](#input\_custom\_model\_training\_uri) | The S3 URI where the training data is stored for custom model. | `string` | `null` | no |
