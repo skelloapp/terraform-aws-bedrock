@@ -16,6 +16,12 @@ resource "aws_iam_role_policy" "agent_policy" {
   role   = aws_iam_role.agent_role[0].id
 }
 
+resource "aws_iam_role_policy" "agent_alias_policy" {
+  count  = var.create_agent_alias ? 1 : 0
+  policy = data.aws_iam_policy_document.agent_alias_permissions[0].json
+  role   = aws_iam_role.agent_role[0].id
+}
+
 resource "aws_iam_role_policy" "kb_policy" {
   count  = var.create_kb && var.create_agent ? 1 : 0
   policy = data.aws_iam_policy_document.knowledge_base_permissions[0].json
