@@ -39,6 +39,11 @@ locals {
   action_group_result = [for count in local.counter_action_group : local.action_group_value]
 
   counter_collaborator = var.create_agent && var.create_agent_alias && var.create_collaborator ? 1 : 0
+
+  supervisor_guardrail = var.create_supervisor_guardrail == false ? null : [{
+    guardrail_identifier = var.supervisor_guardrail_id
+    guardrail_version    = var.supervisor_guardrail_version
+  }]
 }
 
 resource "awscc_bedrock_agent" "bedrock_agent" {
@@ -111,13 +116,15 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
 }
 
 resource "aws_bedrockagent_agent" "agent_supervisor" {
-  count                      = local.counter_collaborator    
+  count                      = local.counter_collaborator
   agent_name                  = "${random_string.solution_prefix.result}-${var.supervisor_name}"
   agent_resource_role_arn     = aws_iam_role.agent_role[0].arn
   agent_collaboration         = var.agent_collaboration
   idle_session_ttl_in_seconds = var.supervisor_idle_session_ttl
   foundation_model            = var.supervisor_model
   instruction                 = var.supervisor_instruction
+  customer_encryption_key_arn = var.supervisor_kms_key_arn
+  guardrail_configuration = local.supervisor_guardrail
   prepare_agent               = false
 }
 

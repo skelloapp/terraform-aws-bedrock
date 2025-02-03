@@ -279,6 +279,30 @@ variable "agent_collaboration" {
   } 
 }
 
+variable "supervisor_kms_key_arn" {
+  description = "KMS encryption key to use for the supervisor agent."
+  type        = string
+  default     = null
+}
+
+variable "create_supervisor_guardrail" {
+  description = "Whether or not to create a guardrail for the supervisor agent."
+  type        = bool
+  default     = false
+}
+
+variable "supervisor_guardrail_id" {
+  description = "The ID of the guardrail for the supervisor agent."
+  type        = string
+  default     = null
+}
+
+variable "supervisor_guardrail_version" {
+  description = "The version of the guardrail for the supervisor agent."
+  type        = string
+  default     = null
+}
+
 # – Guardrails –
 
 variable "create_guardrail" {

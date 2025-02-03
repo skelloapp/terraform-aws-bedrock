@@ -5,7 +5,7 @@ locals {
 
 
 resource "aws_iam_role" "agent_role" {
-  count              = var.create_agent ? 1 : 0
+  count              = var.create_agent || var.create_collaborator ? 1 : 0
   assume_role_policy = data.aws_iam_policy_document.agent_trust[0].json
   name_prefix        = var.name_prefix
 }
@@ -165,7 +165,7 @@ resource "aws_iam_role_policy" "bedrock_kb_oss" {
 # Guardrails Policies
 
 resource "aws_iam_role_policy" "guardrail_policy" {
-  count = var.create_guardrail ? 1 : 0
+  count = var.create_guardrail && var.create_agent ? 1 : 0
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -180,6 +180,24 @@ resource "aws_iam_role_policy" "guardrail_policy" {
   })
   role = aws_iam_role.agent_role[0].id
 }
+
+resource "aws_iam_role_policy" "guardrail_policy_supervisor_agent" {
+  count = var.create_collaborator && var.create_supervisor_guardrail ? 1 : 0 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "bedrock:ApplyGuardrail",
+        ]
+        Resource = aws_bedrockagent_agent.agent_supervisor[0].guardrail_configuration[0].guardrail_identifier
+      }
+    ]
+  })
+  role = aws_iam_role.agent_role[0].id
+}
+
 
 # Action Group Policies
 
