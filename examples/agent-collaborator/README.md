@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-This example shows how to deploy a basic Bedrock agent collaborator.
+This example shows how to deploy a basic Bedrock agent collaborator with a supervisor agent and a collaborator agent with agent alias.
 
 ## Requirements
 

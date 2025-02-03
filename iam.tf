@@ -5,7 +5,7 @@ locals {
 
 
 resource "aws_iam_role" "agent_role" {
-  count              = var.create_agent || var.create_collaborator ? 1 : 0
+  count              = var.create_agent ? 1 : 0
   assume_role_policy = data.aws_iam_policy_document.agent_trust[0].json
   name_prefix        = var.name_prefix
 }
