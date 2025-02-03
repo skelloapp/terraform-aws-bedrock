@@ -115,7 +115,6 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
   }
 }
 
-#checkov:skip=CKV_AWS_383:The user can optionally associate agent with Bedrock guardrails
 resource "aws_bedrockagent_agent" "agent_supervisor" {
   count                      = local.counter_collaborator
   agent_name                  = "${random_string.solution_prefix.result}-${var.supervisor_name}"
@@ -125,6 +124,7 @@ resource "aws_bedrockagent_agent" "agent_supervisor" {
   foundation_model            = var.supervisor_model
   instruction                 = var.supervisor_instruction
   customer_encryption_key_arn = var.supervisor_kms_key_arn
+  #checkov:skip=CKV_AWS_383:The user can optionally associate agent with Bedrock guardrails
   guardrail_configuration = local.supervisor_guardrail
   prepare_agent               = false
 }
