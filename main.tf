@@ -38,6 +38,12 @@ locals {
   }
   action_group_result = [for count in local.counter_action_group : local.action_group_value]
 
+  counter_collaborator = var.create_agent && var.create_agent_alias && var.create_collaborator ? 1 : 0
+
+  supervisor_guardrail = var.create_supervisor_guardrail == false ? null : [{
+    guardrail_identifier = var.supervisor_guardrail_id
+    guardrail_version    = var.supervisor_guardrail_version
+  }]
 }
 
 resource "awscc_bedrock_agent" "bedrock_agent" {
@@ -93,6 +99,34 @@ resource "awscc_bedrock_agent_alias"  "bedrock_agent_alias" {
     }
   ]
   tags = var.agent_alias_tags
+}
+
+# Agent Collaborator 
+
+resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
+  count                      = local.counter_collaborator    
+  agent_id                   = aws_bedrockagent_agent.agent_supervisor[0].agent_id
+  collaboration_instruction  = var.collaboration_instruction
+  collaborator_name          = "${random_string.solution_prefix.result}-${var.collaborator_name}"
+  relay_conversation_history = "TO_COLLABORATOR"
+
+  agent_descriptor {
+    alias_arn = awscc_bedrock_agent_alias.bedrock_agent_alias[0].agent_alias_arn
+  }
+}
+
+resource "aws_bedrockagent_agent" "agent_supervisor" {
+  count                      = local.counter_collaborator
+  agent_name                  = "${random_string.solution_prefix.result}-${var.supervisor_name}"
+  agent_resource_role_arn     = aws_iam_role.agent_role[0].arn
+  agent_collaboration         = var.agent_collaboration
+  idle_session_ttl_in_seconds = var.supervisor_idle_session_ttl
+  foundation_model            = var.supervisor_model
+  instruction                 = var.supervisor_instruction
+  customer_encryption_key_arn = var.supervisor_kms_key_arn
+  #checkov:skip=CKV_AWS_383:The user can optionally associate agent with Bedrock guardrails
+  guardrail_configuration = local.supervisor_guardrail
+  prepare_agent               = false
 }
 
 # – Guardrail –
@@ -169,7 +203,7 @@ resource "aws_bedrock_custom_model" "custom_model" {
 }
 
 resource "awscc_s3_bucket" "custom_model_output" {
-  count = var.custom_model_output_uri == null ? 1 : 0
+  count = var.custom_model_output_uri == null && var.create_custom_model == true ? 1 : 0
   bucket_name = "${random_string.solution_prefix.result}-${var.custom_model_name}-output-bucket"
   public_access_block_configuration = {
     block_public_acls       = true

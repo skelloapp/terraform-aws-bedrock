@@ -44,6 +44,21 @@ data "aws_iam_policy_document" "agent_permissions" {
   }
 }
 
+data "aws_iam_policy_document" "agent_alias_permissions" {
+  count = var.create_agent_alias ? 1 : 0
+  statement {
+    actions = [
+      "bedrock:GetAgentAlias", 
+      "bedrock:InvokeAgent"
+    ]
+    resources = [
+      "arn:${local.partition}:bedrock:${local.region}:${local.account_id}:agent/*",
+      "arn:${local.partition}:bedrock:${local.region}:${local.account_id}:agent-alias/*"     
+    ]
+  }
+}
+
+
 data "aws_iam_policy_document" "knowledge_base_permissions" {
   count = var.create_kb ? 1 : 0
 

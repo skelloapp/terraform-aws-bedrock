@@ -218,6 +218,91 @@ variable "agent_alias_tags" {
   default     = null
 }
 
+# – Agent Collaborator – 
+
+variable "create_collaborator" {
+  description = "Whether or not to create an agent collaborator."
+  type        = bool
+  default     = false
+}
+
+variable "collaboration_instruction" {
+  description = "Instruction to give the collaborator."
+  type        = string
+  default     = null
+}
+
+variable "collaborator_name" {
+  description = "The name of the collaborator."
+  type        = string
+  default     = "TerraformBedrockAgentCollaborator"
+}
+
+variable "supervisor_name" {
+  description = "The name of the supervisor."
+  type        = string
+  default     = "TerraformBedrockAgentSupervisor"
+}
+
+
+variable "supervisor_idle_session_ttl" {
+  description = "How long sessions should be kept open for the supervisor agent."
+  type        = number
+  default     = 600
+}
+
+variable "supervisor_model" {
+  description = "The foundation model for the Bedrock supervisor agent."
+  type        = string
+  default     = null
+}
+
+variable "supervisor_instruction" {
+  description = "A narrative instruction to provide the agent as context."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = length(var.supervisor_instruction) == 0 || length(var.supervisor_instruction) >= 40 
+    error_message = "Instruction string length must be at least 40."
+  }
+}
+
+variable "agent_collaboration" {
+  description = "Agents collaboration role."
+  type        = string
+  default     = "SUPERVISOR"
+  
+  validation {
+    condition     = var.agent_collaboration == "SUPERVISOR" || var.agent_collaboration == "SUPERVISOR_ROUTER"
+    error_message = "Valid values: SUPERVISOR or SUPERVISOR_ROUTER"
+  } 
+}
+
+variable "supervisor_kms_key_arn" {
+  description = "KMS encryption key to use for the supervisor agent."
+  type        = string
+  default     = null
+}
+
+variable "create_supervisor_guardrail" {
+  description = "Whether or not to create a guardrail for the supervisor agent."
+  type        = bool
+  default     = false
+}
+
+variable "supervisor_guardrail_id" {
+  description = "The ID of the guardrail for the supervisor agent."
+  type        = string
+  default     = null
+}
+
+variable "supervisor_guardrail_version" {
+  description = "The version of the guardrail for the supervisor agent."
+  type        = string
+  default     = null
+}
+
 # – Guardrails –
 
 variable "create_guardrail" {

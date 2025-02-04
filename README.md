@@ -315,6 +315,8 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_bedrock_custom_model.custom_model](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrock_custom_model) | resource |
+| [aws_bedrockagent_agent.agent_supervisor](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_agent) | resource |
+| [aws_bedrockagent_agent_collaborator.agent_collaborator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_agent_collaborator) | resource |
 | [aws_bedrockagent_data_source.knowledge_base_ds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_data_source) | resource |
 | [aws_cloudwatch_log_group.knowledge_base_cwl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_iam_policy.bedrock_kb_s3_decryption_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -325,11 +327,13 @@ No modules.
 | [aws_iam_role.bedrock_knowledge_base_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.custom_model_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.action_group_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.agent_alias_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.agent_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.app_inference_profile_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.bedrock_kb_oss](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.custom_model_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.guardrail_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.guardrail_policy_supervisor_agent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.kb_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.bedrock_kb_s3_decryption_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -368,6 +372,7 @@ No modules.
 | [time_sleep.wait_before_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [aws_bedrock_foundation_model.model_identifier](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/bedrock_foundation_model) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.agent_alias_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.agent_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.agent_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.custom_model_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -385,6 +390,7 @@ No modules.
 | <a name="input_agent_alias_description"></a> [agent\_alias\_description](#input\_agent\_alias\_description) | Description of the agent alias. | `string` | `null` | no |
 | <a name="input_agent_alias_name"></a> [agent\_alias\_name](#input\_agent\_alias\_name) | The name of the guardrail. | `string` | `"TerraformBedrockAgentAlias"` | no |
 | <a name="input_agent_alias_tags"></a> [agent\_alias\_tags](#input\_agent\_alias\_tags) | Tag bedrock agent alias resource. | `map(string)` | `null` | no |
+| <a name="input_agent_collaboration"></a> [agent\_collaboration](#input\_agent\_collaboration) | Agents collaboration role. | `string` | `"SUPERVISOR"` | no |
 | <a name="input_agent_description"></a> [agent\_description](#input\_agent\_description) | A description of agent. | `string` | `null` | no |
 | <a name="input_agent_id"></a> [agent\_id](#input\_agent\_id) | Agent identifier. | `string` | `null` | no |
 | <a name="input_agent_name"></a> [agent\_name](#input\_agent\_name) | The name of your agent. | `string` | `"TerraformBedrockAgents"` | no |
@@ -405,6 +411,8 @@ No modules.
 | <a name="input_chunking_strategy"></a> [chunking\_strategy](#input\_chunking\_strategy) | Knowledge base can split your source data into chunks. A chunk refers to an excerpt from a data source that is returned when the knowledge base that it belongs to is queried. You have the following options for chunking your data. If you opt for NONE, then you may want to pre-process your files by splitting them up such that each file corresponds to a chunk. | `string` | `null` | no |
 | <a name="input_chunking_strategy_max_tokens"></a> [chunking\_strategy\_max\_tokens](#input\_chunking\_strategy\_max\_tokens) | The maximum number of tokens to include in a chunk. | `number` | `null` | no |
 | <a name="input_chunking_strategy_overlap_percentage"></a> [chunking\_strategy\_overlap\_percentage](#input\_chunking\_strategy\_overlap\_percentage) | The percentage of overlap between adjacent chunks of a data source. | `number` | `null` | no |
+| <a name="input_collaboration_instruction"></a> [collaboration\_instruction](#input\_collaboration\_instruction) | Instruction to give the collaborator. | `string` | `null` | no |
+| <a name="input_collaborator_name"></a> [collaborator\_name](#input\_collaborator\_name) | The name of the collaborator. | `string` | `"TerraformBedrockAgentCollaborator"` | no |
 | <a name="input_collection_arn"></a> [collection\_arn](#input\_collection\_arn) | The ARN of the collection. | `string` | `null` | no |
 | <a name="input_collection_name"></a> [collection\_name](#input\_collection\_name) | The name of the collection. | `string` | `null` | no |
 | <a name="input_confluence_credentials_secret_arn"></a> [confluence\_credentials\_secret\_arn](#input\_confluence\_credentials\_secret\_arn) | The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your Confluence instance URL. | `string` | `null` | no |
@@ -415,6 +423,7 @@ No modules.
 | <a name="input_create_agent"></a> [create\_agent](#input\_create\_agent) | Whether or not to deploy an agent. | `bool` | `true` | no |
 | <a name="input_create_agent_alias"></a> [create\_agent\_alias](#input\_create\_agent\_alias) | Whether or not to create an agent alias. | `bool` | `false` | no |
 | <a name="input_create_app_inference_profile"></a> [create\_app\_inference\_profile](#input\_create\_app\_inference\_profile) | Whether or not to create an application inference profile. | `bool` | `false` | no |
+| <a name="input_create_collaborator"></a> [create\_collaborator](#input\_create\_collaborator) | Whether or not to create an agent collaborator. | `bool` | `false` | no |
 | <a name="input_create_confluence"></a> [create\_confluence](#input\_create\_confluence) | Whether or not create a Confluence data source. | `bool` | `false` | no |
 | <a name="input_create_custom_model"></a> [create\_custom\_model](#input\_create\_custom\_model) | Whether or not to create a custom model. | `bool` | `false` | no |
 | <a name="input_create_custom_tranformation_config"></a> [create\_custom\_tranformation\_config](#input\_create\_custom\_tranformation\_config) | Whether or not to create a custom transformation configuration. | `bool` | `false` | no |
@@ -433,6 +442,7 @@ No modules.
 | <a name="input_create_s3_data_source"></a> [create\_s3\_data\_source](#input\_create\_s3\_data\_source) | Whether or not to create the S3 data source. | `bool` | `true` | no |
 | <a name="input_create_salesforce"></a> [create\_salesforce](#input\_create\_salesforce) | Whether or not create a Salesforce data source. | `bool` | `false` | no |
 | <a name="input_create_sharepoint"></a> [create\_sharepoint](#input\_create\_sharepoint) | Whether or not create a Share Point data source. | `bool` | `false` | no |
+| <a name="input_create_supervisor_guardrail"></a> [create\_supervisor\_guardrail](#input\_create\_supervisor\_guardrail) | Whether or not to create a guardrail for the supervisor agent. | `bool` | `false` | no |
 | <a name="input_create_vector_ingestion_configuration"></a> [create\_vector\_ingestion\_configuration](#input\_create\_vector\_ingestion\_configuration) | Whether or not to create a vector ingestion configuration. | `bool` | `false` | no |
 | <a name="input_create_web_crawler"></a> [create\_web\_crawler](#input\_create\_web\_crawler) | Whether or not create a web crawler data source. | `bool` | `false` | no |
 | <a name="input_credentials_secret_arn"></a> [credentials\_secret\_arn](#input\_credentials\_secret\_arn) | The ARN of the secret in Secrets Manager that is linked to your database | `string` | `null` | no |
@@ -522,6 +532,13 @@ No modules.
 | <a name="input_share_point_site_urls"></a> [share\_point\_site\_urls](#input\_share\_point\_site\_urls) | A list of one or more SharePoint site URLs. | `list(string)` | `[]` | no |
 | <a name="input_skip_resource_in_use"></a> [skip\_resource\_in\_use](#input\_skip\_resource\_in\_use) | Specifies whether to allow deleting action group while it is in use. | `bool` | `null` | no |
 | <a name="input_stop_sequences"></a> [stop\_sequences](#input\_stop\_sequences) | A list of stop sequences. | `list(string)` | `[]` | no |
+| <a name="input_supervisor_guardrail_id"></a> [supervisor\_guardrail\_id](#input\_supervisor\_guardrail\_id) | The ID of the guardrail for the supervisor agent. | `string` | `null` | no |
+| <a name="input_supervisor_guardrail_version"></a> [supervisor\_guardrail\_version](#input\_supervisor\_guardrail\_version) | The version of the guardrail for the supervisor agent. | `string` | `null` | no |
+| <a name="input_supervisor_idle_session_ttl"></a> [supervisor\_idle\_session\_ttl](#input\_supervisor\_idle\_session\_ttl) | How long sessions should be kept open for the supervisor agent. | `number` | `600` | no |
+| <a name="input_supervisor_instruction"></a> [supervisor\_instruction](#input\_supervisor\_instruction) | A narrative instruction to provide the agent as context. | `string` | `""` | no |
+| <a name="input_supervisor_kms_key_arn"></a> [supervisor\_kms\_key\_arn](#input\_supervisor\_kms\_key\_arn) | KMS encryption key to use for the supervisor agent. | `string` | `null` | no |
+| <a name="input_supervisor_model"></a> [supervisor\_model](#input\_supervisor\_model) | The foundation model for the Bedrock supervisor agent. | `string` | `null` | no |
+| <a name="input_supervisor_name"></a> [supervisor\_name](#input\_supervisor\_name) | The name of the supervisor. | `string` | `"TerraformBedrockAgentSupervisor"` | no |
 | <a name="input_table_name"></a> [table\_name](#input\_table\_name) | The name of the table in the database. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tag bedrock agent resource. | `map(string)` | `null` | no |
 | <a name="input_temperature"></a> [temperature](#input\_temperature) | The likelihood of the model selecting higher-probability options while generating a response. | `number` | `0` | no |
