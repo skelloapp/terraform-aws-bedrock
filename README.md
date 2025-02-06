@@ -52,6 +52,18 @@ The Agent constructs take an optional parameter shouldPrepareAgent to indicate t
 
 Bedrock Agents allows you to customize the prompts and LLM configuration for its different steps. You can disable steps or create a new prompt template. Prompt templates can be inserted from plain text files.
 
+### Agent Alias
+
+After you have sufficiently iterated on your working draft and are satisfied with the behavior of your agent, you can set it up for deployment and integration into your application by creating aliases of your agent.
+
+To deploy your agent, you need to create an alias. During alias creation, Amazon Bedrock automatically creates a version of your agent. The alias points to this newly created version. You can point the alias to a previously created version if necessary. You then configure your application to make API calls to that alias.
+
+By default, the Agent resource does not create any aliases, and you can use the 'DRAFT' version.
+
+You can creat an Agent Alias by setting `create_agent_alias` to `true`.
+
+See the additional input variables for deploying an Agent Alias [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L183)
+
 ### Agent Collaborators
 
 Multi-agent collaboration in Amazon Bedrock enables you to create teams of specialized agents that work together to solve complex tasks. You can designate a supervisor agent to coordinate with collaborator agents, each optimized for specific functions.

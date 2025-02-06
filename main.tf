@@ -8,7 +8,6 @@ resource "random_string" "solution_prefix" {
 
 locals {
   counter_kb = local.create_kb ? [1] : []
-  #counter_kb        = var.create_kb ? [1] : []
   knowledge_base_id = local.create_kb ? (var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : (var.create_mongo_config ? awscc_bedrock_knowledge_base.knowledge_base_mongo[0].id : (var.create_opensearch_config ? awscc_bedrock_knowledge_base.knowledge_base_opensearch[0].id : (var.create_pinecone_config ? awscc_bedrock_knowledge_base.knowledge_base_pinecone[0].id : (var.create_rds_config ? awscc_bedrock_knowledge_base.knowledge_base_rds[0].id : null))))) : null
   knowledge_bases_value = {
     description          = var.kb_description
@@ -41,7 +40,7 @@ locals {
 
   counter_collaborator = var.create_agent && var.create_agent_alias && var.create_collaborator ? 1 : 0
 
-  supervisor_guardrail = var.create_supervisor_guardrail == false ? null : [{
+  supervisor_guardrail = var.create_supervisor_guardrail == false && local.counter_collaborator == 0 ? null : [{
     guardrail_identifier = var.supervisor_guardrail_id
     guardrail_version    = var.supervisor_guardrail_version
   }]
@@ -117,7 +116,7 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
 }
 
 resource "aws_bedrockagent_agent" "agent_supervisor" {
-  count                      = local.counter_collaborator
+  count                       = local.counter_collaborator
   agent_name                  = "${random_string.solution_prefix.result}-${var.supervisor_name}"
   agent_resource_role_arn     = aws_iam_role.agent_role[0].arn
   agent_collaboration         = var.agent_collaboration
