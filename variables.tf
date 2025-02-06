@@ -414,7 +414,7 @@ variable "create_default_kb" {
 variable "create_s3_data_source" {
   description = "Whether or not to create the S3 data source."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "kb_s3_data_source" {

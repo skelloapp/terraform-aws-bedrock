@@ -1,6 +1,6 @@
 # – IAM –
 locals {
-  create_kb_role = var.kb_role_arn == null && var.create_default_kb
+  create_kb_role = var.kb_role_arn == null && local.create_kb
 }
 
 
@@ -23,14 +23,14 @@ resource "aws_iam_role_policy" "agent_alias_policy" {
 }
 
 resource "aws_iam_role_policy" "kb_policy" {
-  count  = var.create_kb && var.create_agent ? 1 : 0
+  count  = local.create_kb && var.create_agent ? 1 : 0
   policy = data.aws_iam_policy_document.knowledge_base_permissions[0].json
   role   = aws_iam_role.agent_role[0].id
 }
 
 # Define the IAM role for Amazon Bedrock Knowledge Base
 resource "aws_iam_role" "bedrock_knowledge_base_role" {
-  count = var.kb_role_arn != null || var.create_default_kb == false ? 0 : 1
+  count = var.kb_role_arn != null || local.create_kb == false ? 0 : 1
   name  = "AmazonBedrockExecutionRoleForKnowledgeBase-${random_string.solution_prefix.result}"
 
   assume_role_policy = jsonencode({
@@ -82,7 +82,7 @@ resource "aws_iam_policy" "bedrock_knowledge_base_policy" {
 }
 
 resource "aws_iam_policy" "bedrock_knowledge_base_policy_s3" {
-  count = var.kb_role_arn != null || var.create_default_kb == false || var.create_s3_data_source == false ? 0 : 1
+  count = var.kb_role_arn != null || local.create_kb == false || var.create_s3_data_source == false ? 0 : 1
   name  = "AmazonBedrockKnowledgeBasePolicyS3DataSource-${random_string.solution_prefix.result}"
 
   policy = jsonencode({
@@ -129,7 +129,7 @@ resource "aws_iam_policy" "bedrock_kb_s3_decryption_policy" {
 
 # Attach the policies to the role
 resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_policy_attachment" {
-  count      = var.kb_role_arn != null || var.create_kb == false ? 0 : 1
+  count      = var.kb_role_arn != null || local.create_kb == false ? 0 : 1
   role       = aws_iam_role.bedrock_knowledge_base_role[0].name
   policy_arn = aws_iam_policy.bedrock_knowledge_base_policy[0].arn
 }
@@ -141,7 +141,7 @@ resource "aws_iam_role_policy_attachment" "bedrock_kb_s3_decryption_policy_attac
 }
 
 resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_policy_s3_attachment" {
-  count      = var.kb_role_arn != null || var.create_kb == false || var.create_s3_data_source == false ? 0 : 1
+  count      = var.kb_role_arn != null || local.create_kb == false || var.create_s3_data_source == false ? 0 : 1
   role       = aws_iam_role.bedrock_knowledge_base_role[0].name
   policy_arn = aws_iam_policy.bedrock_knowledge_base_policy_s3[0].arn
 }
