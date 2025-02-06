@@ -6,6 +6,7 @@ locals {
   region     = data.aws_region.current.name
   account_id = data.aws_caller_identity.current.account_id
   partition  = data.aws_partition.current.partition
+  create_kb  = var.create_default_kb || var.create_rds_config || var.create_mongo_config || var.create_pinecone_config || var.create_opensearch_config || var.create_kb
 }
 
 data "aws_iam_policy_document" "agent_trust" {
@@ -60,7 +61,7 @@ data "aws_iam_policy_document" "agent_alias_permissions" {
 
 
 data "aws_iam_policy_document" "knowledge_base_permissions" {
-  count = var.create_kb ? 1 : 0
+  count = local.create_kb ? 1 : 0
 
   statement {
     actions   = ["bedrock:Retrieve"]

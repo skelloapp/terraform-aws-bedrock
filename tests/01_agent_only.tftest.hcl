@@ -3,16 +3,16 @@
 # create additional *.tftest.hcl for your own unit / integration tests
 # use tests/*.auto.tfvars to add non-default variables
 
-run "mandatory_plan_basic" {
+run "agent_only_basic" {
   command = plan
   module {
-    source = "./examples/basic"
+    source = "./examples/agent-only"
   }
 }
 
-run "mandatory_apply_basic" {
+run "agent_only_basic" {
   command = apply
   module {
-    source = "./examples/basic"
+    source = "./examples/agent-only"
   }
 }

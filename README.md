@@ -5,6 +5,80 @@ Amazon Bedrock is a fully managed service that offers a choice of foundation mod
 
 This module includes resources to deploy Bedrock features.
 
+You can control which features to use with your input variables. The resources are created based on boolean logic. The default behavior is to deploy a Bedrock Agent. To disable this behavior you can turn `create_agent` to false. To deploy other features such as guardrails or knowledge bases, you can use the input variables to set their respective create booleans to `true` and then pass in the appropriate values.
+
+The main features of the Bedrock module include:
+
+- Agents
+  - Agent Action Groups
+  - Agent Alias
+  - Agent Collaborators
+- Knowledge Bases
+  - Data Sources
+- Guardrails
+- Prompt Management
+  - Prompt Versions
+- Application Inference Profiles
+- Custom Models
+
+## Agents
+
+Enable generative AI applications to execute multistep tasks across company systems and data sources.
+
+### Create an Agent
+
+The following example creates an Agent, where you must define at a minimum the desired foundtaion model and the instruction for the agent.
+
+```hcl
+module "bedrock" {
+  source  = "aws-ia/bedrock/aws"
+  version = "0.0.8"
+  foundation_model = "anthropic.claude-v2"
+  instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
+}
+```
+See the additional configurable variables for deploying an Agent [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L7)
+
+### Action Groups
+
+An action group defines functions your agent can call. The functions are Lambda functions. The action group uses an OpenAPI schema to tell the agent what your functions do and how to call them. You can configure an action group by setting `create_ag` to `true` and passing in the appropriate input variables. You can see an example of an an agent being deployed with an action group in [this samples repository](https://github.com/aws-samples/aws-generative-ai-terraform-samples/blob/main/samples/bedrock-agent/main.tf)
+
+### Prepare the Agent
+
+The Agent constructs take an optional parameter shouldPrepareAgent to indicate that the Agent should be prepared after any updates to an agent, Knowledge Base association, or action group. This may increase the time to create and update those resources. By default, this value is true.
+
+### Prompt Overrides
+
+Bedrock Agents allows you to customize the prompts and LLM configuration for its different steps. You can disable steps or create a new prompt template. Prompt templates can be inserted from plain text files.
+
+### Agent Collaborators
+
+Multi-agent collaboration in Amazon Bedrock enables you to create teams of specialized agents that work together to solve complex tasks. You can designate a supervisor agent to coordinate with collaborator agents, each optimized for specific functions.
+
+To set up agent collaboration, you'll need:
+- A supervisor agent that coordinates the team
+- One or more collaborator agents with specialized capabilities
+- Collaboration instructions that define when each agent should be used
+
+Example configuration with a supervisor agent and a collaborator agent:
+
+```hcl
+module "bedrock" {
+  source = "../.." # local example
+  create_agent_alias = true
+  foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  instruction = "You are an agent. Do what the supervisor tells you to do"
+
+  # Setting up the collaboration
+  create_collaborator = true
+  collaboration_instruction = "Tell the other agent what to do"
+  supervisor_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  supervisor_instruction = "You are a supervisor who can provide detailed information about cars to an agent."
+}
+```
+
+See the additional configurable variables for deploying Agent Collaborators [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L221)
+
 ## Knowledge Bases
 
 With Knowledge Bases for Amazon Bedrock, you can give FMs and agents contextual information from your company’s private data sources for Retrieval Augmented Generation (RAG) to deliver more relevant, accurate, and customized responses.
@@ -15,9 +89,9 @@ A vector index on a vector store is required to create a Knowledge Base. This co
 
 The resource accepts an instruction prop that is provided to any Bedrock Agent it is associated with so the agent can decide when to query the Knowledge Base.
 
-To create a knowledge base, make sure you pass in the appropriate variables and set the `create_kb` variable to `true`.
+To create an OpenSearch Serverless knowledge base, make sure you pass in the appropriate variables and set the `create_default_kb` variable to `true`. To create an RDS, Pinecone, or MongoDB Knowledge Base, set `create_rds_config`, `create_pinecone_config`, or `create_mongo_config` to `true`, respectively.
 
-Example default Opensearch Serverless Agent with Knowledgebase
+Example default Opensearch Serverless Agent with Knowledge Base:
 
 ```hcl
 provider "opensearch" {
@@ -27,13 +101,14 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.7"
-  create_kb = true
+  version = "0.0.8"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
 ```
+
+See the additional configurable variables for deploying Knowledge Bases [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L682)
 
 ### Knowledge Base - Data Sources
 
@@ -49,47 +124,7 @@ Data sources are the various repositories or systems from which information is e
 
 - Confluence. You can create a new Confluence data source by setting the `create_confluence` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
 
-## Agents
-
-Enable generative AI applications to execute multistep tasks across company systems and data sources.
-
-### Create an Agent
-
-The following example creates an Agent with a simple instruction and without any action groups or knowedlge bases.
-
-```hcl
-module "bedrock" {
-  source  = "aws-ia/bedrock/aws"
-  version = "0.0.7"
-  foundation_model = "anthropic.claude-v2"
-  instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
-}
-```
-
-To create an Agent with a default Knowledge Base you simply set `create_kb` and `create_default_kb` to `true`:
-
-```hcl
-module "bedrock" {
-  source  = "aws-ia/bedrock/aws"
-  version = "0.0.7"
-  create_kb = true
-  create_default_kb = true
-  foundation_model = "anthropic.claude-v2"
-  instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
-}
-```
-
-### Action Groups
-
-An action group defines functions your agent can call. The functions are Lambda functions. The action group uses an OpenAPI schema to tell the agent what your functions do and how to call them. You can configure an action group by passing in the appropriate input variables.
-
-### Prepare the Agent
-
-The Agent constructs take an optional parameter shouldPrepareAgent to indicate that the Agent should be prepared after any updates to an agent, Knowledge Base association, or action group. This may increase the time to create and update those resources. By default, this value is true.
-
-### Prompt Overrides
-
-Bedrock Agents allows you to customize the prompts and LLM configuration for its different steps. You can disable steps or create a new prompt template. Prompt templates can be inserted from plain text files.
+See the additional optional variables for deploying Knowledge Base Data Sources [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L412)
 
 ## Bedrock Guardrails
 
@@ -110,9 +145,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.7"
-  create_kb = false
-  create_default_kb = false
+  version = "0.0.8"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -165,9 +198,11 @@ module "bedrock" {
 }
 ```
 
+See the additional optional variables for deploying guardrails [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L306)
+
 ## Prompt Management
 
-Amazon Bedrock provides the ability to create and save prompts using Prompt management so that you can save time by applying the same prompt to different workflows. You can include variables in the prompt so that you can adjust the prompt for different use case.
+Amazon Bedrock provides the ability to create and save prompts using Prompt management so that you can save time by applying the same prompt to different workflows. You can include variables in the prompt so that you can adjust the prompt for different use case. To create a prompt, you set the `create_prompt` variable to `true` and pass in the appropriate values.
 
 ### Prompt Variants
 
@@ -206,17 +241,14 @@ Prompt variants in the context of Amazon Bedrock refer to alternative configurat
 
 A prompt version is a snapshot of a prompt at a specific point in time that you create when you are satisfied with a set of configurations. Versions allow you to deploy your prompt and easily switch between different configurations for your prompt and update your application with the most appropriate version for your use-case.
 
-You can create a Prompt version by setting `create_prompt_version` to true and adding an optional `prompt_version_description` and optional `prompt_version_tags`.
+You can create a Prompt version by setting `create_prompt_version` to `true` and adding an optional `prompt_version_description` and optional `prompt_version_tags`.
 
 Creating a prompt with a prompt version would look like:
 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.7"
-  create_kb = false
-  create_default_kb = false
-  create_s3_data_source = false
+  version = "0.0.8"
   create_agent = false
 
   # Prompt Management
@@ -256,6 +288,8 @@ module "bedrock" {
 }
 ```
 
+See the additional optional variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L955)
+
 ## Application Inference Profile
 
 You can create an application inference profile with one or more Regions to track usage and costs when invoking a model.
@@ -273,10 +307,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.7"
-  create_kb = false
-  create_default_kb = false
-  create_s3_data_source = false
+  version = "0.0.8"
   create_agent = false
 
   # Application Inference Profile
@@ -284,6 +315,38 @@ module "bedrock" {
   app_inference_profile_model_source = "arn:aws:bedrock:${data.aws_region.current.name}::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0"
 }
 ```
+
+See the additional optional variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1041)
+
+## Custom Models
+
+Model customization is the process of providing training data to a base model in order to improve its performance for specific use-cases.  Custom models help improve performance on domain-specific tasks while maintaining the base capabilities of the foundation model. With custom models, you can do a continued pre-training or fine-tuning job which is started when the Terraform resource is created.
+
+To create a custom model, set the `create_custom_model` variable to `true` and pass in the necessary values for custom models:
+
+- `custom_model_id`
+  - Defaults to `amazon.titan-text-express-v1`
+- `custom_model_name`
+  - Defaults to `custom-model`
+- `custom_model_job_name`
+  - Defaults to `custom-model-job`
+- `customization_type`
+  - Defaults to `FINE_TUNING` but the other valid value is `CONTINUED_PRE_TRAINING`
+-  `custom_model_hyperparameters`
+  - Defaults to:
+
+    ```
+    {
+      "epochCount"              = "2"
+      "batchSize"               = "1"
+      "learningRate"            = "0.00001"
+      "learningRateWarmupSteps" = "10"
+    }
+    ```
+
+- `custom_model_training_uri`
+
+See the additional optional variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1111)
 
 ## Requirements
 
@@ -439,7 +502,7 @@ No modules.
 | <a name="input_create_prompt"></a> [create\_prompt](#input\_create\_prompt) | Whether or not to create a prompt resource. | `bool` | `false` | no |
 | <a name="input_create_prompt_version"></a> [create\_prompt\_version](#input\_create\_prompt\_version) | Whether or not to create a prompt version. | `bool` | `false` | no |
 | <a name="input_create_rds_config"></a> [create\_rds\_config](#input\_create\_rds\_config) | Whether or not to use RDS configuration | `bool` | `false` | no |
-| <a name="input_create_s3_data_source"></a> [create\_s3\_data\_source](#input\_create\_s3\_data\_source) | Whether or not to create the S3 data source. | `bool` | `true` | no |
+| <a name="input_create_s3_data_source"></a> [create\_s3\_data\_source](#input\_create\_s3\_data\_source) | Whether or not to create the S3 data source. | `bool` | `false` | no |
 | <a name="input_create_salesforce"></a> [create\_salesforce](#input\_create\_salesforce) | Whether or not create a Salesforce data source. | `bool` | `false` | no |
 | <a name="input_create_sharepoint"></a> [create\_sharepoint](#input\_create\_sharepoint) | Whether or not create a Share Point data source. | `bool` | `false` | no |
 | <a name="input_create_supervisor_guardrail"></a> [create\_supervisor\_guardrail](#input\_create\_supervisor\_guardrail) | Whether or not to create a guardrail for the supervisor agent. | `bool` | `false` | no |

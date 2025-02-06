@@ -6,9 +6,6 @@
 
 module "bedrock" {
   source = "../.." # local example
-  create_kb = false
-  create_default_kb = false
-  create_s3_data_source = false
   create_agent = false
 
   # Prompt Management
