@@ -38,7 +38,7 @@ module "bedrock" {
 }
 ```
 
-See the additional configurable variables for deploying an Agent [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L7)
+See the additional input variables for deploying an Agent [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L7)
 
 ### Action Groups
 
@@ -79,7 +79,7 @@ module "bedrock" {
 }
 ```
 
-See the additional configurable variables for deploying Agent Collaborators [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L221)
+See the additional input variables for deploying Agent Collaborators [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L221)
 
 ## Knowledge Bases
 
@@ -110,7 +110,7 @@ module "bedrock" {
 }
 ```
 
-See the additional configurable variables for deploying Knowledge Bases [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L682)
+See the additional input variables for deploying Knowledge Bases [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L682)
 
 ### Knowledge Base - Data Sources
 
@@ -126,7 +126,7 @@ Data sources are the various repositories or systems from which information is e
 
 - Confluence. You can create a new Confluence data source by setting the `create_confluence` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
 
-See the additional optional variables for deploying Knowledge Base Data Sources [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L412)
+See the additional input variables for deploying Knowledge Base Data Sources [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L412)
 
 ## Bedrock Guardrails
 
@@ -200,7 +200,7 @@ module "bedrock" {
 }
 ```
 
-See the additional optional variables for deploying guardrails [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L306)
+See the additional input variables for deploying guardrails [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L306)
 
 ## Prompt Management
 
@@ -290,7 +290,7 @@ module "bedrock" {
 }
 ```
 
-See the additional optional variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L955)
+See the additional input variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L955)
 
 ## Application Inference Profile
 
@@ -318,7 +318,7 @@ module "bedrock" {
 }
 ```
 
-See the additional optional variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1041)
+See the additional input variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1041)
 
 ## Custom Models
 
@@ -344,7 +344,7 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
   }
 - `custom_model_training_uri`
 
-See the additional optional variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1111)
+See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1111)
 
 ## Requirements
 
