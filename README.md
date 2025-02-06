@@ -37,6 +37,7 @@ module "bedrock" {
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
 ```
+
 See the additional configurable variables for deploying an Agent [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L7)
 
 ### Action Groups
@@ -56,6 +57,7 @@ Bedrock Agents allows you to customize the prompts and LLM configuration for its
 Multi-agent collaboration in Amazon Bedrock enables you to create teams of specialized agents that work together to solve complex tasks. You can designate a supervisor agent to coordinate with collaborator agents, each optimized for specific functions.
 
 To set up agent collaboration, you'll need:
+
 - A supervisor agent that coordinates the team
 - One or more collaborator agents with specialized capabilities
 - Collaboration instructions that define when each agent should be used
@@ -334,7 +336,6 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
   - Defaults to `FINE_TUNING` but the other valid value is `CONTINUED_PRE_TRAINING`
 -  `custom_model_hyperparameters`
   - Defaults to:
-
     ```
     {
       "epochCount"              = "2"
@@ -343,7 +344,6 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
       "learningRateWarmupSteps" = "10"
     }
     ```
-
 - `custom_model_training_uri`
 
 See the additional optional variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1111)
