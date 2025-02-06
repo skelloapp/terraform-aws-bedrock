@@ -78,7 +78,8 @@ Example configuration with a supervisor agent and a collaborator agent:
 
 ```hcl
 module "bedrock" {
-  source = "../.." # local example
+  source  = "aws-ia/bedrock/aws"
+  version = "0.0.8"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
