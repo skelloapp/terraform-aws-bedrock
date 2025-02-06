@@ -40,7 +40,7 @@ locals {
 
   counter_collaborator = var.create_agent && var.create_agent_alias && var.create_collaborator ? 1 : 0
 
-  supervisor_guardrail = var.create_supervisor_guardrail == false && local.counter_collaborator == 0 ? null : [{
+  supervisor_guardrail = var.create_supervisor_guardrail == false || local.counter_collaborator == 0 ? null : [{
     guardrail_identifier = var.supervisor_guardrail_id
     guardrail_version    = var.supervisor_guardrail_version
   }]
