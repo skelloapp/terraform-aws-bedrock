@@ -1,7 +1,7 @@
 # – IAM –
 locals {
   create_kb_role = var.kb_role_arn == null && local.create_kb
-  kendra_index_id = var.kendra_index_id != null ? var.kendra_index_id : awscc_kendra_index.genai_kendra_index[0].id
+  kendra_index_id = var.create_kendra_config == true ? (var.kendra_index_id != null ? var.kendra_index_id : awscc_kendra_index.genai_kendra_index[0].id) : null
 }
 
 
