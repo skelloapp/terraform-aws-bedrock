@@ -1,6 +1,7 @@
 # – IAM –
 locals {
   create_kb_role = var.kb_role_arn == null && local.create_kb
+  kendra_index_id = var.kendra_index_id != null ? var.kendra_index_id : awscc_kendra_index.genai_kendra_index[0].id
 }
 
 
@@ -49,7 +50,7 @@ resource "aws_iam_role" "bedrock_knowledge_base_role" {
 
 # Attach a policy to allow necessary permissions for the Bedrock Knowledge Base
 resource "aws_iam_policy" "bedrock_knowledge_base_policy" {
-  count = var.kb_role_arn != null || var.create_default_kb == false ? 0 : 1
+  count = var.kb_role_arn != null || var.create_default_kb == false || var.create_kendra_config == true ? 0 : 1
   name  = "AmazonBedrockKnowledgeBasePolicy-${random_string.solution_prefix.result}"
 
   policy = jsonencode({
@@ -129,9 +130,15 @@ resource "aws_iam_policy" "bedrock_kb_s3_decryption_policy" {
 
 # Attach the policies to the role
 resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_policy_attachment" {
-  count      = var.kb_role_arn != null || local.create_kb == false ? 0 : 1
+  count      = var.kb_role_arn != null || local.create_kb == false || var.create_kendra_config == true ? 0 : 1
   role       = aws_iam_role.bedrock_knowledge_base_role[0].name
   policy_arn = aws_iam_policy.bedrock_knowledge_base_policy[0].arn
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_kendra_policy_attachment" {
+  count      = var.kb_role_arn != null || var.create_kendra_config == false ? 0 : 1
+  role       = aws_iam_role.bedrock_knowledge_base_role[0].name
+  policy_arn = aws_iam_policy.bedrock_kb_kendra[0].arn
 }
 
 resource "aws_iam_role_policy_attachment" "bedrock_kb_s3_decryption_policy_attachment" {
@@ -348,3 +355,126 @@ resource "aws_iam_role_policy" "custom_model_policy" {
   })
   role = aws_iam_role.custom_model_role[0].id
 }
+
+# Kendra IAM   
+resource "aws_iam_policy" "bedrock_kb_kendra" {
+  count = var.kb_role_arn != null || var.create_kendra_config == false ? 0 : 1
+  name  = "AmazonBedrockKnowledgeBaseKendraIndexAccessStatement_${var.kb_name}"
+  
+  policy = jsonencode({
+    "Version" = "2012-10-17"
+    "Statement" = [
+      {
+        "Action"   = [ 
+          "kendra:Retrieve",
+          "kendra:DescribeIndex",
+          "kendra:*"
+        ]
+        "Effect"   = "Allow"
+        "Resource" = ["arn:aws:kendra:${local.region}:${local.account_id}:index/${local.kendra_index_id}"]
+      }
+    ]
+  })
+}
+
+resource "awscc_iam_role" "kendra_index_role" {
+  count       = var.create_kendra_config && var.kendra_index_arn == null ? 1 : 0
+  role_name   = "kendra_index_role"
+  description = "Role assigned to the Kendra index"
+  assume_role_policy_document = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "kendra.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "awscc_iam_role_policy" "kendra_role_policy" {
+  count       = var.create_kendra_config && var.kendra_index_arn == null ? 1 : 0
+  policy_name = "kendra_role_policy"
+  role_name   = awscc_iam_role.kendra_index_role[0].id
+
+  policy_document = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "cloudwatch:PutMetricData"
+        Resource = "*"
+        Condition = {
+          "StringEquals" : {
+            "cloudwatch:namespace" : "AWS/Kendra"
+          }
+        }
+      },
+      {
+        Effect   = "Allow"
+        Action   = "logs:DescribeLogGroups"
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "logs:CreateLogGroup",
+        Resource = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/kendra/*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:DescribeLogStreams",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "arn:aws:logs:${local.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/kendra/*:log-stream:*"
+      }
+    ]
+  })
+}
+
+/*
+# Create IAM role for Kendra Data Source
+resource "awscc_iam_role" "kendra_datasource_role" {
+  assume_role_policy_document = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "kendra.amazonaws.com"
+        }
+      }
+    ]
+  })
+  description = "IAM role for Kendra Data Source"
+  path       = "/"
+  role_name  = "kendra-datasource-role"
+
+  policies = [
+    {
+      policy_name = "kendra-datasource-policy"
+      policy_document = jsonencode({
+        Version = "2012-10-17"
+        Statement = [
+          {
+            Effect = "Allow"
+            Action = [
+              "s3:GetObject",
+              "s3:ListBucket"
+            ]
+            Resource = [
+              awscc_s3_bucket.example.arn,
+              "${awscc_s3_bucket.example.arn}/*"
+            ]
+          }
+        ]
+      })
+      policy_name = "kendra-datasource-policy"
+    }
+  ]
+}*/

@@ -26,7 +26,7 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_default" {
   depends_on = [ time_sleep.wait_after_index_creation ]
 }
 
-# – Existing KBs –
+# – Existing Vector KBs –
 
 # - Mongo –
 resource "awscc_bedrock_knowledge_base" "knowledge_base_mongo" {
@@ -146,4 +146,23 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_rds" {
       embedding_model_arn = var.kb_embedding_model_arn
     }
   }
+}
+
+# – Kendra Knowledge Base – 
+
+resource "awscc_bedrock_knowledge_base" "knowledge_base_kendra" {
+  count       = var.create_kendra_config ? 1 : 0
+  name        = "${random_string.solution_prefix.result}-${var.kb_name}"
+  description = var.kb_description
+  role_arn    = var.kb_role_arn != null ? var.kb_role_arn : aws_iam_role.bedrock_knowledge_base_role[0].arn
+  tags        = var.kb_tags
+
+  knowledge_base_configuration = {
+    type = "KENDRA"
+    kendra_knowledge_base_configuration = {
+      kendra_index_arn = var.kendra_index_arn != null ? var.kendra_index_arn : awscc_kendra_index.genai_kendra_index[0].arn
+    }
+  }
+
+  depends_on = [ time_sleep.wait_after_kendra_index_creation ]
 }
