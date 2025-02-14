@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-This example shows how to deploy a Kendra GenAI Knowledge Base.
+This example shows how to deploy a Kendra GenAI Knowledge Base without an agent.
 
 ## Requirements
 
