@@ -367,8 +367,7 @@ resource "aws_iam_policy" "bedrock_kb_kendra" {
       {
         "Action"   = [ 
           "kendra:Retrieve",
-          "kendra:DescribeIndex",
-          "kendra:*"
+          "kendra:DescribeIndex"
         ]
         "Effect"   = "Allow"
         "Resource" = ["arn:aws:kendra:${local.region}:${local.account_id}:index/${local.kendra_index_id}"]
