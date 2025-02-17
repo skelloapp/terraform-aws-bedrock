@@ -6,9 +6,6 @@
 
 module "bedrock" {
   source = "../.." # local example
-  create_kb = true
   create_kendra_config = true
   create_agent = false
-  foundation_model = "anthropic.claude-v2"
-  instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
