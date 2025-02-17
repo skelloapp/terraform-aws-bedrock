@@ -747,7 +747,7 @@ variable "kb_type" {
   default     = "VECTOR"
 
   validation {
-    condition     = var.kb_type == "VECTOR" || var.kb_type == "KENDRA" || var.kb_type == "SQL"
+    condition     = var.kb_type == "VECTOR" || var.kb_type == "KENDRA" || var.kb_type == "SQL" || var.kb_type == null
     error_message = "kb_type must be either VECTOR, KENDRA, or SQL"
   }
 }
