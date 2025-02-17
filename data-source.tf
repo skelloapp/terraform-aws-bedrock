@@ -13,7 +13,7 @@ locals {
         level_configurations = var.level_configurations_list
         overlap_tokens = var.heirarchical_overlap_tokens
       }
-      semantic_chunking_configuration = var.breakpoint_percentile_threshold == null && var.semantic_buffer_size == null && var.semantic_max_tokens ? null : {
+      semantic_chunking_configuration = var.breakpoint_percentile_threshold == null && var.semantic_buffer_size == null && var.semantic_max_tokens == null ? null : {
         breakpoint_percentile_threshold = var.breakpoint_percentile_threshold
         buffer_size = var.semantic_buffer_size
         max_tokens = var.semantic_max_tokens 
