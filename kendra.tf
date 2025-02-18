@@ -21,13 +21,13 @@ resource "awscc_kendra_index" "genai_kendra_index" {
 resource "time_sleep" "wait_after_kendra_index_creation" {
   count           = var.create_kendra_config && var.kendra_index_arn == null ? 1 : 0
   depends_on      = [ awscc_kendra_index.genai_kendra_index[0] ]
-  create_duration = "60s" # Wait for 60 seconds before creating the index
+  create_duration = "60s" # Wait for 60 seconds
 }
 
 
 # Create Kendra Data Source
 resource "awscc_kendra_data_source" "kendra_s3_data_source" {
-  count    = var.create_kendra_config && var.create_kendra_s3_data_source == true ? 1 : 0
+  count    = var.create_kendra_s3_data_source == true ? 1 : 0
   index_id = var.kendra_index_arn != null ? var.kendra_index_arn : awscc_kendra_index.genai_kendra_index[0].id
   name     = "${random_string.solution_prefix.result}-${var.kendra_data_source_name}"
   type     = "S3"
@@ -52,7 +52,7 @@ resource "awscc_kendra_data_source" "kendra_s3_data_source" {
 }
 
 resource "time_sleep" "wait_after_kendra_s3_data_source_creation" {
-  count           = var.create_kendra_config && var.create_kendra_s3_data_source ? 1 : 0
+  count           = var.create_kendra_s3_data_source ? 1 : 0
   depends_on      = [ awscc_kendra_data_source.kendra_s3_data_source[0] ]
-  create_duration = "60s" # Wait for 60 seconds before creating the index
+  create_duration = "60s" # Wait for 60 seconds
 }

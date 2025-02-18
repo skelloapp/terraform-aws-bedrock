@@ -439,7 +439,7 @@ resource "awscc_iam_role_policy" "kendra_role_policy" {
 
 # Create IAM role for Kendra Data Source
 resource "awscc_iam_role" "kendra_s3_datasource_role" {
-  count = var.create_kendra_config && var.create_kendra_s3_data_source ? 1 : 0
+  count = var.create_kendra_s3_data_source ? 1 : 0
   assume_role_policy_document = jsonencode({
     Version = "2012-10-17"
     Statement = [
