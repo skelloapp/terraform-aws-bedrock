@@ -393,6 +393,7 @@ No modules.
 | [aws_bedrockagent_agent_collaborator.agent_collaborator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_agent_collaborator) | resource |
 | [aws_bedrockagent_data_source.knowledge_base_ds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_data_source) | resource |
 | [aws_cloudwatch_log_group.knowledge_base_cwl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_iam_policy.bedrock_kb_kendra](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.bedrock_kb_s3_decryption_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.bedrock_knowledge_base_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.bedrock_knowledge_base_policy_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -410,6 +411,7 @@ No modules.
 | [aws_iam_role_policy.guardrail_policy_supervisor_agent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.kb_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.bedrock_kb_s3_decryption_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_kendra_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_s3_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_permission.allow_bedrock_agent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
@@ -428,12 +430,18 @@ No modules.
 | [awscc_bedrock_guardrail.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_guardrail) | resource |
 | [awscc_bedrock_guardrail_version.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_guardrail_version) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_default](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_kendra](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_mongo](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_opensearch](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_pinecone](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_rds](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_prompt.prompt](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_prompt) | resource |
 | [awscc_bedrock_prompt_version.prompt_version](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_prompt_version) | resource |
+| [awscc_iam_role.kendra_index_role](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role) | resource |
+| [awscc_iam_role.kendra_s3_datasource_role](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role) | resource |
+| [awscc_iam_role_policy.kendra_role_policy](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role_policy) | resource |
+| [awscc_kendra_data_source.kendra_s3_data_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/kendra_data_source) | resource |
+| [awscc_kendra_index.genai_kendra_index](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/kendra_index) | resource |
 | [awscc_logs_delivery.knowledge_base_log_delivery](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery) | resource |
 | [awscc_logs_delivery_destination.knowledge_base_log_destination](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_destination) | resource |
 | [awscc_logs_delivery_source.knowledge_base_log_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_source) | resource |
@@ -443,6 +451,8 @@ No modules.
 | [opensearch_index.default_oss_index](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/index) | resource |
 | [random_string.solution_prefix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [time_sleep.wait_after_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
+| [time_sleep.wait_after_kendra_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
+| [time_sleep.wait_after_kendra_s3_data_source_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_before_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [aws_bedrock_foundation_model.model_identifier](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/bedrock_foundation_model) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
@@ -506,6 +516,8 @@ No modules.
 | <a name="input_create_guardrail"></a> [create\_guardrail](#input\_create\_guardrail) | Whether or not to create a guardrail. | `bool` | `false` | no |
 | <a name="input_create_kb"></a> [create\_kb](#input\_create\_kb) | Whether or not to attach a knowledge base. | `bool` | `false` | no |
 | <a name="input_create_kb_log_group"></a> [create\_kb\_log\_group](#input\_create\_kb\_log\_group) | Whether or not to create a log group for the knowledge base. | `bool` | `false` | no |
+| <a name="input_create_kendra_config"></a> [create\_kendra\_config](#input\_create\_kendra\_config) | Whether or not to create a Kendra GenAI knowledge base. | `bool` | `false` | no |
+| <a name="input_create_kendra_s3_data_source"></a> [create\_kendra\_s3\_data\_source](#input\_create\_kendra\_s3\_data\_source) | Whether or not to create a Kendra S3 data source. | `bool` | `false` | no |
 | <a name="input_create_mongo_config"></a> [create\_mongo\_config](#input\_create\_mongo\_config) | Whether or not to use MongoDB Atlas configuration | `bool` | `false` | no |
 | <a name="input_create_opensearch_config"></a> [create\_opensearch\_config](#input\_create\_opensearch\_config) | Whether or not to use Opensearch Serverless configuration | `bool` | `false` | no |
 | <a name="input_create_parsing_configuration"></a> [create\_parsing\_configuration](#input\_create\_parsing\_configuration) | Whether or not to create a parsing configuration. | `bool` | `false` | no |
@@ -533,6 +545,7 @@ No modules.
 | <a name="input_customization_type"></a> [customization\_type](#input\_customization\_type) | The customization type. Valid values: FINE\_TUNING, CONTINUED\_PRE\_TRAINING. | `string` | `"FINE_TUNING"` | no |
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | Name of the database. | `string` | `null` | no |
 | <a name="input_default_variant"></a> [default\_variant](#input\_default\_variant) | Name for a variant. | `string` | `null` | no |
+| <a name="input_document_metadata_configurations"></a> [document\_metadata\_configurations](#input\_document\_metadata\_configurations) | List of document metadata configurations for Kendra. | <pre>list(object({<br>    name = optional(string)<br>    type = optional(string)<br>    search = optional(object({<br>      facetable = optional(bool)<br>      searchable = optional(bool)<br>      displayable = optional(bool)<br>      sortable = optional(bool)<br>    }))<br>    relevance = optional(object({<br>      duration = optional(string)<br>      freshness = optional(bool)<br>      importance = optional(number)<br>      rank_order = optional(string)<br>      value_importance_items = optional(list(object({<br>        key = optional(string)<br>        value = optional(number)<br>      }))) <br>    }))<br>  }))</pre> | `null` | no |
 | <a name="input_endpoint"></a> [endpoint](#input\_endpoint) | Database endpoint | `string` | `null` | no |
 | <a name="input_endpoint_service_name"></a> [endpoint\_service\_name](#input\_endpoint\_service\_name) | MongoDB Atlas endpoint service name. | `string` | `null` | no |
 | <a name="input_exclusion_filters"></a> [exclusion\_filters](#input\_exclusion\_filters) | A set of regular expression filter patterns for a type of object. | `list(string)` | `[]` | no |
@@ -565,7 +578,22 @@ No modules.
 | <a name="input_kb_state"></a> [kb\_state](#input\_kb\_state) | State of knowledge base; whether it is enabled or disabled | `string` | `"ENABLED"` | no |
 | <a name="input_kb_storage_type"></a> [kb\_storage\_type](#input\_kb\_storage\_type) | The storage type of a knowledge base. | `string` | `null` | no |
 | <a name="input_kb_tags"></a> [kb\_tags](#input\_kb\_tags) | A map of tags keys and values for the knowledge base. | `map(string)` | `null` | no |
-| <a name="input_kb_type"></a> [kb\_type](#input\_kb\_type) | The type of a knowledge base. | `string` | `null` | no |
+| <a name="input_kb_type"></a> [kb\_type](#input\_kb\_type) | The type of a knowledge base. | `string` | `"VECTOR"` | no |
+| <a name="input_kendra_data_source_description"></a> [kendra\_data\_source\_description](#input\_kendra\_data\_source\_description) | A description for the Kendra data source. | `string` | `null` | no |
+| <a name="input_kendra_data_source_language_code"></a> [kendra\_data\_source\_language\_code](#input\_kendra\_data\_source\_language\_code) | The code for the language of the Kendra data source content. | `string` | `"en"` | no |
+| <a name="input_kendra_data_source_name"></a> [kendra\_data\_source\_name](#input\_kendra\_data\_source\_name) | The name of the Kendra data source. | `string` | `"kendra-data-source"` | no |
+| <a name="input_kendra_data_source_schedule"></a> [kendra\_data\_source\_schedule](#input\_kendra\_data\_source\_schedule) | The schedule for Amazon Kendra to update the index. | `string` | `null` | no |
+| <a name="input_kendra_data_source_tags"></a> [kendra\_data\_source\_tags](#input\_kendra\_data\_source\_tags) | A map of tag keys and values for Kendra data source. | `list(map(string))` | `null` | no |
+| <a name="input_kendra_index_arn"></a> [kendra\_index\_arn](#input\_kendra\_index\_arn) | The ARN of the existing Kendra index. | `string` | `null` | no |
+| <a name="input_kendra_index_description"></a> [kendra\_index\_description](#input\_kendra\_index\_description) | A description for the Kendra index. | `string` | `null` | no |
+| <a name="input_kendra_index_edition"></a> [kendra\_index\_edition](#input\_kendra\_index\_edition) | The Amazon Kendra Edition to use for the index. | `string` | `"GEN_AI_ENTERPRISE_EDITION"` | no |
+| <a name="input_kendra_index_id"></a> [kendra\_index\_id](#input\_kendra\_index\_id) | The ID of the existing Kendra index. | `string` | `null` | no |
+| <a name="input_kendra_index_name"></a> [kendra\_index\_name](#input\_kendra\_index\_name) | The name of the Kendra index. | `string` | `"kendra-genai-index"` | no |
+| <a name="input_kendra_index_query_capacity"></a> [kendra\_index\_query\_capacity](#input\_kendra\_index\_query\_capacity) | The number of queries per second allowed for the Kendra index. | `number` | `1` | no |
+| <a name="input_kendra_index_storage_capacity"></a> [kendra\_index\_storage\_capacity](#input\_kendra\_index\_storage\_capacity) | The storage capacity of the Kendra index. | `number` | `1` | no |
+| <a name="input_kendra_index_tags"></a> [kendra\_index\_tags](#input\_kendra\_index\_tags) | A map of tag keys and values for Kendra index. | `list(map(string))` | `null` | no |
+| <a name="input_kendra_index_user_context_policy"></a> [kendra\_index\_user\_context\_policy](#input\_kendra\_index\_user\_context\_policy) | The Kendra index user context policy. | `string` | `null` | no |
+| <a name="input_kendra_kms_key_id"></a> [kendra\_kms\_key\_id](#input\_kendra\_kms\_key\_id) | The Kendra index is encrypted at rest using this key. Specify the key ARN. | `string` | `null` | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | KMS encryption key to use for the agent. | `string` | `null` | no |
 | <a name="input_lambda_action_group_executor"></a> [lambda\_action\_group\_executor](#input\_lambda\_action\_group\_executor) | ARN of Lambda. | `string` | `null` | no |
 | <a name="input_level_configurations_list"></a> [level\_configurations\_list](#input\_level\_configurations\_list) | Token settings for each layer. | `list(object({ max_tokens = number }))` | `null` | no |
@@ -595,6 +623,11 @@ No modules.
 | <a name="input_rate_limit"></a> [rate\_limit](#input\_rate\_limit) | Rate of web URLs retrieved per minute. | `number` | `null` | no |
 | <a name="input_regexes_config"></a> [regexes\_config](#input\_regexes\_config) | List of regex. | `list(map(string))` | `null` | no |
 | <a name="input_resource_arn"></a> [resource\_arn](#input\_resource\_arn) | The ARN of the vector store. | `string` | `null` | no |
+| <a name="input_s3_data_source_bucket_name"></a> [s3\_data\_source\_bucket\_name](#input\_s3\_data\_source\_bucket\_name) | The name of the S3 bucket where the data source is stored. | `string` | `null` | no |
+| <a name="input_s3_data_source_document_metadata_prefix"></a> [s3\_data\_source\_document\_metadata\_prefix](#input\_s3\_data\_source\_document\_metadata\_prefix) | The prefix for the S3 data source. | `string` | `null` | no |
+| <a name="input_s3_data_source_exclusion_patterns"></a> [s3\_data\_source\_exclusion\_patterns](#input\_s3\_data\_source\_exclusion\_patterns) | A list of glob patterns to exclude from the data source. | `list(string)` | `null` | no |
+| <a name="input_s3_data_source_inclusion_patterns"></a> [s3\_data\_source\_inclusion\_patterns](#input\_s3\_data\_source\_inclusion\_patterns) | A list of glob patterns to include in the data source. | `list(string)` | `null` | no |
+| <a name="input_s3_data_source_key_path"></a> [s3\_data\_source\_key\_path](#input\_s3\_data\_source\_key\_path) | The S3 key path where for the data source. | `string` | `null` | no |
 | <a name="input_s3_inclusion_prefixes"></a> [s3\_inclusion\_prefixes](#input\_s3\_inclusion\_prefixes) | List of S3 prefixes that define the object containing the data sources. | `list(string)` | `null` | no |
 | <a name="input_s3_location_uri"></a> [s3\_location\_uri](#input\_s3\_location\_uri) | A location for storing content from data sources temporarily as it is processed by custom components in the ingestion pipeline. | `string` | `null` | no |
 | <a name="input_salesforce_credentials_secret_arn"></a> [salesforce\_credentials\_secret\_arn](#input\_salesforce\_credentials\_secret\_arn) | The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your Salesforce instance URL. | `string` | `null` | no |
@@ -622,6 +655,7 @@ No modules.
 | <a name="input_top_p"></a> [top\_p](#input\_top\_p) | Cumulative probability cutoff for token selection. | `number` | `0.5` | no |
 | <a name="input_topics_config"></a> [topics\_config](#input\_topics\_config) | List of topic configs in topic policy | <pre>list(object({<br>    name       = string<br>    examples   = list(string)<br>    type       = string<br>    definition = string<br>  }))</pre> | `null` | no |
 | <a name="input_transformations_list"></a> [transformations\_list](#input\_transformations\_list) | A list of Lambda functions that process documents. | <pre>list(object({<br>                  step_to_apply = optional(string)<br>                  transformation_function = optional(object({<br>                    transformation_lambda_configuration = optional(object({<br>                      lambda_arn = optional(string)<br>                    }))<br>                  }))<br>                }))</pre> | `null` | no |
+| <a name="input_user_token_configurations"></a> [user\_token\_configurations](#input\_user\_token\_configurations) | List of user token configurations for Kendra. | <pre>list(object({<br><br>    json_token_type_configurations = optional(object({<br>      group_attribute_field = string<br>      user_name_attribute_field = string<br>    }))<br><br>    jwt_token_type_configuration = optional(object({<br>      claim_regex = optional(string)<br>      key_location = optional(string)<br>      group_attribute_field = optional(string)<br>      user_name_attribute_field = optional(string)<br>      issuer = optional(string)<br>      secret_manager_arn = optional(string)<br>      url = optional(string)<br>    })) <br><br>  }))</pre> | `null` | no |
 | <a name="input_variants_list"></a> [variants\_list](#input\_variants\_list) | List of prompt variants. | <pre>list(object({<br>    name                    = optional(string)<br>    template_type           = optional(string)<br>    model_id                = optional(string)<br>    inference_configuration = optional(object({<br>                                text = optional(object({<br>                                  max_tokens = optional(number)<br>                                  stop_sequences = optional(list(string))<br>                                  temperature = optional(number)<br>                                  top_p = optional(number)<br>                                }))<br>                              }))<br><br>    template_configuration  = optional(object({<br>                                text = optional(object({<br>                                  input_variables = optional(list(object({ name = optional(string) })))<br>                                  text = optional(string)<br>                                  text_s3_location = optional(object({<br>                                    bucket = optional(string)<br>                                    key = optional(string)<br>                                    version = optional(string)<br>                                  }))<br>                                }))<br>                              }))<br>  }))</pre> | `null` | no |
 | <a name="input_vector_field"></a> [vector\_field](#input\_vector\_field) | The name of the field where the vector embeddings are stored | `string` | `"bedrock-knowledge-base-default-vector"` | no |
 | <a name="input_vector_index_name"></a> [vector\_index\_name](#input\_vector\_index\_name) | The name of the vector index. | `string` | `"bedrock-knowledge-base-default-index"` | no |

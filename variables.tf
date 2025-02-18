@@ -744,7 +744,12 @@ variable "kb_description" {
 variable "kb_type" {
   description = "The type of a knowledge base."
   type        = string
-  default     = null
+  default     = "VECTOR"
+
+  validation {
+    condition     = var.kb_type == "VECTOR" || var.kb_type == "KENDRA" || var.kb_type == "SQL" || var.kb_type == null
+    error_message = "kb_type must be either VECTOR, KENDRA, or SQL"
+  }
 }
 
 variable "kb_embedding_model_arn" {
@@ -1179,3 +1184,202 @@ variable "custom_model_training_uri" {
   type        = string
   default     = null
 }
+
+# – Kendra GenAI Knowledge Base – 
+
+variable "create_kendra_config" {
+  description = "Whether or not to create a Kendra GenAI knowledge base."
+  type        = bool
+  default     = false
+}
+
+variable "kendra_index_arn" {
+  description = "The ARN of the existing Kendra index."
+  type        = string
+  default     = null
+}
+
+variable "kendra_index_id" {
+  description = "The ID of the existing Kendra index."
+  type        = string
+  default     = null
+}
+
+variable "kendra_index_name" {
+  description = "The name of the Kendra index."
+  type        = string
+  default     = "kendra-genai-index"
+}
+
+variable "kendra_index_edition" {
+  description = "The Amazon Kendra Edition to use for the index."
+  type        = string
+  default     = "GEN_AI_ENTERPRISE_EDITION"
+
+  validation {
+    condition     = var.kendra_index_edition == "DEVELOPER_EDITION" || var.kendra_index_edition == "ENTERPRISE_EDITION" || var.kendra_index_edition == "GEN_AI_ENTERPRISE_EDITION"
+    error_message = "Kendra index edition must be DEVELOPER_EDITION, ENTERPRISE_EDITION or GEN_AI_ENTERPRISE_EDITION."
+  }
+}
+
+variable "kendra_index_description" {
+  description = "A description for the Kendra index."
+  type        = string
+  default     = null
+}
+
+variable "kendra_index_query_capacity" {
+  description = "The number of queries per second allowed for the Kendra index."
+  type        = number
+  default     = 1
+
+  validation {
+    condition     = var.kendra_index_query_capacity >= 1 && var.kendra_index_query_capacity <= 100
+    error_message = "Kendra index query capacity must be between 1 and 100."
+  }
+}
+
+variable "kendra_index_storage_capacity" {
+  description = "The storage capacity of the Kendra index."
+  type        = number
+  default     = 1
+
+   validation {
+    condition     = var.kendra_index_storage_capacity >= 1 && var.kendra_index_storage_capacity <= 50
+    error_message = "Kendra index storage capacity must be between 1 and 50."
+  }
+}
+
+variable "kendra_index_tags" {
+  description = "A map of tag keys and values for Kendra index."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "user_token_configurations" {
+  description = "List of user token configurations for Kendra."
+  type = list(object({
+
+    json_token_type_configurations = optional(object({
+      group_attribute_field = string
+      user_name_attribute_field = string
+    }))
+
+    jwt_token_type_configuration = optional(object({
+      claim_regex = optional(string)
+      key_location = optional(string)
+      group_attribute_field = optional(string)
+      user_name_attribute_field = optional(string)
+      issuer = optional(string)
+      secret_manager_arn = optional(string)
+      url = optional(string)
+    })) 
+
+  }))
+  default = null
+}
+
+variable "kendra_kms_key_id" {
+  description = "The Kendra index is encrypted at rest using this key. Specify the key ARN."
+  type        = string
+  default     = null
+}
+
+variable "kendra_index_user_context_policy" {
+  description = "The Kendra index user context policy."
+  type        = string
+  default     = null
+}
+
+variable "document_metadata_configurations" {
+  description = "List of document metadata configurations for Kendra."
+  type = list(object({
+    name = optional(string)
+    type = optional(string)
+    search = optional(object({
+      facetable = optional(bool)
+      searchable = optional(bool)
+      displayable = optional(bool)
+      sortable = optional(bool)
+    }))
+    relevance = optional(object({
+      duration = optional(string)
+      freshness = optional(bool)
+      importance = optional(number)
+      rank_order = optional(string)
+      value_importance_items = optional(list(object({
+        key = optional(string)
+        value = optional(number)
+      }))) 
+    }))
+  }))
+  default = null
+}
+
+# – Kendra Data Source –
+
+variable "kendra_data_source_name" {
+  description = "The name of the Kendra data source."
+  type        = string
+  default     = "kendra-data-source"
+}
+
+variable "kendra_data_source_language_code" {
+  description = "The code for the language of the Kendra data source content."
+  type        = string
+  default     = "en"
+}  
+
+variable "kendra_data_source_description" {
+  description = "A description for the Kendra data source."
+  type        = string
+  default     = null
+}
+
+variable "kendra_data_source_tags" {
+  description = "A map of tag keys and values for Kendra data source."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "kendra_data_source_schedule" {
+  description = "The schedule for Amazon Kendra to update the index."
+  type        = string
+  default     = null
+}
+
+variable "s3_data_source_exclusion_patterns" {
+  description = "A list of glob patterns to exclude from the data source."
+  type        = list(string)
+  default     = null
+}
+
+variable "s3_data_source_inclusion_patterns" {
+  description = "A list of glob patterns to include in the data source."
+  type        = list(string)
+  default     = null
+}
+
+variable "s3_data_source_document_metadata_prefix" {
+  description = "The prefix for the S3 data source."
+  type        = string
+  default     = null
+}
+
+variable "s3_data_source_key_path" {
+  description = "The S3 key path where for the data source."
+  type        = string
+  default     = null
+}
+
+variable "s3_data_source_bucket_name" {
+  description = "The name of the S3 bucket where the data source is stored."
+  type        = string
+  default     = null
+}
+
+variable "create_kendra_s3_data_source" {
+  description = "Whether or not to create a Kendra S3 data source."
+  type        = bool
+  default     = false
+}  
