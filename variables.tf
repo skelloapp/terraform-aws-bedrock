@@ -1383,3 +1383,93 @@ variable "create_kendra_s3_data_source" {
   type        = bool
   default     = false
 }  
+
+# SQL Knowledge Base
+
+variable "create_sql_config" {
+  description = "Whether or not to create a SQL knowledge base."
+  type        = bool
+  default     = false
+}
+
+variable "sql_kb_workgroup_arn" {
+  description = "The ARN of the existing workgroup."
+  type        = string
+  default     = null
+}
+
+variable "provisioned_auth_configuration" {
+  description = "Configurations for provisioned Redshift query engine"
+  type        = object({
+          database_user = optional(string)
+          type  = optional(string)
+          username_password_secret_arn  = optional(string)
+        })
+  default     = null  
+}
+
+variable "provisioned_config_cluster_identifier" {
+  description = "The cluster identifier for the provisioned Redshift query engine."
+  type        = string
+  default     = null
+}
+
+
+variable "serverless_auth_configuration" {
+  description = "Configuration for the Redshift serverless query engine."
+  type        = object({
+                  type  = optional(string)
+                  username_password_secret_arn  = optional(string)
+                })
+  default     = null
+}
+
+variable "query_generation_configuration" {
+  description = "Configurations for generating Redshift engine queries."
+  type = object({
+    generation_context = optional(object({
+      curated_queries = optional(list(object({
+        natural_language = optional(string)
+        sql = optional(string)
+      })))
+      tables = optional(list(object({
+        columns = optional(list(object({
+          description = optional(string)
+          inclusion = optional(string)
+          name = optional(string)
+        })))
+        description = optional(string)
+        inclusion = optional(string)
+        name = optional(string)
+      })))
+    }))
+    execution_timeout_seconds = optional(number)
+  })
+  default = null
+}
+
+variable "storage_configuration" {
+  description = "List of configurations for available Redshift query engine storage types."
+  type = list(object({
+    aws_data_catalog_configuration = optional(object({
+      table_names = optional(list(string))
+    }))
+    redshift_configuration = optional(object({
+        database_name = optional(string)
+      }))
+    type = optional(string)
+  }))
+  default = null
+}
+
+variable "sql_type" {
+  description = "SQL query engine type for the knowledge base."
+  type        = string
+  default     = "SQL"
+}
+
+variable "redshift_query_engine_type" {
+  description = "Redshift query engine type for the knowledge base."
+  type        = string
+  default     = null
+}
