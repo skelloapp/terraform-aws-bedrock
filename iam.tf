@@ -360,7 +360,7 @@ resource "aws_iam_role_policy" "custom_model_policy" {
 # Kendra IAM   
 resource "aws_iam_policy" "bedrock_kb_kendra" {
   count = var.kb_role_arn != null || var.create_kendra_config == false ? 0 : 1
-  name  = "AmazonBedrockKnowledgeBaseKendraIndexAccessStatement_${var.kb_name}"
+  name  = "AmazonBedrockKnowledgeBaseKendraIndexAccessStatement_${var.kendra_index_name}"
   
   policy = jsonencode({
     "Version" = "2012-10-17"
@@ -379,7 +379,7 @@ resource "aws_iam_policy" "bedrock_kb_kendra" {
 
 resource "awscc_iam_role" "kendra_index_role" {
   count       = var.create_kendra_config && var.kendra_index_arn == null ? 1 : 0
-  role_name   = "kendra_index_role"
+  role_name   = "kendra_index_role_${random_string.solution_prefix.result}"
   description = "Role assigned to the Kendra index"
   assume_role_policy_document = jsonencode({
     Version = "2012-10-17"
