@@ -164,5 +164,5 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_kendra" {
     }
   }
 
-  depends_on = [ time_sleep.wait_after_kendra_index_creation ]
+  depends_on = [ time_sleep.wait_after_kendra_index_creation, time_sleep.wait_after_kendra_s3_data_source_creation ]
 }

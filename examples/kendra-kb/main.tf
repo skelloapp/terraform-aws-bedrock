@@ -7,5 +7,6 @@
 module "bedrock" {
   source = "../.." # local example
   create_kendra_config = true
+  create_kendra_s3_data_source = true
   create_agent = false
 }

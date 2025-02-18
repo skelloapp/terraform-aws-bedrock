@@ -2,6 +2,7 @@
 locals {
   create_kb_role = var.kb_role_arn == null && local.create_kb
   kendra_index_id = var.create_kendra_config == true ? (var.kendra_index_id != null ? var.kendra_index_id : awscc_kendra_index.genai_kendra_index[0].id) : null
+  kendra_data_source_bucket_arn = var.create_kendra_s3_data_source ? (var.kb_s3_data_source != null ? var.kb_s3_data_source : awscc_s3_bucket.s3_data_source[0].arn) : null
 }
 
 
@@ -435,9 +436,10 @@ resource "awscc_iam_role_policy" "kendra_role_policy" {
   })
 }
 
-/*
+
 # Create IAM role for Kendra Data Source
-resource "awscc_iam_role" "kendra_datasource_role" {
+resource "awscc_iam_role" "kendra_s3_datasource_role" {
+  count = var.create_kendra_config && var.create_kendra_s3_data_source ? 1 : 0
   assume_role_policy_document = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -466,14 +468,21 @@ resource "awscc_iam_role" "kendra_datasource_role" {
               "s3:GetObject",
               "s3:ListBucket"
             ]
-            Resource = [
-              awscc_s3_bucket.example.arn,
-              "${awscc_s3_bucket.example.arn}/*"
+            Resource = [ 
+              local.kendra_data_source_bucket_arn,
+              "${local.kendra_data_source_bucket_arn}/*"
             ]
-          }
+          },
+          {
+            Effect: "Allow",
+            Action: [
+                "kendra:BatchPutDocument",
+                "kendra:BatchDeleteDocument"
+            ],
+            Resource: "arn:aws:kendra:${local.region}:${local.account_id}:index/${local.kendra_index_id}"
+        }
         ]
       })
-      policy_name = "kendra-datasource-policy"
     }
   ]
-}*/
+}

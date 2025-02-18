@@ -24,24 +24,23 @@ resource "time_sleep" "wait_after_kendra_index_creation" {
   create_duration = "60s" # Wait for 60 seconds before creating the index
 }
 
-/*
+
 # Create Kendra Data Source
-resource "awscc_kendra_data_source" "kendra_data_source" {
-  count    = var.create_kendra_config ? 1 : 0
-  index_id = var.kendra_index_arn ? var.kendra_index_arn : awscc_kendra_index.genai_kendra_index[0].id
+resource "awscc_kendra_data_source" "kendra_s3_data_source" {
+  count    = var.create_kendra_config && var.create_kendra_s3_data_source == true ? 1 : 0
+  index_id = var.kendra_index_arn != null ? var.kendra_index_arn : awscc_kendra_index.genai_kendra_index[0].id
   name     = "${random_string.solution_prefix.result}-${var.kendra_data_source_name}"
   type     = "S3"
-  role_arn = awscc_iam_role.kendra_datasource_role.arn
+  role_arn = awscc_iam_role.kendra_s3_datasource_role[0].arn
   language_code = var.kendra_data_source_language_code
   schedule = var.kendra_data_source_schedule
-  description = var.kendra_datasource_description
-  tags = var.kendra_datasource_tags
+  description = var.kendra_data_source_description
+  tags = var.kendra_data_source_tags
   data_source_configuration = {
     s3_configuration = {
-      bucket_name = var.s3_data_source_bucket_name ? var.s3_data_source_bucket_name : awscc_s3_bucket.s3_data_source.name
+      bucket_name = var.s3_data_source_bucket_name != null ? var.s3_data_source_bucket_name : awscc_s3_bucket.s3_data_source[0].bucket_name
       exclusion_patterns = var.s3_data_source_exclusion_patterns
       inclusion_patterns = var.s3_data_source_inclusion_patterns
-      inclusion_prefixes = var.s3_data_source_inclusion_prefixes
       documents_metadata_configuration = {
         s3_prefix = var.s3_data_source_document_metadata_prefix
       }
@@ -50,4 +49,10 @@ resource "awscc_kendra_data_source" "kendra_data_source" {
       }
     } 
   }
-}*/
+}
+
+resource "time_sleep" "wait_after_kendra_s3_data_source_creation" {
+  count           = var.create_kendra_config && var.create_kendra_s3_data_source ? 1 : 0
+  depends_on      = [ awscc_kendra_data_source.kendra_s3_data_source[0] ]
+  create_duration = "60s" # Wait for 60 seconds before creating the index
+}

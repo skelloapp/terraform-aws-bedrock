@@ -1315,3 +1315,71 @@ variable "document_metadata_configurations" {
   }))
   default = null
 }
+
+# – Kendra Data Source –
+
+variable "kendra_data_source_name" {
+  description = "The name of the Kendra data source."
+  type        = string
+  default     = "kendra-data-source"
+}
+
+variable "kendra_data_source_language_code" {
+  description = "The code for the language of the Kendra data source content."
+  type        = string
+  default     = "en"
+}  
+
+variable "kendra_data_source_description" {
+  description = "A description for the Kendra data source."
+  type        = string
+  default     = null
+}
+
+variable "kendra_data_source_tags" {
+  description = "A map of tag keys and values for Kendra data source."
+  type        = list(map(string))
+  default     = null
+}
+
+variable "kendra_data_source_schedule" {
+  description = "The schedule for Amazon Kendra to update the index."
+  type        = string
+  default     = null
+}
+
+variable "s3_data_source_exclusion_patterns" {
+  description = "A list of glob patterns to exclude from the data source."
+  type        = list(string)
+  default     = null
+}
+
+variable "s3_data_source_inclusion_patterns" {
+  description = "A list of glob patterns to include in the data source."
+  type        = list(string)
+  default     = null
+}
+
+variable "s3_data_source_document_metadata_prefix" {
+  description = "The prefix for the S3 data source."
+  type        = string
+  default     = null
+}
+
+variable "s3_data_source_key_path" {
+  description = "The S3 key path where for the data source."
+  type        = string
+  default     = null
+}
+
+variable "s3_data_source_bucket_name" {
+  description = "The name of the S3 bucket where the data source is stored."
+  type        = string
+  default     = null
+}
+
+variable "create_kendra_s3_data_source" {
+  description = "Whether or not to create a Kendra S3 data source."
+  type        = bool
+  default     = false
+}  
