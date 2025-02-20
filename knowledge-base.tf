@@ -179,21 +179,21 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_sql" {
   knowledge_base_configuration = {
     type = "SQL"
     sql_knowledge_base_configuration = {
-      type = var.sql_type
+      type = "REDSHIFT"
       redshift_configuration = {
         query_engine_configuration = {
-          serverless_configuration = {
+          serverless_configuration = var.sql_kb_workgroup_arn == null ? null : {
             workgroup_arn = var.sql_kb_workgroup_arn
             auth_configuration = var.serverless_auth_configuration
           }
-          provisioned_configuration = {
+          provisioned_configuration = var.provisioned_config_cluster_identifier == null ? null : {
             cluster_identifier = var.provisioned_config_cluster_identifier
             auth_configuration = var.provisioned_auth_configuration
           } 
           type = var.redshift_query_engine_type
         }
         query_generation_configuration = var.query_generation_configuration
-        storage_configurations = var.storage_configuration
+        storage_configurations = var.redshift_storage_configuration
       }
       
     }

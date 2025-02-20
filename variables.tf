@@ -1448,7 +1448,7 @@ variable "query_generation_configuration" {
   default = null
 }
 
-variable "storage_configuration" {
+variable "redshift_storage_configuration" {
   description = "List of configurations for available Redshift query engine storage types."
   type = list(object({
     aws_data_catalog_configuration = optional(object({
@@ -1462,14 +1462,13 @@ variable "storage_configuration" {
   default = null
 }
 
-variable "sql_type" {
-  description = "SQL query engine type for the knowledge base."
-  type        = string
-  default     = "SQL"
-}
-
 variable "redshift_query_engine_type" {
-  description = "Redshift query engine type for the knowledge base."
+  description = "Redshift query engine type for the knowledge base. Defaults to SERVERLESS"
   type        = string
-  default     = null
+  default     = "SERVERLESS"
+
+  validation  {
+    condition     = var.redshift_query_engine_type == "SERVERLESS" || var.redshift_query_engine_type == "PROVISIONED"
+    error_message = "Redshift query engine type must be SERVERLESS or PROVISIONED."
+  }
 }
