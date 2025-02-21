@@ -32,7 +32,7 @@ resource "aws_iam_role_policy" "kb_policy" {
 
 # Define the IAM role for Amazon Bedrock Knowledge Base
 resource "aws_iam_role" "bedrock_knowledge_base_role" {
-  count = var.kb_role_arn != null || local.create_kb == false ? 0 : 1
+  count = var.kb_role_arn != null || (local.create_kb == false && var.create_sql_config == false) ? 0 : 1
   name  = "AmazonBedrockExecutionRoleForKnowledgeBase-${random_string.solution_prefix.result}"
 
   assume_role_policy = jsonencode({
@@ -140,6 +140,24 @@ resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_kendra_policy_
   count      = var.kb_role_arn != null || var.create_kendra_config == false ? 0 : 1
   role       = aws_iam_role.bedrock_knowledge_base_role[0].name
   policy_arn = aws_iam_policy.bedrock_kb_kendra[0].arn
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_sql_policy_attachment" {
+  count      = var.kb_role_arn != null || var.create_sql_config == false ? 0 : 1
+  role       = aws_iam_role.bedrock_knowledge_base_role[0].name
+  policy_arn = aws_iam_policy.bedrock_kb_sql[0].arn
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_sql_serverless_policy_attachment" {
+  count      = var.kb_role_arn != null || var.create_sql_config == false || var.redshift_query_engine_type != "SERVERLESS" ? 0 : 1
+  role       = aws_iam_role.bedrock_knowledge_base_role[0].name
+  policy_arn = aws_iam_policy.bedrock_kb_sql_serverless[0].arn
+}
+
+resource "aws_iam_role_policy_attachment" "bedrock_knowledge_base_sql_provision_policy_attachment" {
+  count      = var.kb_role_arn != null || var.create_sql_config == false || var.redshift_query_engine_type != "PROVISIONED" ? 0 : 1
+  role       = aws_iam_role.bedrock_knowledge_base_role[0].name
+  policy_arn = aws_iam_policy.bedrock_kb_sql_provisioned[0].arn
 }
 
 resource "aws_iam_role_policy_attachment" "bedrock_kb_s3_decryption_policy_attachment" {
@@ -485,4 +503,113 @@ resource "awscc_iam_role" "kendra_s3_datasource_role" {
       })
     }
   ]
+}
+
+# SQL Knowledge Base IAM
+resource "aws_iam_policy" "bedrock_kb_sql" {
+  count = var.kb_role_arn != null || var.create_sql_config == false ? 0 : 1
+  name  = "AmazonBedrockKnowledgeBaseRedshiftStatement_${var.kb_name}"
+  
+  policy = jsonencode({
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Sid": "RedshiftDataAPIStatementPermissions",
+              "Effect": "Allow",
+              "Action": [
+                  "redshift-data:GetStatementResult",
+                  "redshift-data:DescribeStatement",
+                  "redshift-data:CancelStatement"
+              ],
+              "Resource": [
+                  "*"
+              ],
+              "Condition": {
+                "StringEquals": {
+                    "redshift-data:statement-owner-iam-userid": "$${aws:userid}"
+                }
+            }
+          },
+          {
+              "Sid": "SqlWorkbenchAccess",
+              "Effect": "Allow",
+              "Action": [
+                  "sqlworkbench:GetSqlRecommendations",
+                  "sqlworkbench:PutSqlGenerationContext",
+                  "sqlworkbench:GetSqlGenerationContext",
+                  "sqlworkbench:DeleteSqlGenerationContext"
+              ],
+              "Resource": "*"
+          },
+          {
+              "Sid": "KbAccess",
+              "Effect": "Allow",
+              "Action": [
+                  "bedrock:GenerateQuery"
+              ],
+              "Resource": "*"
+          }
+    ]
+  })
+}
+
+
+resource "aws_iam_policy" "bedrock_kb_sql_serverless" {
+  count = var.kb_role_arn != null || var.create_sql_config == false || var.redshift_query_engine_type != "SERVERLESS" ? 0 : 1
+  name  = "AmazonBedrockKnowledgeBaseRedshiftServerlessStatement_${var.kb_name}"
+  
+  policy = jsonencode({
+      "Version": "2012-10-17",
+      "Statement": [
+ 
+          {
+              "Sid": "RedshiftDataAPIExecutePermissions",
+              "Effect": "Allow",
+              "Action": [
+                  "redshift-data:ExecuteStatement"
+              ],
+              "Resource": [
+                  "arn:aws:redshift-serverless:${local.region}:${local.account_id}:workgroup:${split("/", var.sql_kb_workgroup_arn)[1]}"
+              ]
+          },
+          {
+              "Sid": "RedshiftServerlessGetCredentials",
+              "Effect": "Allow",
+              "Action": "redshift-serverless:GetCredentials",
+              "Resource": [
+                  "arn:aws:redshift-serverless:${local.region}:${local.account_id}:workgroup:${split("/", var.sql_kb_workgroup_arn)[1]}"
+              ]
+          }
+    ]
+  })
+}
+
+
+resource "aws_iam_policy" "bedrock_kb_sql_provisioned" {
+  count = var.kb_role_arn != null || var.create_sql_config == false || var.redshift_query_engine_type != "PROVISIONED" ? 0 : 1
+  name  = "AmazonBedrockKnowledgeBaseRedshiftProvisionedStatement_${var.kb_name}"
+  
+  policy = jsonencode({
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+            "Sid": "RedshiftDataAPIExecutePermissions",
+            "Effect": "Allow",
+            "Action": [
+                "redshift-data:ExecuteStatement"
+            ],
+            "Resource": [
+                "arn:aws:redshift:${local.region}:${local.account_id}:cluster:${var.provisioned_config_cluster_identifier}"
+            ]
+        },
+        {
+            "Sid": "GetCredentialsWithFederatedIAMCredentials",
+            "Effect": "Allow",
+            "Action": "redshift:GetClusterCredentialsWithIAM",
+            "Resource": [
+                "arn:aws:redshift:${local.region}:${local.account_id}:dbname:${var.provisioned_config_cluster_identifier}/*"
+            ]
+        }
+    ]
+  })
 }

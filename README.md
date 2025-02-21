@@ -14,7 +14,9 @@ The main features of the Bedrock module include:
   - Agent Alias
   - Agent Collaborators
 - Knowledge Bases
-  - Data Sources
+  - Vector Knowledge Base
+  - Kendra Knowledge Base
+  - SQL Knowledge Base
 - Guardrails
 - Prompt Management
   - Prompt Versions
@@ -32,7 +34,7 @@ The following example creates an Agent, where you must define at a minimum the d
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -79,7 +81,7 @@ Example configuration with a supervisor agent and a collaborator agent:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
@@ -98,9 +100,9 @@ See the additional input variables for deploying Agent Collaborators [here](http
 
 With Knowledge Bases for Amazon Bedrock, you can give FMs and agents contextual information from your company’s private data sources for Retrieval Augmented Generation (RAG) to deliver more relevant, accurate, and customized responses.
 
-### Create a Knowledge Base
+### Create a Vector Knowledge Base
 
-A vector index on a vector store is required to create a Knowledge Base. This construct currently supports Amazon OpenSearch Serverless, Amazon RDS Aurora PostgreSQL, Pinecone, and MongoDB. By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
+A vector index on a vector store is required to create a vector Knowledge Base. This construct currently supports Amazon OpenSearch Serverless, Amazon RDS Aurora PostgreSQL, Pinecone, and MongoDB. By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
 
 The resource accepts an instruction prop that is provided to any Bedrock Agent it is associated with so the agent can decide when to query the Knowledge Base.
 
@@ -116,7 +118,7 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
@@ -125,7 +127,7 @@ module "bedrock" {
 
 See the additional input variables for deploying Knowledge Bases [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L682)
 
-### Knowledge Base - Data Sources
+### Vector Knowledge Base - Data Sources
 
 Data sources are the various repositories or systems from which information is extracted and ingested into the knowledge base. These sources provide the raw content that will be processed, indexed, and made available for querying within the knowledge base system. Data sources can include various types of systems such as document management systems, databases, file storage systems, and content management platforms. Suuported Data Sources include Amazon S3 buckets, Web Crawlers, SharePoint sites, Salesforce instances, and Confluence spaces.
 
@@ -140,6 +142,41 @@ Data sources are the various repositories or systems from which information is e
 - Confluence. You can create a new Confluence data source by setting the `create_confluence` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
 
 See the additional input variables for deploying Knowledge Base Data Sources [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L412)
+
+### Create a Kendra Knowledge Base
+
+With Amazon Bedrock Knowledge Bases, you can build a knowledge base from an Amazon Kendra GenAI index to create more sophisticated and accurate Retrieval Augmented Generation (RAG)-powered digital assistants. By combining an Amazon Kendra GenAI index with Amazon Bedrock Knowledge Bases, you can:
+
+- Reuse your indexed content across multiple Amazon Bedrock applications without rebuilding indexes or re-ingesting data.
+- Leverage the advanced GenAI capabilities of Amazon Bedrock while benefiting from the high-accuracy information retrieval of Amazon Kendra.
+- Customize your digital assistant's behavior using the tools of Amazon Bedrock while maintaining the semantic accuracy of an Amazon Kendra GenAI index.
+
+Example Kendra Knowledge Base:
+
+```
+module "bedrock" {
+  source  = "aws-ia/bedrock/aws"
+  version = "0.0.9"
+  create_kendra_config = true
+  create_kendra_s3_data_source = true
+  create_agent = false
+}
+```
+
+See the additional input variables for deploying a Kendra Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1188)
+
+### Create a SQL Knowledge Base
+
+Amazon Bedrock Knowledge Bases provides direct integration with structured data stores, allowing natural language queries to be automatically converted into SQL queries for data retrieval. This feature enables you to query your structured data sources without the need for vector embeddings or data preprocessing.
+
+- Amazon Bedrock Knowledge Bases analyzes:
+  - Query patterns
+  - Query history
+  - Schema metadata
+- Converts natural language queries into SQL
+- Retrieves relevant information directly from supported data sources
+
+See the additional input variables for deploying a SQL Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1387)
 
 ## Bedrock Guardrails
 
@@ -160,7 +197,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -263,7 +300,7 @@ Creating a prompt with a prompt version would look like:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_agent = false
 
   # Prompt Management
@@ -303,7 +340,7 @@ module "bedrock" {
 }
 ```
 
-See the additional input variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L955)
+See the additional input variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L960)
 
 ## Application Inference Profile
 
@@ -322,7 +359,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_agent = false
 
   # Application Inference Profile
@@ -331,7 +368,7 @@ module "bedrock" {
 }
 ```
 
-See the additional input variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1041)
+See the additional input variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1046)
 
 ## Custom Models
 
@@ -357,7 +394,7 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
   }
 - `custom_model_training_uri`
 
-See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1111)
+See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1116)
 
 ## Requirements
 
@@ -395,6 +432,9 @@ No modules.
 | [aws_cloudwatch_log_group.knowledge_base_cwl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_iam_policy.bedrock_kb_kendra](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.bedrock_kb_s3_decryption_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_kb_sql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_kb_sql_provisioned](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_kb_sql_serverless](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.bedrock_knowledge_base_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.bedrock_knowledge_base_policy_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.agent_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -414,6 +454,9 @@ No modules.
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_kendra_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_s3_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_provision_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_serverless_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_permission.allow_bedrock_agent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_opensearchserverless_access_policy.data_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_access_policy) | resource |
 | [aws_opensearchserverless_security_policy.nw_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_security_policy) | resource |
@@ -435,6 +478,7 @@ No modules.
 | [awscc_bedrock_knowledge_base.knowledge_base_opensearch](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_pinecone](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_rds](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_sql](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_prompt.prompt](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_prompt) | resource |
 | [awscc_bedrock_prompt_version.prompt_version](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_prompt_version) | resource |
 | [awscc_iam_role.kendra_index_role](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role) | resource |
@@ -528,6 +572,7 @@ No modules.
 | <a name="input_create_s3_data_source"></a> [create\_s3\_data\_source](#input\_create\_s3\_data\_source) | Whether or not to create the S3 data source. | `bool` | `false` | no |
 | <a name="input_create_salesforce"></a> [create\_salesforce](#input\_create\_salesforce) | Whether or not create a Salesforce data source. | `bool` | `false` | no |
 | <a name="input_create_sharepoint"></a> [create\_sharepoint](#input\_create\_sharepoint) | Whether or not create a Share Point data source. | `bool` | `false` | no |
+| <a name="input_create_sql_config"></a> [create\_sql\_config](#input\_create\_sql\_config) | Whether or not to create a SQL knowledge base. | `bool` | `false` | no |
 | <a name="input_create_supervisor_guardrail"></a> [create\_supervisor\_guardrail](#input\_create\_supervisor\_guardrail) | Whether or not to create a guardrail for the supervisor agent. | `bool` | `false` | no |
 | <a name="input_create_vector_ingestion_configuration"></a> [create\_vector\_ingestion\_configuration](#input\_create\_vector\_ingestion\_configuration) | Whether or not to create a vector ingestion configuration. | `bool` | `false` | no |
 | <a name="input_create_web_crawler"></a> [create\_web\_crawler](#input\_create\_web\_crawler) | Whether or not create a web crawler data source. | `bool` | `false` | no |
@@ -620,7 +665,12 @@ No modules.
 | <a name="input_prompt_type"></a> [prompt\_type](#input\_prompt\_type) | The step in the agent sequence that this prompt configuration applies to. | `string` | `null` | no |
 | <a name="input_prompt_version_description"></a> [prompt\_version\_description](#input\_prompt\_version\_description) | Description for a prompt version resource. | `string` | `null` | no |
 | <a name="input_prompt_version_tags"></a> [prompt\_version\_tags](#input\_prompt\_version\_tags) | A map of tag keys and values for a prompt version resource. | `map(string)` | `null` | no |
+| <a name="input_provisioned_auth_configuration"></a> [provisioned\_auth\_configuration](#input\_provisioned\_auth\_configuration) | Configurations for provisioned Redshift query engine | <pre>object({<br>          database_user = optional(string)<br>          type  = optional(string)<br>          username_password_secret_arn  = optional(string)<br>        })</pre> | `null` | no |
+| <a name="input_provisioned_config_cluster_identifier"></a> [provisioned\_config\_cluster\_identifier](#input\_provisioned\_config\_cluster\_identifier) | The cluster identifier for the provisioned Redshift query engine. | `string` | `null` | no |
+| <a name="input_query_generation_configuration"></a> [query\_generation\_configuration](#input\_query\_generation\_configuration) | Configurations for generating Redshift engine queries. | <pre>object({<br>    generation_context = optional(object({<br>      curated_queries = optional(list(object({<br>        natural_language = optional(string)<br>        sql = optional(string)<br>      })))<br>      tables = optional(list(object({<br>        columns = optional(list(object({<br>          description = optional(string)<br>          inclusion = optional(string)<br>          name = optional(string)<br>        })))<br>        description = optional(string)<br>        inclusion = optional(string)<br>        name = optional(string)<br>      })))<br>    }))<br>    execution_timeout_seconds = optional(number)<br>  })</pre> | `null` | no |
 | <a name="input_rate_limit"></a> [rate\_limit](#input\_rate\_limit) | Rate of web URLs retrieved per minute. | `number` | `null` | no |
+| <a name="input_redshift_query_engine_type"></a> [redshift\_query\_engine\_type](#input\_redshift\_query\_engine\_type) | Redshift query engine type for the knowledge base. Defaults to SERVERLESS | `string` | `"SERVERLESS"` | no |
+| <a name="input_redshift_storage_configuration"></a> [redshift\_storage\_configuration](#input\_redshift\_storage\_configuration) | List of configurations for available Redshift query engine storage types. | <pre>list(object({<br>    aws_data_catalog_configuration = optional(object({<br>      table_names = optional(list(string))<br>    }))<br>    redshift_configuration = optional(object({<br>        database_name = optional(string)<br>      }))<br>    type = optional(string)<br>  }))</pre> | `null` | no |
 | <a name="input_regexes_config"></a> [regexes\_config](#input\_regexes\_config) | List of regex. | `list(map(string))` | `null` | no |
 | <a name="input_resource_arn"></a> [resource\_arn](#input\_resource\_arn) | The ARN of the vector store. | `string` | `null` | no |
 | <a name="input_s3_data_source_bucket_name"></a> [s3\_data\_source\_bucket\_name](#input\_s3\_data\_source\_bucket\_name) | The name of the S3 bucket where the data source is stored. | `string` | `null` | no |
@@ -634,10 +684,12 @@ No modules.
 | <a name="input_seed_urls"></a> [seed\_urls](#input\_seed\_urls) | A list of web urls. | `list(object({url = string}))` | `[]` | no |
 | <a name="input_semantic_buffer_size"></a> [semantic\_buffer\_size](#input\_semantic\_buffer\_size) | The buffer size. | `number` | `null` | no |
 | <a name="input_semantic_max_tokens"></a> [semantic\_max\_tokens](#input\_semantic\_max\_tokens) | The maximum number of tokens that a chunk can contain. | `number` | `null` | no |
+| <a name="input_serverless_auth_configuration"></a> [serverless\_auth\_configuration](#input\_serverless\_auth\_configuration) | Configuration for the Redshift serverless query engine. | <pre>object({<br>                  type  = optional(string)<br>                  username_password_secret_arn  = optional(string)<br>                })</pre> | `null` | no |
 | <a name="input_share_point_credentials_secret_arn"></a> [share\_point\_credentials\_secret\_arn](#input\_share\_point\_credentials\_secret\_arn) | The ARN of an AWS Secrets Manager secret that stores your authentication credentials for your SharePoint site/sites. | `string` | `null` | no |
 | <a name="input_share_point_domain"></a> [share\_point\_domain](#input\_share\_point\_domain) | The domain of your SharePoint instance or site URL/URLs. | `string` | `null` | no |
 | <a name="input_share_point_site_urls"></a> [share\_point\_site\_urls](#input\_share\_point\_site\_urls) | A list of one or more SharePoint site URLs. | `list(string)` | `[]` | no |
 | <a name="input_skip_resource_in_use"></a> [skip\_resource\_in\_use](#input\_skip\_resource\_in\_use) | Specifies whether to allow deleting action group while it is in use. | `bool` | `null` | no |
+| <a name="input_sql_kb_workgroup_arn"></a> [sql\_kb\_workgroup\_arn](#input\_sql\_kb\_workgroup\_arn) | The ARN of the existing workgroup. | `string` | `null` | no |
 | <a name="input_stop_sequences"></a> [stop\_sequences](#input\_stop\_sequences) | A list of stop sequences. | `list(string)` | `[]` | no |
 | <a name="input_supervisor_guardrail_id"></a> [supervisor\_guardrail\_id](#input\_supervisor\_guardrail\_id) | The ID of the guardrail for the supervisor agent. | `string` | `null` | no |
 | <a name="input_supervisor_guardrail_version"></a> [supervisor\_guardrail\_version](#input\_supervisor\_guardrail\_version) | The version of the guardrail for the supervisor agent. | `string` | `null` | no |
