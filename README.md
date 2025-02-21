@@ -162,18 +162,19 @@ module "bedrock" {
   create_agent = false
 }
 ```
+
 See the additional input variables for deploying a Kendra Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1188)
 
 ### Create a SQL Knowledge Base
 
 Amazon Bedrock Knowledge Bases provides direct integration with structured data stores, allowing natural language queries to be automatically converted into SQL queries for data retrieval. This feature enables you to query your structured data sources without the need for vector embeddings or data preprocessing.
 
-1. Amazon Bedrock Knowledge Bases analyzes:
-   - Query patterns
-   - Query history
-   - Schema metadata
-2. Converts natural language queries into SQL
-3. Retrieves relevant information directly from supported data sources
+- Amazon Bedrock Knowledge Bases analyzes:
+  - Query patterns
+  - Query history
+  - Schema metadata
+- Converts natural language queries into SQL
+- Retrieves relevant information directly from supported data sources
 
 See the additional input variables for deploying a SQL Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1387)
 
