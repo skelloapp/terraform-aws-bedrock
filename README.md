@@ -14,7 +14,9 @@ The main features of the Bedrock module include:
   - Agent Alias
   - Agent Collaborators
 - Knowledge Bases
-  - Data Sources
+  - Vector Knowledge Base
+  - Kendra Knowledge Base
+  - SQL Knowledge Base
 - Guardrails
 - Prompt Management
   - Prompt Versions
@@ -32,7 +34,7 @@ The following example creates an Agent, where you must define at a minimum the d
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -79,7 +81,7 @@ Example configuration with a supervisor agent and a collaborator agent:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
@@ -98,9 +100,9 @@ See the additional input variables for deploying Agent Collaborators [here](http
 
 With Knowledge Bases for Amazon Bedrock, you can give FMs and agents contextual information from your company’s private data sources for Retrieval Augmented Generation (RAG) to deliver more relevant, accurate, and customized responses.
 
-### Create a Knowledge Base
+### Create a Vector Knowledge Base
 
-A vector index on a vector store is required to create a Knowledge Base. This construct currently supports Amazon OpenSearch Serverless, Amazon RDS Aurora PostgreSQL, Pinecone, and MongoDB. By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
+A vector index on a vector store is required to create a vector Knowledge Base. This construct currently supports Amazon OpenSearch Serverless, Amazon RDS Aurora PostgreSQL, Pinecone, and MongoDB. By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
 
 The resource accepts an instruction prop that is provided to any Bedrock Agent it is associated with so the agent can decide when to query the Knowledge Base.
 
@@ -116,7 +118,7 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
@@ -125,7 +127,7 @@ module "bedrock" {
 
 See the additional input variables for deploying Knowledge Bases [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L682)
 
-### Knowledge Base - Data Sources
+### Vector Knowledge Base - Data Sources
 
 Data sources are the various repositories or systems from which information is extracted and ingested into the knowledge base. These sources provide the raw content that will be processed, indexed, and made available for querying within the knowledge base system. Data sources can include various types of systems such as document management systems, databases, file storage systems, and content management platforms. Suuported Data Sources include Amazon S3 buckets, Web Crawlers, SharePoint sites, Salesforce instances, and Confluence spaces.
 
@@ -140,6 +142,40 @@ Data sources are the various repositories or systems from which information is e
 - Confluence. You can create a new Confluence data source by setting the `create_confluence` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
 
 See the additional input variables for deploying Knowledge Base Data Sources [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L412)
+
+### Create a Kendra Knowledge Base
+
+With Amazon Bedrock Knowledge Bases, you can build a knowledge base from an Amazon Kendra GenAI index to create more sophisticated and accurate Retrieval Augmented Generation (RAG)-powered digital assistants. By combining an Amazon Kendra GenAI index with Amazon Bedrock Knowledge Bases, you can:
+
+- Reuse your indexed content across multiple Amazon Bedrock applications without rebuilding indexes or re-ingesting data.
+- Leverage the advanced GenAI capabilities of Amazon Bedrock while benefiting from the high-accuracy information retrieval of Amazon Kendra.
+- Customize your digital assistant's behavior using the tools of Amazon Bedrock while maintaining the semantic accuracy of an Amazon Kendra GenAI index.
+
+Example Kendra Knowledge Base:
+
+```
+module "bedrock" {
+  source  = "aws-ia/bedrock/aws"
+  version = "0.0.9"
+  create_kendra_config = true
+  create_kendra_s3_data_source = true
+  create_agent = false
+}
+```
+See the additional input variables for deploying a Kendra Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1188)
+
+### Create a SQL Knowledge Base
+
+Amazon Bedrock Knowledge Bases provides direct integration with structured data stores, allowing natural language queries to be automatically converted into SQL queries for data retrieval. This feature enables you to query your structured data sources without the need for vector embeddings or data preprocessing.
+
+1. Amazon Bedrock Knowledge Bases analyzes:
+   - Query patterns
+   - Query history
+   - Schema metadata
+2. Converts natural language queries into SQL
+3. Retrieves relevant information directly from supported data sources
+
+See the additional input variables for deploying a SQL Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1387)
 
 ## Bedrock Guardrails
 
@@ -160,7 +196,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -263,7 +299,7 @@ Creating a prompt with a prompt version would look like:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_agent = false
 
   # Prompt Management
@@ -303,7 +339,7 @@ module "bedrock" {
 }
 ```
 
-See the additional input variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L955)
+See the additional input variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L960)
 
 ## Application Inference Profile
 
@@ -322,7 +358,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.8"
+  version = "0.0.9"
   create_agent = false
 
   # Application Inference Profile
@@ -331,7 +367,7 @@ module "bedrock" {
 }
 ```
 
-See the additional input variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1041)
+See the additional input variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1046)
 
 ## Custom Models
 
@@ -357,7 +393,7 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
   }
 - `custom_model_training_uri`
 
-See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1111)
+See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1116)
 
 ## Requirements
 
