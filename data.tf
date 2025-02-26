@@ -10,7 +10,7 @@ locals {
 }
 
 data "aws_iam_policy_document" "agent_trust" {
-  count = var.create_agent ? 1 : 0
+  count = var.create_agent || var.create_supervisor ? 1 : 0
   statement {
     actions = ["sts:AssumeRole"]
     principals {
@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "agent_permissions" {
 }
 
 data "aws_iam_policy_document" "agent_alias_permissions" {
-  count = var.create_agent_alias ? 1 : 0
+  count = var.create_agent_alias || var.create_supervisor ? 1 : 0
   statement {
     actions = [
       "bedrock:GetAgentAlias", 

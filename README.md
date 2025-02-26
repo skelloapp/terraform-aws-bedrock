@@ -573,6 +573,7 @@ No modules.
 | <a name="input_create_salesforce"></a> [create\_salesforce](#input\_create\_salesforce) | Whether or not create a Salesforce data source. | `bool` | `false` | no |
 | <a name="input_create_sharepoint"></a> [create\_sharepoint](#input\_create\_sharepoint) | Whether or not create a Share Point data source. | `bool` | `false` | no |
 | <a name="input_create_sql_config"></a> [create\_sql\_config](#input\_create\_sql\_config) | Whether or not to create a SQL knowledge base. | `bool` | `false` | no |
+| <a name="input_create_supervisor"></a> [create\_supervisor](#input\_create\_supervisor) | Whether or not to create an agent supervisor. | `bool` | `false` | no |
 | <a name="input_create_supervisor_guardrail"></a> [create\_supervisor\_guardrail](#input\_create\_supervisor\_guardrail) | Whether or not to create a guardrail for the supervisor agent. | `bool` | `false` | no |
 | <a name="input_create_vector_ingestion_configuration"></a> [create\_vector\_ingestion\_configuration](#input\_create\_vector\_ingestion\_configuration) | Whether or not to create a vector ingestion configuration. | `bool` | `false` | no |
 | <a name="input_create_web_crawler"></a> [create\_web\_crawler](#input\_create\_web\_crawler) | Whether or not create a web crawler data source. | `bool` | `false` | no |
@@ -693,6 +694,7 @@ No modules.
 | <a name="input_stop_sequences"></a> [stop\_sequences](#input\_stop\_sequences) | A list of stop sequences. | `list(string)` | `[]` | no |
 | <a name="input_supervisor_guardrail_id"></a> [supervisor\_guardrail\_id](#input\_supervisor\_guardrail\_id) | The ID of the guardrail for the supervisor agent. | `string` | `null` | no |
 | <a name="input_supervisor_guardrail_version"></a> [supervisor\_guardrail\_version](#input\_supervisor\_guardrail\_version) | The version of the guardrail for the supervisor agent. | `string` | `null` | no |
+| <a name="input_supervisor_id"></a> [supervisor\_id](#input\_supervisor\_id) | The ID of the supervisor. | `string` | `null` | no |
 | <a name="input_supervisor_idle_session_ttl"></a> [supervisor\_idle\_session\_ttl](#input\_supervisor\_idle\_session\_ttl) | How long sessions should be kept open for the supervisor agent. | `number` | `600` | no |
 | <a name="input_supervisor_instruction"></a> [supervisor\_instruction](#input\_supervisor\_instruction) | A narrative instruction to provide the agent as context. | `string` | `""` | no |
 | <a name="input_supervisor_kms_key_arn"></a> [supervisor\_kms\_key\_arn](#input\_supervisor\_kms\_key\_arn) | KMS encryption key to use for the supervisor agent. | `string` | `null` | no |
@@ -727,4 +729,5 @@ No modules.
 | <a name="output_pinecone_kb_identifier"></a> [pinecone\_kb\_identifier](#output\_pinecone\_kb\_identifier) | The unique identifier of the Pinecone knowledge base that was created.  If no Pinecone KB was requested, value will be null |
 | <a name="output_rds_kb_identifier"></a> [rds\_kb\_identifier](#output\_rds\_kb\_identifier) | The unique identifier of the RDS knowledge base that was created.  If no RDS KB was requested, value will be null |
 | <a name="output_s3_data_source_arn"></a> [s3\_data\_source\_arn](#output\_s3\_data\_source\_arn) | The Amazon Bedrock Data Source for S3. |
+| <a name="output_supervisor_id"></a> [supervisor\_id](#output\_supervisor\_id) | The identifier of the supervisor agent. |
 <!-- END_TF_DOCS -->
