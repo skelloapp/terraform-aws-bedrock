@@ -20,7 +20,9 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_bedrock"></a> [bedrock](#module\_bedrock) | ../.. | n/a |
+| <a name="module_agent_collaborator1"></a> [agent\_collaborator1](#module\_agent\_collaborator1) | ../.. | n/a |
+| <a name="module_agent_collaborator2"></a> [agent\_collaborator2](#module\_agent\_collaborator2) | ../.. | n/a |
+| <a name="module_agent_supervisor"></a> [agent\_supervisor](#module\_agent\_supervisor) | ../.. | n/a |
 
 ## Resources
 

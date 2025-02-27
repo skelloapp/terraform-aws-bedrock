@@ -238,12 +238,23 @@ variable "collaborator_name" {
   default     = "TerraformBedrockAgentCollaborator"
 }
 
+variable "create_supervisor" {
+  description = "Whether or not to create an agent supervisor."
+  type        = bool
+  default     = false
+}
+
+variable "supervisor_id" {
+  description = "The ID of the supervisor."
+  type        = string
+  default     = null
+}
+
 variable "supervisor_name" {
   description = "The name of the supervisor."
   type        = string
   default     = "TerraformBedrockAgentSupervisor"
 }
-
 
 variable "supervisor_idle_session_ttl" {
   description = "How long sessions should be kept open for the supervisor agent."

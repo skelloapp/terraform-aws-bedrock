@@ -105,7 +105,7 @@ resource "awscc_bedrock_agent_alias"  "bedrock_agent_alias" {
 
 resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
   count                      = local.counter_collaborator    
-  agent_id                   = aws_bedrockagent_agent.agent_supervisor[0].agent_id
+  agent_id                   = var.create_supervisor ? aws_bedrockagent_agent.agent_supervisor[0].agent_id : var.supervisor_id
   collaboration_instruction  = var.collaboration_instruction
   collaborator_name          = "${random_string.solution_prefix.result}-${var.collaborator_name}"
   relay_conversation_history = "TO_COLLABORATOR"
@@ -113,10 +113,12 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
   agent_descriptor {
     alias_arn = awscc_bedrock_agent_alias.bedrock_agent_alias[0].agent_alias_arn
   }
+
+  depends_on = [awscc_bedrock_agent.bedrock_agent[0], awscc_bedrock_agent_alias.bedrock_agent_alias[0]]
 }
 
 resource "aws_bedrockagent_agent" "agent_supervisor" {
-  count                       = local.counter_collaborator
+  count                       = var.create_supervisor ? 1 : 0
   agent_name                  = "${random_string.solution_prefix.result}-${var.supervisor_name}"
   agent_resource_role_arn     = aws_iam_role.agent_role[0].arn
   agent_collaboration         = var.agent_collaboration

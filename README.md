@@ -34,7 +34,7 @@ The following example creates an Agent, where you must define at a minimum the d
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.9"
+  version = "0.0.10"
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -81,7 +81,7 @@ Example configuration with a supervisor agent and a collaborator agent:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.9"
+  version = "0.0.10"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
@@ -118,14 +118,14 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.9"
+  version = "0.0.10"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
 ```
 
-See the additional input variables for deploying Knowledge Bases [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L682)
+See the additional input variables for deploying Knowledge Bases [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L693)
 
 ### Vector Knowledge Base - Data Sources
 
@@ -141,7 +141,7 @@ Data sources are the various repositories or systems from which information is e
 
 - Confluence. You can create a new Confluence data source by setting the `create_confluence` input variable to true and passing in the necessary variables for site urls, filter patterns, etc.
 
-See the additional input variables for deploying Knowledge Base Data Sources [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L412)
+See the additional input variables for deploying Knowledge Base Data Sources [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L423)
 
 ### Create a Kendra Knowledge Base
 
@@ -156,14 +156,14 @@ Example Kendra Knowledge Base:
 ```
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.9"
+  version = "0.0.10"
   create_kendra_config = true
   create_kendra_s3_data_source = true
   create_agent = false
 }
 ```
 
-See the additional input variables for deploying a Kendra Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1188)
+See the additional input variables for deploying a Kendra Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1199)
 
 ### Create a SQL Knowledge Base
 
@@ -176,7 +176,7 @@ Amazon Bedrock Knowledge Bases provides direct integration with structured data 
 - Converts natural language queries into SQL
 - Retrieves relevant information directly from supported data sources
 
-See the additional input variables for deploying a SQL Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1387)
+See the additional input variables for deploying a SQL Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1398)
 
 ## Bedrock Guardrails
 
@@ -197,7 +197,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.9"
+  version = "0.0.10"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -250,7 +250,7 @@ module "bedrock" {
 }
 ```
 
-See the additional input variables for deploying guardrails [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L306)
+See the additional input variables for deploying guardrails [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L317)
 
 ## Prompt Management
 
@@ -300,7 +300,7 @@ Creating a prompt with a prompt version would look like:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.9"
+  version = "0.0.10"
   create_agent = false
 
   # Prompt Management
@@ -340,7 +340,7 @@ module "bedrock" {
 }
 ```
 
-See the additional input variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L960)
+See the additional input variables for deploying prompt management [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L971)
 
 ## Application Inference Profile
 
@@ -359,7 +359,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.9"
+  version = "0.0.10"
   create_agent = false
 
   # Application Inference Profile
@@ -368,7 +368,7 @@ module "bedrock" {
 }
 ```
 
-See the additional input variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1046)
+See the additional input variables for deploying application inference profiles [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1057)
 
 ## Custom Models
 
@@ -394,7 +394,7 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
   }
 - `custom_model_training_uri`
 
-See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1116)
+See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1127)
 
 ## Requirements
 
@@ -573,6 +573,7 @@ No modules.
 | <a name="input_create_salesforce"></a> [create\_salesforce](#input\_create\_salesforce) | Whether or not create a Salesforce data source. | `bool` | `false` | no |
 | <a name="input_create_sharepoint"></a> [create\_sharepoint](#input\_create\_sharepoint) | Whether or not create a Share Point data source. | `bool` | `false` | no |
 | <a name="input_create_sql_config"></a> [create\_sql\_config](#input\_create\_sql\_config) | Whether or not to create a SQL knowledge base. | `bool` | `false` | no |
+| <a name="input_create_supervisor"></a> [create\_supervisor](#input\_create\_supervisor) | Whether or not to create an agent supervisor. | `bool` | `false` | no |
 | <a name="input_create_supervisor_guardrail"></a> [create\_supervisor\_guardrail](#input\_create\_supervisor\_guardrail) | Whether or not to create a guardrail for the supervisor agent. | `bool` | `false` | no |
 | <a name="input_create_vector_ingestion_configuration"></a> [create\_vector\_ingestion\_configuration](#input\_create\_vector\_ingestion\_configuration) | Whether or not to create a vector ingestion configuration. | `bool` | `false` | no |
 | <a name="input_create_web_crawler"></a> [create\_web\_crawler](#input\_create\_web\_crawler) | Whether or not create a web crawler data source. | `bool` | `false` | no |
@@ -693,6 +694,7 @@ No modules.
 | <a name="input_stop_sequences"></a> [stop\_sequences](#input\_stop\_sequences) | A list of stop sequences. | `list(string)` | `[]` | no |
 | <a name="input_supervisor_guardrail_id"></a> [supervisor\_guardrail\_id](#input\_supervisor\_guardrail\_id) | The ID of the guardrail for the supervisor agent. | `string` | `null` | no |
 | <a name="input_supervisor_guardrail_version"></a> [supervisor\_guardrail\_version](#input\_supervisor\_guardrail\_version) | The version of the guardrail for the supervisor agent. | `string` | `null` | no |
+| <a name="input_supervisor_id"></a> [supervisor\_id](#input\_supervisor\_id) | The ID of the supervisor. | `string` | `null` | no |
 | <a name="input_supervisor_idle_session_ttl"></a> [supervisor\_idle\_session\_ttl](#input\_supervisor\_idle\_session\_ttl) | How long sessions should be kept open for the supervisor agent. | `number` | `600` | no |
 | <a name="input_supervisor_instruction"></a> [supervisor\_instruction](#input\_supervisor\_instruction) | A narrative instruction to provide the agent as context. | `string` | `""` | no |
 | <a name="input_supervisor_kms_key_arn"></a> [supervisor\_kms\_key\_arn](#input\_supervisor\_kms\_key\_arn) | KMS encryption key to use for the supervisor agent. | `string` | `null` | no |
@@ -727,4 +729,5 @@ No modules.
 | <a name="output_pinecone_kb_identifier"></a> [pinecone\_kb\_identifier](#output\_pinecone\_kb\_identifier) | The unique identifier of the Pinecone knowledge base that was created.  If no Pinecone KB was requested, value will be null |
 | <a name="output_rds_kb_identifier"></a> [rds\_kb\_identifier](#output\_rds\_kb\_identifier) | The unique identifier of the RDS knowledge base that was created.  If no RDS KB was requested, value will be null |
 | <a name="output_s3_data_source_arn"></a> [s3\_data\_source\_arn](#output\_s3\_data\_source\_arn) | The Amazon Bedrock Data Source for S3. |
+| <a name="output_supervisor_id"></a> [supervisor\_id](#output\_supervisor\_id) | The identifier of the supervisor agent. |
 <!-- END_TF_DOCS -->
