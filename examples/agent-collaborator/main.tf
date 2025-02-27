@@ -21,6 +21,8 @@ module "agent_collaborator1" {
   create_collaborator        = true
   collaborator_name          = "AgentA"
   collaboration_instruction  = "Handle customer inquiries"
+
+  depends_on = [module.agent_supervisor]
 }
 
 module "agent_collaborator2" {
@@ -32,4 +34,6 @@ module "agent_collaborator2" {
   create_collaborator        = true
   collaborator_name          = "AgentB"
   collaboration_instruction  = "Process backend tasks"
+
+  depends_on = [module.agent_supervisor]
 }

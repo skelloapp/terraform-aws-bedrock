@@ -113,6 +113,8 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
   agent_descriptor {
     alias_arn = awscc_bedrock_agent_alias.bedrock_agent_alias[0].agent_alias_arn
   }
+
+  depends_on = [awscc_bedrock_agent.bedrock_agent[0], awscc_bedrock_agent_alias.bedrock_agent_alias[0]]
 }
 
 resource "aws_bedrockagent_agent" "agent_supervisor" {
