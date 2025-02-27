@@ -35,5 +35,5 @@ module "agent_collaborator2" {
   collaborator_name          = "AgentB"
   collaboration_instruction  = "Process backend tasks"
 
-  depends_on = [module.agent_supervisor]
+  depends_on = [module.agent_supervisor, module.agent_collaborator2]
 }
