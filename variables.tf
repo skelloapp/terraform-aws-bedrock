@@ -1483,3 +1483,40 @@ variable "redshift_query_engine_type" {
     error_message = "Redshift query engine type must be SERVERLESS or PROVISIONED."
   }
 }
+
+# Action Groups list
+
+variable "action_group_list" {
+  description = "List of configurations for available action groups."
+  type = list(object({
+    action_group_name = optional(string)
+    description = optional(string)
+    action_group_state = optional(string)
+    parent_action_group_signature = optional(string)
+    skip_resource_in_use_check_on_delete = optional(bool)
+    action_group_executor = optional(object({
+      custom_control = optional(string)
+      lambda = optional(string)
+    }))
+    api_schema = optional(object({
+      payload = optional(string)
+      s3 = optional(object({
+        s3_bucket_name = optional(string)
+        s3_object_key = optional(string)
+      }))
+    }))
+  }))
+  default = []
+}
+
+variable "action_group_lambda_arns_list" {
+  description = "List of Lambda ARNs for action groups."
+  type        = list(string)
+  default     = []
+}
+
+variable "action_group_lambda_names_list" {
+  description = "List of Lambda names for action groups."
+  type        = list(string)
+  default     = []
+}

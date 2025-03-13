@@ -228,9 +228,9 @@ resource "aws_iam_role_policy" "guardrail_policy_supervisor_agent" {
 # Action Group Policies
 
 resource "aws_lambda_permission" "allow_bedrock_agent" {
-  count = var.create_ag ? 1 : 0
+  for_each       = toset(concat(var.action_group_lambda_names_list, [var.lambda_action_group_executor]))
   action        = "lambda:InvokeFunction"
-  function_name = var.lambda_action_group_executor
+  function_name = each.key
   principal     = "bedrock.amazonaws.com"
   source_arn    = awscc_bedrock_agent.bedrock_agent[0].agent_arn
 }
@@ -243,7 +243,7 @@ resource "aws_iam_role_policy" "action_group_policy" {
       {
         Effect   = "Allow"
         Action   = "lambda:InvokeModel"
-        Resource = var.lambda_action_group_executor
+        Resource = concat([var.lambda_action_group_executor], var.action_group_lambda_arns_list)
       }
     ]
   })

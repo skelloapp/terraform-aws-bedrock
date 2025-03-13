@@ -38,6 +38,8 @@ locals {
   }
   action_group_result = [for count in local.counter_action_group : local.action_group_value]
 
+  action_group_list = concat(local.action_group_result, var.action_group_list)
+
   counter_collaborator = var.create_agent && var.create_agent_alias && var.create_collaborator ? 1 : 0
 
   supervisor_guardrail = var.create_supervisor_guardrail == false || local.counter_collaborator == 0 ? null : [{
@@ -79,7 +81,7 @@ resource "awscc_bedrock_agent" "bedrock_agent" {
   # auto_prepare needs to be set to true
   auto_prepare    = true
   knowledge_bases = length(local.kb_result) > 0 ? local.kb_result : null
-  action_groups   = length(local.action_group_result) > 0 ? local.action_group_result : null
+  action_groups   = length(local.action_group_list) > 0 ? local.action_group_list : null
   guardrail_configuration = var.create_guardrail == false ? null : {
     guardrail_identifier = awscc_bedrock_guardrail.guardrail[0].id
     guardrail_version    = awscc_bedrock_guardrail_version.guardrail[0].version
