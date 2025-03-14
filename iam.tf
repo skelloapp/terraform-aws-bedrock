@@ -3,6 +3,7 @@ locals {
   create_kb_role = var.kb_role_arn == null && local.create_kb
   kendra_index_id = var.create_kendra_config == true ? (var.kendra_index_id != null ? var.kendra_index_id : awscc_kendra_index.genai_kendra_index[0].id) : null
   kendra_data_source_bucket_arn = var.create_kendra_s3_data_source ? (var.kb_s3_data_source != null ? var.kb_s3_data_source : awscc_s3_bucket.s3_data_source[0].arn) : null
+  action_group_names = concat(var.action_group_lambda_names_list, [var.lambda_action_group_executor])
 }
 
 
@@ -228,9 +229,9 @@ resource "aws_iam_role_policy" "guardrail_policy_supervisor_agent" {
 # Action Group Policies
 
 resource "aws_lambda_permission" "allow_bedrock_agent" {
-  count = var.create_ag ? 1 : 0
+  count         = var.create_ag ? length(local.action_group_names) : 0
   action        = "lambda:InvokeFunction"
-  function_name = var.lambda_action_group_executor
+  function_name = local.action_group_names[count.index]
   principal     = "bedrock.amazonaws.com"
   source_arn    = awscc_bedrock_agent.bedrock_agent[0].agent_arn
 }
@@ -243,7 +244,7 @@ resource "aws_iam_role_policy" "action_group_policy" {
       {
         Effect   = "Allow"
         Action   = "lambda:InvokeModel"
-        Resource = var.lambda_action_group_executor
+        Resource = concat([var.lambda_action_group_executor], var.action_group_lambda_arns_list)
       }
     ]
   })
