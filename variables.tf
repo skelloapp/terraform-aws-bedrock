@@ -766,7 +766,13 @@ variable "kb_type" {
 variable "kb_embedding_model_arn" {
   description = "The ARN of the model used to create vector embeddings for the knowledge base."
   type        = string
-  default     = "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1"
+  default     = "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0"
+}
+
+variable "vector_dimension" {
+  description = "The dimension of vectors in the OpenSearch index. Use 1024 for Titan Text Embeddings V2, 1536 for V1"
+  type        = number
+  default     = 1024
 }
 
 variable "kb_storage_type" {

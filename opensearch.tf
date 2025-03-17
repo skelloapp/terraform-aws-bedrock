@@ -97,7 +97,8 @@ resource "aws_opensearchserverless_access_policy" "data_policy" {
       ],
       Principal = [
         var.kb_role_arn != null ? var.kb_role_arn : aws_iam_role.bedrock_knowledge_base_role[0].arn,
-        data.aws_caller_identity.current.arn
+        data.aws_caller_identity.current.arn,
+        data.aws_iam_session_context.current.issuer_arn
       ]
     }
   ])
@@ -123,7 +124,7 @@ resource "opensearch_index" "default_oss_index" {
       "properties": {
         "bedrock-knowledge-base-default-vector": {
           "type": "knn_vector",
-          "dimension": 1536,
+          "dimension": ${var.vector_dimension},
           "method": {
             "name": "hnsw",
             "engine": "faiss",
