@@ -1,5 +1,5 @@
 output "default_collection" {
-  value       = awscc_opensearchserverless_collection.default_collection
+  value       = module.oss-knowledgebase[0].opensearch_serverless_collection
   description = "Opensearch default collection value."
 }
 
