@@ -1,5 +1,5 @@
 output "default_collection" {
-  value       = module.oss_knowledgebase[0].opensearch_serverless_collection
+  value       = length(module.oss_knowledgebase) > 0 ? module.oss_knowledgebase[0].opensearch_serverless_collection : null
   description = "Opensearch default collection value."
 }
 
