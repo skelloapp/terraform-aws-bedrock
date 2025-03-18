@@ -63,7 +63,7 @@ resource "aws_iam_policy" "bedrock_knowledge_base_policy" {
         "Action" : [
           "aoss:APIAccessAll"
         ],
-        "Resource" : module.oss_knowledgebase[0].opensearch_serverless_collection.arn #awscc_opensearchserverless_collection.default_collection[0].arn
+        "Resource" : module.oss_knowledgebase[0].opensearch_serverless_collection.arn
       },
       {
         "Effect" : "Allow",
