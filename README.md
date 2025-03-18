@@ -420,7 +420,7 @@ See the additional input variables for deploying custom models [here](https://gi
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_oss-knowledgebase"></a> [oss-knowledgebase](#module\_oss-knowledgebase) | aws-ia/opensearch-serverless/aws | 0.0.2 |
+| <a name="module_oss_knowledgebase"></a> [oss\_knowledgebase](#module\_oss\_knowledgebase) | aws-ia/opensearch-serverless/aws | 0.0.2 |
 
 ## Resources
 
@@ -501,7 +501,6 @@ See the additional input variables for deploying custom models [here](https://gi
 | [aws_iam_policy_document.agent_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.custom_model_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.knowledge_base_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_session_context.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_session_context) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
