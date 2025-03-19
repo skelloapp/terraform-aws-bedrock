@@ -8,8 +8,8 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_default" {
   storage_configuration = {
     type = "OPENSEARCH_SERVERLESS"
     opensearch_serverless_configuration = {
-      collection_arn    = awscc_opensearchserverless_collection.default_collection[0].arn
-      vector_index_name = opensearch_index.default_oss_index[0].name
+      collection_arn    = module.oss_knowledgebase[0].opensearch_serverless_collection.arn
+      vector_index_name = module.oss_knowledgebase[0].vector_index.name
       field_mapping = {
         metadata_field = var.metadata_field
         text_field     = var.text_field

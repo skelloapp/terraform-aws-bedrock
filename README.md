@@ -403,7 +403,6 @@ See the additional input variables for deploying custom models [here](https://gi
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.7 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~>5.0 |
 | <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | >= 1.0.0 |
-| <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | = 2.2.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.6.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.6 |
 
@@ -413,13 +412,14 @@ See the additional input variables for deploying custom models [here](https://gi
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~>5.0 |
 | <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.0.0 |
-| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | = 2.2.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.6.0 |
 | <a name="provider_time"></a> [time](#provider\_time) | ~> 0.6 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_oss_knowledgebase"></a> [oss\_knowledgebase](#module\_oss\_knowledgebase) | aws-ia/opensearch-serverless/aws | 0.0.2 |
 
 ## Resources
 
@@ -458,9 +458,7 @@ No modules.
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_provision_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_serverless_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_permission.allow_bedrock_agent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
-| [aws_opensearchserverless_access_policy.data_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_access_policy) | resource |
-| [aws_opensearchserverless_security_policy.nw_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_security_policy) | resource |
-| [aws_opensearchserverless_security_policy.security_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_security_policy) | resource |
+| [aws_opensearchserverless_access_policy.updated_data_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_access_policy) | resource |
 | [awscc_bedrock_agent.bedrock_agent](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent) | resource |
 | [awscc_bedrock_agent_alias.bedrock_agent_alias](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent_alias) | resource |
 | [awscc_bedrock_application_inference_profile.application_inference_profile](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_application_inference_profile) | resource |
@@ -489,15 +487,12 @@ No modules.
 | [awscc_logs_delivery.knowledge_base_log_delivery](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery) | resource |
 | [awscc_logs_delivery_destination.knowledge_base_log_destination](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_destination) | resource |
 | [awscc_logs_delivery_source.knowledge_base_log_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_source) | resource |
-| [awscc_opensearchserverless_collection.default_collection](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/opensearchserverless_collection) | resource |
 | [awscc_s3_bucket.custom_model_output](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/s3_bucket) | resource |
 | [awscc_s3_bucket.s3_data_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/s3_bucket) | resource |
-| [opensearch_index.default_oss_index](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/index) | resource |
 | [random_string.solution_prefix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [time_sleep.wait_after_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_after_kendra_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_after_kendra_s3_data_source_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [time_sleep.wait_before_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [aws_bedrock_foundation_model.model_identifier](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/bedrock_foundation_model) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.agent_alias_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -505,7 +500,6 @@ No modules.
 | [aws_iam_policy_document.agent_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.custom_model_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.knowledge_base_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_session_context.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_session_context) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
