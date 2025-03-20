@@ -22,6 +22,7 @@ The main features of the Bedrock module include:
   - Prompt Versions
 - Application Inference Profiles
 - Custom Models
+- Bedrock Data Automation
 
 ## Agents
 
@@ -34,7 +35,7 @@ The following example creates an Agent, where you must define at a minimum the d
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -81,7 +82,7 @@ Example configuration with a supervisor agent and a collaborator agent:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
@@ -118,7 +119,7 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
@@ -156,7 +157,7 @@ Example Kendra Knowledge Base:
 ```
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_kendra_config = true
   create_kendra_s3_data_source = true
   create_agent = false
@@ -197,7 +198,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -300,7 +301,7 @@ Creating a prompt with a prompt version would look like:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_agent = false
 
   # Prompt Management
@@ -359,7 +360,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_agent = false
 
   # Application Inference Profile
@@ -395,6 +396,103 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
 - `custom_model_training_uri`
 
 See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1127)
+
+## Bedrock Data Automation (BDA)
+
+### BDA Project
+
+Amazon Bedrock Data AAutomation (BDA) helps you extract information and insights from your documents, images, videos, and audio files using foundation models (FMs). BDA provides both standard output and custom output through blueprints.
+
+BDA supports different extraction capabilities for each file type:
+
+- Documents
+  - Text extraction with different granularity levels (word, line, page)
+  - Bounding box information
+  - Custom output formats
+- Images
+  - Object and scene detection
+  - Text extraction
+  - Bounding box information
+  - Custom generative fields
+- Video
+  - Object and action detection
+  - Scene analysis
+  - Bounding box tracking
+  - Custom generative fields
+- Audio
+  - Speaker identification
+  - Sentiment analysis
+  - Language detection
+  - Transcription
+  - Custom generative fields
+
+### Standard Output
+
+Standard output is pre-defined extraction managed by Bedrock. It can extract information from documents, images, videos, and audio files. You can configure what information to extract for each file type.
+
+```hcl
+module "bedrock" {
+  source     = "aws-ia/bedrock/aws"
+  version    = "0.0.13"
+  create_agent = false
+  create_bda = true
+
+  bda_standard_output_configuration = {
+    document = {
+      extraction = {
+        bounding_box = {
+          state = "ENABLED"
+        }
+        granularity = {
+          types = ["WORD", "PAGE"]
+        }
+      }
+      generative_field = {
+        state = "ENABLED"
+      }
+      output_format = {
+        additional_file_format = {
+          state = "ENABLED"
+        }
+        text_format = {
+          types = ["PLAIN_TEXT"]
+        }
+      }
+    }
+  }
+}
+```
+
+### Blueprints
+
+Blueprints allow you to define custom extraction schemas for your specific use cases. You can specify what information to extract and how to structure the output.
+
+```hcl
+module "bedrock" {
+  source     = "aws-ia/bedrock/aws"
+  version    = "0.0.13"
+  create_agent = false
+
+  create_blueprint = true
+  blueprint_name   = "advertisement-analysis"
+  blueprint_schema = jsonencode({
+    "$schema"     = "http://json-schema.org/draft-07/schema#"
+    description   = "Extract key information from advertisement images"
+    class         = "advertisement image"
+    type          = "object"
+    properties = {
+      image_sentiment = {
+        type          = "string"
+        inferenceType = "explicit"
+        instruction   = "What is the overall sentiment of the image?"
+      }
+      # Additional properties as needed
+    }
+  })
+}
+```
+
+See the additional input variables for deploying BDA projects and blueprints [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1530)
 
 ## Requirements
 
@@ -462,6 +560,8 @@ See the additional input variables for deploying custom models [here](https://gi
 | [awscc_bedrock_agent.bedrock_agent](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent) | resource |
 | [awscc_bedrock_agent_alias.bedrock_agent_alias](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent_alias) | resource |
 | [awscc_bedrock_application_inference_profile.application_inference_profile](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_application_inference_profile) | resource |
+| [awscc_bedrock_blueprint.bda_blueprint](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_blueprint) | resource |
+| [awscc_bedrock_data_automation_project.bda_project](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_automation_project) | resource |
 | [awscc_bedrock_data_source.knowledge_base_confluence](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
 | [awscc_bedrock_data_source.knowledge_base_salesforce](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
 | [awscc_bedrock_data_source.knowledge_base_sharepoint](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
@@ -529,9 +629,23 @@ See the additional input variables for deploying custom models [here](https://gi
 | <a name="input_app_inference_profile_tags"></a> [app\_inference\_profile\_tags](#input\_app\_inference\_profile\_tags) | A map of tag keys and values for application inference profile. | `list(map(string))` | `null` | no |
 | <a name="input_auth_type"></a> [auth\_type](#input\_auth\_type) | The supported authentication type. | `string` | `null` | no |
 | <a name="input_base_prompt_template"></a> [base\_prompt\_template](#input\_base\_prompt\_template) | Defines the prompt template with which to replace the default prompt template. | `string` | `null` | no |
+| <a name="input_bda_custom_output_config"></a> [bda\_custom\_output\_config](#input\_bda\_custom\_output\_config) | A list of the BDA custom output configuartion blueprint(s). | <pre>list(object({<br>      blueprint_arn = optional(string)<br>      blueprint_stage = optional(string)<br>      blueprint_version = optional(string)<br>    }))</pre> | `null` | no |
+| <a name="input_bda_kms_encryption_context"></a> [bda\_kms\_encryption\_context](#input\_bda\_kms\_encryption\_context) | The KMS encryption context for the Bedrock data automation project. | `map(string)` | `null` | no |
+| <a name="input_bda_kms_key_id"></a> [bda\_kms\_key\_id](#input\_bda\_kms\_key\_id) | The KMS key ID for the Bedrock data automation project. | `string` | `null` | no |
+| <a name="input_bda_override_config_state"></a> [bda\_override\_config\_state](#input\_bda\_override\_config\_state) | Configuration state for the BDA override. | `string` | `null` | no |
+| <a name="input_bda_project_description"></a> [bda\_project\_description](#input\_bda\_project\_description) | The description of the Bedrock data automation project. | `string` | `null` | no |
+| <a name="input_bda_project_name"></a> [bda\_project\_name](#input\_bda\_project\_name) | The name of the Bedrock data automation project. | `string` | `"bda-project"` | no |
+| <a name="input_bda_standard_output_configuration"></a> [bda\_standard\_output\_configuration](#input\_bda\_standard\_output\_configuration) | Standard output is pre-defined extraction managed by Bedrock. It can extract information from documents, images, videos, and audio. | <pre>object({<br>    audio    = optional(object({<br>      extraction = optional(object({<br>        category = optional(object({<br>          state = optional(string)<br>          types = optional(list(string))<br>        }))<br>      }))<br>      generative_field = optional(object({<br>        state = optional(string)<br>        types = optional(list(string))<br>      }))<br>    }))<br>    document = optional(object({<br>      extraction = optional(object({<br>        bounding_box = optional(object({<br>          state = optional(string)<br>        }))<br>        granularity = optional(object({<br>          types = optional(list(string))<br>        }))<br>      }))<br>      generative_field = optional(object({<br>        state = optional(string)<br>      }))<br>      output_format = optional(object({<br>        additional_file_format = optional(object({<br>          state = optional(string)<br>        }))<br>        text_format = optional(object({<br>          types = optional(list(string))<br>        }))<br>      }))<br>    }))<br>    image    = optional(object({<br>      extraction = optional(object({<br>        category = optional(object({<br>          state = optional(string)<br>          types = optional(list(string))<br>        }))<br>        bounding_box = optional(object({<br>          state = optional(string)<br>        }))<br>      }))<br>      generative_field = optional(object({<br>        state = optional(string)<br>        types = optional(list(string))<br>      }))<br>    }))<br>    video    = optional(object({<br>      extraction = optional(object({<br>        category = optional(object({<br>          state = optional(string)<br>          types = optional(list(string))<br>        }))<br>        bounding_box = optional(object({<br>          state = optional(string)<br>        }))<br>      }))<br>      generative_field = optional(object({<br>        state = optional(string)<br>        types = optional(list(string))<br>      }))<br>    }))<br>  })</pre> | `null` | no |
+| <a name="input_bda_tags"></a> [bda\_tags](#input\_bda\_tags) | A list of tag keys and values for the Bedrock data automation project. | <pre>list(object({<br>    key = string<br>    value = string<br>  }))</pre> | `null` | no |
 | <a name="input_bedrock_agent_version"></a> [bedrock\_agent\_version](#input\_bedrock\_agent\_version) | Agent version. | `string` | `null` | no |
 | <a name="input_blocked_input_messaging"></a> [blocked\_input\_messaging](#input\_blocked\_input\_messaging) | Messaging for when violations are detected in text. | `string` | `"Blocked input"` | no |
 | <a name="input_blocked_outputs_messaging"></a> [blocked\_outputs\_messaging](#input\_blocked\_outputs\_messaging) | Messaging for when violations are detected in text. | `string` | `"Blocked output"` | no |
+| <a name="input_blueprint_kms_encryption_context"></a> [blueprint\_kms\_encryption\_context](#input\_blueprint\_kms\_encryption\_context) | The KMS encryption context for the blueprint. | `map(string)` | `null` | no |
+| <a name="input_blueprint_kms_key_id"></a> [blueprint\_kms\_key\_id](#input\_blueprint\_kms\_key\_id) | The KMS key ID for the blueprint. | `string` | `null` | no |
+| <a name="input_blueprint_name"></a> [blueprint\_name](#input\_blueprint\_name) | The name of the BDA blueprint. | `string` | `"bda-blueprint"` | no |
+| <a name="input_blueprint_schema"></a> [blueprint\_schema](#input\_blueprint\_schema) | The schema for the blueprint. | `string` | `null` | no |
+| <a name="input_blueprint_tags"></a> [blueprint\_tags](#input\_blueprint\_tags) | A list of tag keys and values for the blueprint. | <pre>list(object({<br>    key = string<br>    value = string<br>  }))</pre> | `null` | no |
+| <a name="input_blueprint_type"></a> [blueprint\_type](#input\_blueprint\_type) | The modality type of the blueprint. | `string` | `"DOCUMENT"` | no |
 | <a name="input_breakpoint_percentile_threshold"></a> [breakpoint\_percentile\_threshold](#input\_breakpoint\_percentile\_threshold) | The dissimilarity threshold for splitting chunks. | `number` | `null` | no |
 | <a name="input_bucket_owner_account_id"></a> [bucket\_owner\_account\_id](#input\_bucket\_owner\_account\_id) | Bucket account owner ID for the S3 bucket. | `string` | `null` | no |
 | <a name="input_chunking_strategy"></a> [chunking\_strategy](#input\_chunking\_strategy) | Knowledge base can split your source data into chunks. A chunk refers to an excerpt from a data source that is returned when the knowledge base that it belongs to is queried. You have the following options for chunking your data. If you opt for NONE, then you may want to pre-process your files by splitting them up such that each file corresponds to a chunk. | `string` | `null` | no |
@@ -549,6 +663,8 @@ See the additional input variables for deploying custom models [here](https://gi
 | <a name="input_create_agent"></a> [create\_agent](#input\_create\_agent) | Whether or not to deploy an agent. | `bool` | `true` | no |
 | <a name="input_create_agent_alias"></a> [create\_agent\_alias](#input\_create\_agent\_alias) | Whether or not to create an agent alias. | `bool` | `false` | no |
 | <a name="input_create_app_inference_profile"></a> [create\_app\_inference\_profile](#input\_create\_app\_inference\_profile) | Whether or not to create an application inference profile. | `bool` | `false` | no |
+| <a name="input_create_bda"></a> [create\_bda](#input\_create\_bda) | Whether or not to create a Bedrock data automatio project. | `bool` | `false` | no |
+| <a name="input_create_blueprint"></a> [create\_blueprint](#input\_create\_blueprint) | Whether or not to create a BDA blueprint. | `bool` | `false` | no |
 | <a name="input_create_collaborator"></a> [create\_collaborator](#input\_create\_collaborator) | Whether or not to create an agent collaborator. | `bool` | `false` | no |
 | <a name="input_create_confluence"></a> [create\_confluence](#input\_create\_confluence) | Whether or not create a Confluence data source. | `bool` | `false` | no |
 | <a name="input_create_custom_model"></a> [create\_custom\_model](#input\_create\_custom\_model) | Whether or not to create a custom model. | `bool` | `false` | no |
@@ -718,6 +834,7 @@ See the additional input variables for deploying custom models [here](https://gi
 
 | Name | Description |
 |------|-------------|
+| <a name="output_bda_blueprint"></a> [bda\_blueprint](#output\_bda\_blueprint) | The BDA blueprint. |
 | <a name="output_bedrock_agent"></a> [bedrock\_agent](#output\_bedrock\_agent) | The Amazon Bedrock Agent if it is created. |
 | <a name="output_cloudwatch_log_group"></a> [cloudwatch\_log\_group](#output\_cloudwatch\_log\_group) | The name of the CloudWatch log group for the knowledge base.  If no log group was requested, value will be null |
 | <a name="output_datasource_identifier"></a> [datasource\_identifier](#output\_datasource\_identifier) | The unique identifier of the data source. |
