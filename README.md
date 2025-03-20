@@ -419,13 +419,12 @@ BDA supports different extraction capabilities for each file type:
   - Scene analysis
   - Bounding box tracking
   - Custom generative fields
-
-### Audio
-- Speaker identification
-- Sentiment analysis
-- Language detection
-- Transcription
-- Custom generative fields
+- Audio
+  - Speaker identification
+  - Sentiment analysis
+  - Language detection
+  - Transcription
+  - Custom generative fields
 
 ### Standard Output
 
