@@ -22,6 +22,7 @@ The main features of the Bedrock module include:
   - Prompt Versions
 - Application Inference Profiles
 - Custom Models
+- Bedrock Data Automation
 
 ## Agents
 
@@ -34,7 +35,7 @@ The following example creates an Agent, where you must define at a minimum the d
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -81,7 +82,7 @@ Example configuration with a supervisor agent and a collaborator agent:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
@@ -118,7 +119,7 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
@@ -156,7 +157,7 @@ Example Kendra Knowledge Base:
 ```
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_kendra_config = true
   create_kendra_s3_data_source = true
   create_agent = false
@@ -197,7 +198,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -300,7 +301,7 @@ Creating a prompt with a prompt version would look like:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_agent = false
 
   # Prompt Management
@@ -359,7 +360,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.11"
+  version = "0.0.13"
   create_agent = false
 
   # Application Inference Profile
@@ -395,6 +396,106 @@ To create a custom model, set the `create_custom_model` variable to `true` and p
 - `custom_model_training_uri`
 
 See the additional input variables for deploying custom models [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1127)
+
+## Bedrock Data Automation (BDA)
+
+### BDA Project
+
+Amazon Bedrock Data AAutomation (BDA) helps you extract information and insights from your documents, images, videos, and audio files using foundation models (FMs). BDA provides both standard output and custom output through blueprints.
+
+BDA supports different extraction capabilities for each file type:
+
+### Documents
+- Text extraction with different granularity levels (word, line, page)
+- Bounding box information
+- Custom output formats
+
+### Images
+- Object and scene detection
+- Text extraction
+- Bounding box information
+- Custom generative fields
+
+### Video
+- Object and action detection
+- Scene analysis
+- Bounding box tracking
+- Custom generative fields
+
+### Audio
+- Speaker identification
+- Sentiment analysis
+- Language detection
+- Transcription
+- Custom generative fields
+
+### Standard Output
+
+Standard output is pre-defined extraction managed by Bedrock. It can extract information from documents, images, videos, and audio files. You can configure what information to extract for each file type.
+
+```hcl
+module "bedrock" {
+  source     = "aws-ia/bedrock/aws"
+  version    = "0.0.13"
+  create_agent = false
+  create_bda = true
+
+  bda_standard_output_configuration = {
+    document = {
+      extraction = {
+        bounding_box = {
+          state = "ENABLED"
+        }
+        granularity = {
+          types = ["WORD", "PAGE"]
+        }
+      }
+      generative_field = {
+        state = "ENABLED"
+      }
+      output_format = {
+        additional_file_format = {
+          state = "ENABLED"
+        }
+        text_format = {
+          types = ["PLAIN_TEXT"]
+        }
+      }
+    }
+  }
+}
+```
+
+### Blueprints
+
+Blueprints allow you to define custom extraction schemas for your specific use cases. You can specify what information to extract and how to structure the output.
+
+```hcl
+module "bedrock" {
+  source     = "aws-ia/bedrock/aws"
+  version    = "0.0.13"
+  create_agent = false
+
+  create_blueprint = true
+  blueprint_name   = "advertisement-analysis"
+  blueprint_schema = jsonencode({
+    "$schema"     = "http://json-schema.org/draft-07/schema#"
+    description   = "Extract key information from advertisement images"
+    class         = "advertisement image"
+    type          = "object"
+    properties = {
+      image_sentiment = {
+        type          = "string"
+        inferenceType = "explicit"
+        instruction   = "What is the overall sentiment of the image?"
+      }
+      # Additional properties as needed
+    }
+  })
+}
+```
+
+See the additional input variables for deploying BDA projects and blueprints [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1530)
 
 ## Requirements
 
