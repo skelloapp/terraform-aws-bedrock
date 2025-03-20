@@ -52,3 +52,8 @@ output "supervisor_id" {
   value = var.create_supervisor ? aws_bedrockagent_agent.agent_supervisor[0].agent_id : null
   description = "The identifier of the supervisor agent."
 }
+
+output "bda_blueprint" {
+  value = var.create_blueprint ? awscc_bedrock_blueprint.bda_blueprint[0] : null
+  description = "The BDA blueprint."
+}
