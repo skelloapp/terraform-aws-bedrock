@@ -60,5 +60,5 @@ output "bda_blueprint" {
 
 output "custom_model" {
   value = var.create_custom_model ? aws_bedrock_custom_model.custom_model[0] : null
-  description = "The custom model."
+  description = "The custom model. If no custom model was requested, value will be null."
 }
