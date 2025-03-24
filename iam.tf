@@ -8,9 +8,10 @@ locals {
 
 
 resource "aws_iam_role" "agent_role" {
-  count              = var.create_agent || var.create_supervisor ? 1 : 0
-  assume_role_policy = data.aws_iam_policy_document.agent_trust[0].json
-  name_prefix        = var.name_prefix
+  count                 = var.create_agent || var.create_supervisor ? 1 : 0
+  assume_role_policy    = data.aws_iam_policy_document.agent_trust[0].json
+  name_prefix           = var.name_prefix
+  permissions_boundary  = var.permissions_boundary_arn
 }
 
 resource "aws_iam_role_policy" "agent_policy" {
@@ -48,6 +49,7 @@ resource "aws_iam_role" "bedrock_knowledge_base_role" {
       }
     ]
   })
+  permissions_boundary  = var.permissions_boundary_arn
 }
 
 # Attach a policy to allow necessary permissions for the Bedrock Knowledge Base
@@ -270,6 +272,7 @@ resource "aws_iam_role" "application_inference_profile_role" {
       }
     ]
   })
+  permissions_boundary  = var.permissions_boundary_arn
 }
 
 resource "aws_iam_role_policy" "app_inference_profile_policy" {
@@ -314,6 +317,7 @@ resource "aws_iam_role_policy" "app_inference_profile_policy" {
 resource "aws_iam_role" "custom_model_role" {
   count              = var.create_custom_model ? 1 : 0
   assume_role_policy = data.aws_iam_policy_document.custom_model_trust[0].json
+  permissions_boundary  = var.permissions_boundary_arn
   name_prefix        = "CustomModelRole"
 }
 
