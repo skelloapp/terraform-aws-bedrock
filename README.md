@@ -769,6 +769,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_parsing_prompt_text"></a> [parsing\_prompt\_text](#input\_parsing\_prompt\_text) | Instructions for interpreting the contents of a document. | `string` | `null` | no |
 | <a name="input_parsing_strategy"></a> [parsing\_strategy](#input\_parsing\_strategy) | The parsing strategy for the data source. | `string` | `null` | no |
 | <a name="input_pattern_object_filter_list"></a> [pattern\_object\_filter\_list](#input\_pattern\_object\_filter\_list) | List of pattern object information. | <pre>list(object({<br>    exclusion_filters = optional(list(string))<br>    inclusion_filters = optional(list(string))<br>    object_type       = optional(string)<br><br>  }))</pre> | `[]` | no |
+| <a name="input_permissions_boundary_arn"></a> [permissions\_boundary\_arn](#input\_permissions\_boundary\_arn) | The ARN of the IAM permission boundary for the role. | `string` | `null` | no |
 | <a name="input_pii_entities_config"></a> [pii\_entities\_config](#input\_pii\_entities\_config) | List of entities. | `list(map(string))` | `null` | no |
 | <a name="input_primary_key_field"></a> [primary\_key\_field](#input\_primary\_key\_field) | The name of the field in which Bedrock stores the ID for each entry. | `string` | `null` | no |
 | <a name="input_prompt_creation_mode"></a> [prompt\_creation\_mode](#input\_prompt\_creation\_mode) | Specifies whether to override the default prompt template. | `string` | `null` | no |
