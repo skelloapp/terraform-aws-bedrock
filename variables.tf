@@ -1706,3 +1706,10 @@ variable "blueprint_tags" {
   }))
   default     = null
 }
+
+# - IAM -
+variable "permissions_boundary_arn" {
+  description = "The ARN of the IAM permission boundary for the role."
+  type        = string
+  default     = null  
+}
