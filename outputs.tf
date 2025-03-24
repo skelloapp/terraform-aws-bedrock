@@ -57,3 +57,13 @@ output "bda_blueprint" {
   value = var.create_blueprint ? awscc_bedrock_blueprint.bda_blueprint[0] : null
   description = "The BDA blueprint."
 }
+
+output "agent_resource_role_arn" {
+  description = "The ARN of the Bedrock agent resource role."
+  value       = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : aws_iam_role.agent_role[0].arn
+}
+
+output "agent_resource_role_name" {
+  description = "The name of the Bedrock agent resource role."
+  value       = var.agent_resource_role_arn != null ? split("/", var.agent_resource_role_arn)[1] : aws_iam_role.agent_role[0].name
+}

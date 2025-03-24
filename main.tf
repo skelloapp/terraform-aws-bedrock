@@ -55,7 +55,8 @@ resource "awscc_bedrock_agent" "bedrock_agent" {
   instruction                 = var.instruction
   description                 = var.agent_description
   idle_session_ttl_in_seconds = var.idle_session_ttl
-  agent_resource_role_arn     = aws_iam_role.agent_role[0].arn
+  agent_resource_role_arn     = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : aws_iam_role.agent_role[0].arn
+
   customer_encryption_key_arn = var.kms_key_arn
   tags                        = var.tags
   prompt_override_configuration = var.prompt_override == false ? null : {
@@ -122,7 +123,8 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
 resource "aws_bedrockagent_agent" "agent_supervisor" {
   count                       = var.create_supervisor ? 1 : 0
   agent_name                  = "${random_string.solution_prefix.result}-${var.supervisor_name}"
-  agent_resource_role_arn     = aws_iam_role.agent_role[0].arn
+  agent_resource_role_arn     = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : aws_iam_role.agent_role[0].arn
+
   agent_collaboration         = var.agent_collaboration
   idle_session_ttl_in_seconds = var.supervisor_idle_session_ttl
   foundation_model            = var.supervisor_model
