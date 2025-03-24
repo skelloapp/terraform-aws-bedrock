@@ -18,13 +18,8 @@ terraform {
       version = ">= 3.6.0"
     }
     opensearch = {
-      source = "opensearch-project/opensearch"
-      version = "~>2.0"
+      source  = "opensearch-project/opensearch"
+      version = "= 2.2.0"
     }
   }
-}
-
-provider "opensearch" {
-  url = "http://127.0.0.1:9200"
-  healthcheck = false
 }
