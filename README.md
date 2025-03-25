@@ -101,6 +101,35 @@ See the additional input variables for deploying Agent Collaborators [here](http
 
 With Knowledge Bases for Amazon Bedrock, you can give FMs and agents contextual information from your company’s private data sources for Retrieval Augmented Generation (RAG) to deliver more relevant, accurate, and customized responses.
 
+### Using an Existing Knowledge Base
+
+If you already have an Amazon Bedrock Knowledge Base created and want to attach it to a Bedrock Agent using this module, you can configure the module to reference the existing resource instead of creating a new one.
+
+#### Configuration
+
+To use an existing Knowledge Base:
+
+```hcl
+module "bedrock_agent" {
+  source = "..."
+
+  # ID of the existing Knowledge Base
+  existing_kb     = "kb-abc123"          # Required
+  kb_state        = "ENABLED"            
+  use_existing_kb = true                 # Required to attach the existing KB
+
+  # ... other required variables
+}
+```
+
+#### Notes
+
+- existing_kb: The Knowledge Base ID (e.g., kb-abc123) that you want to attach to the Bedrock Agent.
+  
+- kb_state: Set this to the current state of the KB (typically "ENABLED").
+  
+- use_existing_kb: This must be set to true to ensure the module correctly attaches the specified existing Knowledge Base.
+
 ### Create a Vector Knowledge Base
 
 A vector index on a vector store is required to create a vector Knowledge Base. This construct currently supports Amazon OpenSearch Serverless, Amazon RDS Aurora PostgreSQL, Pinecone, and MongoDB. By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
