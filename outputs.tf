@@ -58,12 +58,18 @@ output "bda_blueprint" {
   description = "The BDA blueprint."
 }
 
+
 output "agent_resource_role_arn" {
   description = "The ARN of the Bedrock agent resource role."
-  value       = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : aws_iam_role.agent_role[0].arn
+  value       = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : (var.create_agent ? aws_iam_role.agent_role[0].arn : null)
 }
 
 output "agent_resource_role_name" {
   description = "The name of the Bedrock agent resource role."
-  value       = var.agent_resource_role_arn != null ? split("/", var.agent_resource_role_arn)[1] : aws_iam_role.agent_role[0].name
+  value       = var.agent_resource_role_arn != null ? split("/", var.agent_resource_role_arn)[1] : (var.create_agent ? aws_iam_role.agent_role[0].name : null)
+
+output "custom_model" {
+  value = var.create_custom_model ? aws_bedrock_custom_model.custom_model[0] : null
+  description = "The custom model. If no custom model was requested, value will be null."
+
 }
