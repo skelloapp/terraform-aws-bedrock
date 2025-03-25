@@ -189,7 +189,7 @@ variable "create_agent_alias" {
 }
 
 variable "agent_alias_name" {
-  description = "The name of the guardrail."
+  description = "The name of the agent alias."
   type        = string
   default     = "TerraformBedrockAgentAlias"
 }
