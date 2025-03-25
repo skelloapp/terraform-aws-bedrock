@@ -49,16 +49,27 @@ output "s3_data_source_arn" {
 }
 
 output "supervisor_id" {
-  value = var.create_supervisor ? aws_bedrockagent_agent.agent_supervisor[0].agent_id : null
+  value       = var.create_supervisor ? aws_bedrockagent_agent.agent_supervisor[0].agent_id : null
   description = "The identifier of the supervisor agent."
 }
 
 output "bda_blueprint" {
-  value = var.create_blueprint ? awscc_bedrock_blueprint.bda_blueprint[0] : null
+  value       = var.create_blueprint ? awscc_bedrock_blueprint.bda_blueprint[0] : null
   description = "The BDA blueprint."
 }
 
+
+output "agent_resource_role_arn" {
+  value       = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : (var.create_agent ? aws_iam_role.agent_role[0].arn : null)
+  description = "The ARN of the Bedrock agent resource role."
+}
+
+output "agent_resource_role_name" {
+  value       = var.agent_resource_role_arn != null ? split("/", var.agent_resource_role_arn)[1] : (var.create_agent ? aws_iam_role.agent_role[0].name : null)
+  description = "The name of the Bedrock agent resource role."
+}
+
 output "custom_model" {
-  value = var.create_custom_model ? aws_bedrock_custom_model.custom_model[0] : null
+  value       = var.create_custom_model ? aws_bedrock_custom_model.custom_model[0] : null
   description = "The custom model. If no custom model was requested, value will be null."
 }

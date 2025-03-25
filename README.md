@@ -650,6 +650,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_agent_description"></a> [agent\_description](#input\_agent\_description) | A description of agent. | `string` | `null` | no |
 | <a name="input_agent_id"></a> [agent\_id](#input\_agent\_id) | Agent identifier. | `string` | `null` | no |
 | <a name="input_agent_name"></a> [agent\_name](#input\_agent\_name) | The name of your agent. | `string` | `"TerraformBedrockAgents"` | no |
+| <a name="input_agent_resource_role_arn"></a> [agent\_resource\_role\_arn](#input\_agent\_resource\_role\_arn) | Optional external IAM role ARN for the Bedrock agent resource role. If empty, the module will create one internally. | `string` | `null` | no |
 | <a name="input_api_schema_payload"></a> [api\_schema\_payload](#input\_api\_schema\_payload) | String OpenAPI Payload. | `string` | `null` | no |
 | <a name="input_api_schema_s3_bucket_name"></a> [api\_schema\_s3\_bucket\_name](#input\_api\_schema\_s3\_bucket\_name) | A bucket in S3. | `string` | `null` | no |
 | <a name="input_api_schema_s3_object_key"></a> [api\_schema\_s3\_object\_key](#input\_api\_schema\_s3\_object\_key) | An object key in S3. | `string` | `null` | no |
@@ -866,6 +867,8 @@ See the additional input variables for deploying BDA projects and blueprints [he
 
 | Name | Description |
 |------|-------------|
+| <a name="output_agent_resource_role_arn"></a> [agent\_resource\_role\_arn](#output\_agent\_resource\_role\_arn) | The ARN of the Bedrock agent resource role. |
+| <a name="output_agent_resource_role_name"></a> [agent\_resource\_role\_name](#output\_agent\_resource\_role\_name) | The name of the Bedrock agent resource role. |
 | <a name="output_bda_blueprint"></a> [bda\_blueprint](#output\_bda\_blueprint) | The BDA blueprint. |
 | <a name="output_bedrock_agent"></a> [bedrock\_agent](#output\_bedrock\_agent) | The Amazon Bedrock Agent if it is created. |
 | <a name="output_cloudwatch_log_group"></a> [cloudwatch\_log\_group](#output\_cloudwatch\_log\_group) | The name of the CloudWatch log group for the knowledge base.  If no log group was requested, value will be null |

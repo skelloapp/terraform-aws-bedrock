@@ -59,7 +59,7 @@ variable "tags" {
   default     = null
 }
 
-# – Prompt Override Configuartion –
+# – Prompt Override Configuration –
 variable "prompt_override" {
   description = "Whether to provide prompt override configuration."
   type        = bool
@@ -1718,4 +1718,10 @@ variable "permissions_boundary_arn" {
   description = "The ARN of the IAM permission boundary for the role."
   type        = string
   default     = null  
+}
+
+variable "agent_resource_role_arn" {
+  description = "Optional external IAM role ARN for the Bedrock agent resource role. If empty, the module will create one internally."
+  type        = string
+  default     = null
 }
