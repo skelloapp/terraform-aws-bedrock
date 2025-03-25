@@ -402,6 +402,12 @@ variable "guardrail_kms_key_arn" {
 
 # – Knowledge Base –
 
+variable "use_existing_kb" {
+  description = "Whether or not to use an existing knowledge base."
+  type        = bool
+  default     = false
+}
+
 variable "existing_kb" {
   description = "The ID of the existing knowledge base."
   type        = string
