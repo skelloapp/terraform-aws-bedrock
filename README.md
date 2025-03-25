@@ -194,7 +194,6 @@ module "bedrock_agent" {
   # ID of the existing Knowledge Base
   existing_kb     = "kb-abc123"          # Required
   kb_state        = "ENABLED"
-  use_existing_kb = true                 # Required to attach the existing KB
   # ... other required variables
 }
 ```
@@ -204,8 +203,6 @@ module "bedrock_agent" {
 - existing\_kb: The Knowledge Base ID (e.g., kb-abc123) that you want to attach to the Bedrock Agent.
 
 - kb\_state: Set this to the current state of the KB (typically "ENABLED").
-
-- use\_existing\_kb: This must be set to true to ensure the module correctly attaches the specified existing Knowledge Base.
 
 ## Bedrock Guardrails
 
@@ -854,7 +851,6 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_top_p"></a> [top\_p](#input\_top\_p) | Cumulative probability cutoff for token selection. | `number` | `0.5` | no |
 | <a name="input_topics_config"></a> [topics\_config](#input\_topics\_config) | List of topic configs in topic policy | <pre>list(object({<br>    name       = string<br>    examples   = list(string)<br>    type       = string<br>    definition = string<br>  }))</pre> | `null` | no |
 | <a name="input_transformations_list"></a> [transformations\_list](#input\_transformations\_list) | A list of Lambda functions that process documents. | <pre>list(object({<br>                  step_to_apply = optional(string)<br>                  transformation_function = optional(object({<br>                    transformation_lambda_configuration = optional(object({<br>                      lambda_arn = optional(string)<br>                    }))<br>                  }))<br>                }))</pre> | `null` | no |
-| <a name="input_use_existing_kb"></a> [use\_existing\_kb](#input\_use\_existing\_kb) | Whether or not to use an existing knowledge base. | `bool` | `false` | no |
 | <a name="input_user_token_configurations"></a> [user\_token\_configurations](#input\_user\_token\_configurations) | List of user token configurations for Kendra. | <pre>list(object({<br><br>    json_token_type_configurations = optional(object({<br>      group_attribute_field = string<br>      user_name_attribute_field = string<br>    }))<br><br>    jwt_token_type_configuration = optional(object({<br>      claim_regex = optional(string)<br>      key_location = optional(string)<br>      group_attribute_field = optional(string)<br>      user_name_attribute_field = optional(string)<br>      issuer = optional(string)<br>      secret_manager_arn = optional(string)<br>      url = optional(string)<br>    })) <br><br>  }))</pre> | `null` | no |
 | <a name="input_variants_list"></a> [variants\_list](#input\_variants\_list) | List of prompt variants. | <pre>list(object({<br>    name                    = optional(string)<br>    template_type           = optional(string)<br>    model_id                = optional(string)<br>    inference_configuration = optional(object({<br>                                text = optional(object({<br>                                  max_tokens = optional(number)<br>                                  stop_sequences = optional(list(string))<br>                                  temperature = optional(number)<br>                                  top_p = optional(number)<br>                                }))<br>                              }))<br><br>    template_configuration  = optional(object({<br>                                text = optional(object({<br>                                  input_variables = optional(list(object({ name = optional(string) })))<br>                                  text = optional(string)<br>                                  text_s3_location = optional(object({<br>                                    bucket = optional(string)<br>                                    key = optional(string)<br>                                    version = optional(string)<br>                                  }))<br>                                }))<br>                              }))<br>  }))</pre> | `null` | no |
 | <a name="input_vector_dimension"></a> [vector\_dimension](#input\_vector\_dimension) | The dimension of vectors in the OpenSearch index. Use 1024 for Titan Text Embeddings V2, 1536 for V1 | `number` | `1024` | no |
