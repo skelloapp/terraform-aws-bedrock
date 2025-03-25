@@ -179,6 +179,31 @@ Amazon Bedrock Knowledge Bases provides direct integration with structured data 
 
 See the additional input variables for deploying a SQL Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1398)
 
+### Using an Existing Knowledge Base
+
+If you already have an Amazon Bedrock Knowledge Base created and want to attach it to a Bedrock Agent using this module, you can configure the module to reference the existing resource instead of creating a new one.
+
+#### Configuration
+
+To use an existing Knowledge Base:
+
+```hcl
+module "bedrock_agent" {
+  source  = "aws-ia/bedrock/aws"
+  version = "0.0.14"
+  # ID of the existing Knowledge Base
+  existing_kb     = "kb-abc123"          # Required
+  kb_state        = "ENABLED"
+  # ... other required variables
+}
+```
+
+#### Notes
+
+- existing\_kb: The Knowledge Base ID (e.g., kb-abc123) that you want to attach to the Bedrock Agent.
+
+- kb\_state: Set this to the current state of the KB (typically "ENABLED").
+
 ## Bedrock Guardrails
 
 Amazon Bedrock's Guardrails feature enables you to implement robust governance and control mechanisms for your generative AI applications, ensuring alignment with your specific use cases and responsible AI policies. Guardrails empowers you to create multiple tailored policy configurations, each designed to address the unique requirements and constraints of different use cases. These policy configurations can then be seamlessly applied across multiple foundation models (FMs) and Agents, ensuring a consistent user experience and standardizing safety, security, and privacy controls throughout your generative AI ecosystem.
@@ -615,7 +640,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_action_group_name"></a> [action\_group\_name](#input\_action\_group\_name) | Name of the action group. | `string` | `null` | no |
 | <a name="input_action_group_state"></a> [action\_group\_state](#input\_action\_group\_state) | State of the action group. | `string` | `null` | no |
 | <a name="input_agent_alias_description"></a> [agent\_alias\_description](#input\_agent\_alias\_description) | Description of the agent alias. | `string` | `null` | no |
-| <a name="input_agent_alias_name"></a> [agent\_alias\_name](#input\_agent\_alias\_name) | The name of the guardrail. | `string` | `"TerraformBedrockAgentAlias"` | no |
+| <a name="input_agent_alias_name"></a> [agent\_alias\_name](#input\_agent\_alias\_name) | The name of the agent alias. | `string` | `"TerraformBedrockAgentAlias"` | no |
 | <a name="input_agent_alias_tags"></a> [agent\_alias\_tags](#input\_agent\_alias\_tags) | Tag bedrock agent alias resource. | `map(string)` | `null` | no |
 | <a name="input_agent_collaboration"></a> [agent\_collaboration](#input\_agent\_collaboration) | Agents collaboration role. | `string` | `"SUPERVISOR"` | no |
 | <a name="input_agent_description"></a> [agent\_description](#input\_agent\_description) | A description of agent. | `string` | `null` | no |
