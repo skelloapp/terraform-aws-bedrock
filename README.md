@@ -101,35 +101,6 @@ See the additional input variables for deploying Agent Collaborators [here](http
 
 With Knowledge Bases for Amazon Bedrock, you can give FMs and agents contextual information from your company’s private data sources for Retrieval Augmented Generation (RAG) to deliver more relevant, accurate, and customized responses.
 
-### Using an Existing Knowledge Base
-
-If you already have an Amazon Bedrock Knowledge Base created and want to attach it to a Bedrock Agent using this module, you can configure the module to reference the existing resource instead of creating a new one.
-
-#### Configuration
-
-To use an existing Knowledge Base:
-
-```hcl
-module "bedrock_agent" {
-  source = "..."
-
-  # ID of the existing Knowledge Base
-  existing_kb     = "kb-abc123"          # Required
-  kb_state        = "ENABLED"            
-  use_existing_kb = true                 # Required to attach the existing KB
-
-  # ... other required variables
-}
-```
-
-#### Notes
-
-- existing_kb: The Knowledge Base ID (e.g., kb-abc123) that you want to attach to the Bedrock Agent.
-  
-- kb_state: Set this to the current state of the KB (typically "ENABLED").
-  
-- use_existing_kb: This must be set to true to ensure the module correctly attaches the specified existing Knowledge Base.
-
 ### Create a Vector Knowledge Base
 
 A vector index on a vector store is required to create a vector Knowledge Base. This construct currently supports Amazon OpenSearch Serverless, Amazon RDS Aurora PostgreSQL, Pinecone, and MongoDB. By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
@@ -207,6 +178,34 @@ Amazon Bedrock Knowledge Bases provides direct integration with structured data 
 - Retrieves relevant information directly from supported data sources
 
 See the additional input variables for deploying a SQL Knowledge Base [here](https://github.com/aws-ia/terraform-aws-bedrock/blob/12b2681ce9a0ee5c7acd6d44289e5e1b98203a8a/variables.tf#L1398)
+
+### Using an Existing Knowledge Base
+
+If you already have an Amazon Bedrock Knowledge Base created and want to attach it to a Bedrock Agent using this module, you can configure the module to reference the existing resource instead of creating a new one.
+
+#### Configuration
+
+To use an existing Knowledge Base:
+
+```hcl
+module "bedrock_agent" {
+  source  = "aws-ia/bedrock/aws"
+  version = "0.0.14"
+  # ID of the existing Knowledge Base
+  existing_kb     = "kb-abc123"          # Required
+  kb_state        = "ENABLED"            
+  use_existing_kb = true                 # Required to attach the existing KB
+  # ... other required variables
+}
+```
+
+#### Notes
+
+- existing\_kb: The Knowledge Base ID (e.g., kb-abc123) that you want to attach to the Bedrock Agent.
+
+- kb\_state: Set this to the current state of the KB (typically "ENABLED").
+
+- use\_existing\_kb: This must be set to true to ensure the module correctly attaches the specified existing Knowledge Base.
 
 ## Bedrock Guardrails
 
@@ -855,8 +854,8 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_top_p"></a> [top\_p](#input\_top\_p) | Cumulative probability cutoff for token selection. | `number` | `0.5` | no |
 | <a name="input_topics_config"></a> [topics\_config](#input\_topics\_config) | List of topic configs in topic policy | <pre>list(object({<br>    name       = string<br>    examples   = list(string)<br>    type       = string<br>    definition = string<br>  }))</pre> | `null` | no |
 | <a name="input_transformations_list"></a> [transformations\_list](#input\_transformations\_list) | A list of Lambda functions that process documents. | <pre>list(object({<br>                  step_to_apply = optional(string)<br>                  transformation_function = optional(object({<br>                    transformation_lambda_configuration = optional(object({<br>                      lambda_arn = optional(string)<br>                    }))<br>                  }))<br>                }))</pre> | `null` | no |
+| <a name="input_use_existing_kb"></a> [use\_existing\_kb](#input\_use\_existing\_kb) | Whether or not to use an existing knowledge base. | `bool` | `false` | no |
 | <a name="input_user_token_configurations"></a> [user\_token\_configurations](#input\_user\_token\_configurations) | List of user token configurations for Kendra. | <pre>list(object({<br><br>    json_token_type_configurations = optional(object({<br>      group_attribute_field = string<br>      user_name_attribute_field = string<br>    }))<br><br>    jwt_token_type_configuration = optional(object({<br>      claim_regex = optional(string)<br>      key_location = optional(string)<br>      group_attribute_field = optional(string)<br>      user_name_attribute_field = optional(string)<br>      issuer = optional(string)<br>      secret_manager_arn = optional(string)<br>      url = optional(string)<br>    })) <br><br>  }))</pre> | `null` | no |
-| <a name="input_use_existing_kb"></a> [use\_existing\_kb](#input\_use\_existing\_kb) | Wheather or not to use an existing kb or not. |`bool` | `false` | no |
 | <a name="input_variants_list"></a> [variants\_list](#input\_variants\_list) | List of prompt variants. | <pre>list(object({<br>    name                    = optional(string)<br>    template_type           = optional(string)<br>    model_id                = optional(string)<br>    inference_configuration = optional(object({<br>                                text = optional(object({<br>                                  max_tokens = optional(number)<br>                                  stop_sequences = optional(list(string))<br>                                  temperature = optional(number)<br>                                  top_p = optional(number)<br>                                }))<br>                              }))<br><br>    template_configuration  = optional(object({<br>                                text = optional(object({<br>                                  input_variables = optional(list(object({ name = optional(string) })))<br>                                  text = optional(string)<br>                                  text_s3_location = optional(object({<br>                                    bucket = optional(string)<br>                                    key = optional(string)<br>                                    version = optional(string)<br>                                  }))<br>                                }))<br>                              }))<br>  }))</pre> | `null` | no |
 | <a name="input_vector_dimension"></a> [vector\_dimension](#input\_vector\_dimension) | The dimension of vectors in the OpenSearch index. Use 1024 for Titan Text Embeddings V2, 1536 for V1 | `number` | `1024` | no |
 | <a name="input_vector_field"></a> [vector\_field](#input\_vector\_field) | The name of the field where the vector embeddings are stored | `string` | `"bedrock-knowledge-base-default-vector"` | no |
