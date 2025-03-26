@@ -856,6 +856,12 @@ variable "create_opensearch_config" {
   default     = false
 }
 
+variable "allow_opensearch_public_access" {
+  description = "Whether or not to allow public access to the OpenSearch collection endpoint and the Dashboards endpoint."
+  type        = bool
+  default     = null
+}
+
 # – Pinecone Configuration –
 
 variable "create_pinecone_config" {
