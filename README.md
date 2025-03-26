@@ -876,5 +876,6 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="output_pinecone_kb_identifier"></a> [pinecone\_kb\_identifier](#output\_pinecone\_kb\_identifier) | The unique identifier of the Pinecone knowledge base that was created.  If no Pinecone KB was requested, value will be null |
 | <a name="output_rds_kb_identifier"></a> [rds\_kb\_identifier](#output\_rds\_kb\_identifier) | The unique identifier of the RDS knowledge base that was created.  If no RDS KB was requested, value will be null |
 | <a name="output_s3_data_source_arn"></a> [s3\_data\_source\_arn](#output\_s3\_data\_source\_arn) | The Amazon Bedrock Data Source for S3. |
+| <a name="output_s3_data_source_name"></a> [s3\_data\_source\_name](#output\_s3\_data\_source\_name) | The name of the Amazon Bedrock Data Source for S3. |
 | <a name="output_supervisor_id"></a> [supervisor\_id](#output\_supervisor\_id) | The identifier of the supervisor agent. |
 <!-- END_TF_DOCS -->

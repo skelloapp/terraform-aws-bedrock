@@ -48,6 +48,11 @@ output "s3_data_source_arn" {
   description = "The Amazon Bedrock Data Source for S3."
 }
 
+output "s3_data_source_name" {
+  value       = var.kb_s3_data_source != null ? split("/", var.kb_s3_data_source)[1] : var.create_default_kb ? length(awscc_s3_bucket.s3_data_source) > 0 ? awscc_s3_bucket.s3_data_source[0].name : null : null
+  description = "The name of the Amazon Bedrock Data Source for S3."
+}
+
 output "supervisor_id" {
   value       = var.create_supervisor ? aws_bedrockagent_agent.agent_supervisor[0].agent_id : null
   description = "The identifier of the supervisor agent."
