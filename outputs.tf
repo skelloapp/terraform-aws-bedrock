@@ -49,7 +49,7 @@ output "s3_data_source_arn" {
 }
 
 output "s3_data_source_name" {
-  value       = var.kb_s3_data_source != null ? split("/", var.kb_s3_data_source)[1] : var.create_default_kb ? length(awscc_s3_bucket.s3_data_source) > 0 ? awscc_s3_bucket.s3_data_source[0].name : null : null
+  value       = var.kb_s3_data_source != null ? split("/", var.kb_s3_data_source)[1] : var.create_default_kb ? length(awscc_s3_bucket.s3_data_source) > 0 ? awscc_s3_bucket.s3_data_source[0].id : null : null
   description = "The name of the Amazon Bedrock Data Source for S3."
 }
 
