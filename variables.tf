@@ -30,7 +30,7 @@ variable "instruction" {
   default     = ""
 
   validation {
-    condition     = length(var.instruction) == 0 || length(var.instruction) >= 40
+    condition     = length(var.instruction) == 0 || length(var.instruction) >= 40 
     error_message = "Instruction string length must be at least 40."
   }
 }
@@ -180,7 +180,7 @@ variable "max_length" {
   }
 }
 
-# – Agent Alias –
+# – Agent Alias – 
 
 variable "create_agent_alias" {
   description = "Whether or not to create an agent alias."
@@ -218,7 +218,7 @@ variable "agent_alias_tags" {
   default     = null
 }
 
-# – Agent Collaborator –
+# – Agent Collaborator – 
 
 variable "create_collaborator" {
   description = "Whether or not to create an agent collaborator."
@@ -274,7 +274,7 @@ variable "supervisor_instruction" {
   default     = ""
 
   validation {
-    condition     = length(var.supervisor_instruction) == 0 || length(var.supervisor_instruction) >= 40
+    condition     = length(var.supervisor_instruction) == 0 || length(var.supervisor_instruction) >= 40 
     error_message = "Instruction string length must be at least 40."
   }
 }
@@ -283,11 +283,11 @@ variable "agent_collaboration" {
   description = "Agents collaboration role."
   type        = string
   default     = "SUPERVISOR"
-
+  
   validation {
     condition     = var.agent_collaboration == "SUPERVISOR" || var.agent_collaboration == "SUPERVISOR_ROUTER"
     error_message = "Valid values: SUPERVISOR or SUPERVISOR_ROUTER"
-  }
+  } 
 }
 
 variable "supervisor_kms_key_arn" {
@@ -452,7 +452,7 @@ variable "s3_inclusion_prefixes" {
   default     = null
 }
 
-# – Web Crawler Data Source –
+# – Web Crawler Data Source – 
 
 variable "create_web_crawler" {
   description = "Whether or not create a web crawler data source."
@@ -490,7 +490,7 @@ variable "seed_urls" {
   default     = []
 }
 
-# – Confluence Data Source –
+# – Confluence Data Source – 
 
 variable "create_confluence" {
   description = "Whether or not create a Confluence data source."
@@ -539,7 +539,7 @@ variable "host_url" {
   default     = null
 }
 
-# – Sharepoint Data Source –
+# – Sharepoint Data Source – 
 
 variable "create_sharepoint" {
   description = "Whether or not create a Share Point data source."
@@ -585,7 +585,7 @@ variable "salesforce_credentials_secret_arn" {
   default     = null
 }
 
-# – Data Source Vector Ingestion –
+# – Data Source Vector Ingestion – 
 
 variable "create_vector_ingestion_configuration" {
   description = "Whether or not to create a vector ingestion configuration."
@@ -690,7 +690,7 @@ variable "parsing_strategy" {
   default     = null
 }
 
-# – Knowledge base –
+# – Knowledge base – 
 
 variable "kb_name" {
   description = "Name of the knowledge base."
@@ -1136,7 +1136,7 @@ variable "flow_version_description" {
   default     = null
 }
 
-# – Custom Model –
+# – Custom Model – 
 
 variable "create_custom_model" {
   description = "Whether or not to create a custom model."
@@ -1208,7 +1208,7 @@ variable "custom_model_training_uri" {
   default     = null
 }
 
-# – Kendra GenAI Knowledge Base –
+# – Kendra GenAI Knowledge Base – 
 
 variable "create_kendra_config" {
   description = "Whether or not to create a Kendra GenAI knowledge base."
@@ -1296,7 +1296,7 @@ variable "user_token_configurations" {
       issuer = optional(string)
       secret_manager_arn = optional(string)
       url = optional(string)
-    }))
+    })) 
 
   }))
   default = null
@@ -1333,7 +1333,7 @@ variable "document_metadata_configurations" {
       value_importance_items = optional(list(object({
         key = optional(string)
         value = optional(number)
-      })))
+      }))) 
     }))
   }))
   default = null
@@ -1351,7 +1351,7 @@ variable "kendra_data_source_language_code" {
   description = "The code for the language of the Kendra data source content."
   type        = string
   default     = "en"
-}
+}  
 
 variable "kendra_data_source_description" {
   description = "A description for the Kendra data source."
@@ -1405,7 +1405,7 @@ variable "create_kendra_s3_data_source" {
   description = "Whether or not to create a Kendra S3 data source."
   type        = bool
   default     = false
-}
+}  
 
 # SQL Knowledge Base
 
@@ -1428,7 +1428,7 @@ variable "provisioned_auth_configuration" {
           type  = optional(string)
           username_password_secret_arn  = optional(string)
         })
-  default     = null
+  default     = null  
 }
 
 variable "provisioned_config_cluster_identifier" {
@@ -1533,7 +1533,7 @@ variable "action_group_lambda_names_list" {
   default     = []
 }
 
-# – Bedrock Data Automation –
+# – Bedrock Data Automation – 
 
 variable "create_bda" {
   description = "Whether or not to create a Bedrock data automatio project."
@@ -1717,7 +1717,7 @@ variable "blueprint_tags" {
 variable "permissions_boundary_arn" {
   description = "The ARN of the IAM permission boundary for the role."
   type        = string
-  default     = null
+  default     = null  
 }
 
 variable "agent_resource_role_arn" {
