@@ -8,26 +8,27 @@ locals {
 }
 
 resource "aws_iam_role" "agent_role" {
-  count = var.agent_resource_role_arn == null && (var.create_agent || var.create_supervisor) ? 1 : 0
+  # count = var.agent_resource_role_arn == null && (var.create_agent || var.create_supervisor) ? 1 : 0
+  count = 0
   assume_role_policy    = data.aws_iam_policy_document.agent_trust[0].json
   name_prefix           = var.name_prefix
   permissions_boundary  = var.permissions_boundary_arn
 }
 
 resource "aws_iam_role_policy" "agent_policy" {
-  count  = var.create_agent ? 1 : 0
+  count  = var.agent_resource_role_arn == null && var.create_agent ? 1 : 0
   policy = data.aws_iam_policy_document.agent_permissions[0].json
   role   = local.agent_role_name
 }
 
 resource "aws_iam_role_policy" "agent_alias_policy" {
-  count  = var.create_agent_alias || var.create_supervisor ? 1 : 0
+  count  = var.agent_resource_role_arn == null && (var.create_agent_alias || var.create_supervisor) ? 1 : 0
   policy = data.aws_iam_policy_document.agent_alias_permissions[0].json
   role   = local.agent_role_name
 }
 
 resource "aws_iam_role_policy" "kb_policy" {
-  count  = local.create_kb && var.create_agent ? 1 : 0
+  count  = var.agent_resource_role_arn == null && local.create_kb && var.create_agent ? 1 : 0
   policy = data.aws_iam_policy_document.knowledge_base_permissions[0].json
   role   = local.agent_role_name
 }
