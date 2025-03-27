@@ -9,7 +9,7 @@ You can control which features to use with your input variables. The resources a
 
 The main features of the Bedrock module include:
 
-- Agents
+- Bedrock Agents
   - Agent Action Groups
   - Agent Alias
   - Agent Collaborators
@@ -24,7 +24,7 @@ The main features of the Bedrock module include:
 - Custom Models
 - Bedrock Data Automation
 
-## Agents
+## Bedrock Agents
 
 Enable generative AI applications to execute multistep tasks across company systems and data sources.
 
