@@ -15,19 +15,19 @@ resource "aws_iam_role" "agent_role" {
 }
 
 resource "aws_iam_role_policy" "agent_policy" {
-  count  = var.create_agent ? 1 : 0
+  count  = var.agent_resource_role_arn == null && var.create_agent ? 1 : 0
   policy = data.aws_iam_policy_document.agent_permissions[0].json
   role   = local.agent_role_name
 }
 
 resource "aws_iam_role_policy" "agent_alias_policy" {
-  count  = var.create_agent_alias || var.create_supervisor ? 1 : 0
+  count  = var.agent_resource_role_arn == null && (var.create_agent_alias || var.create_supervisor) ? 1 : 0
   policy = data.aws_iam_policy_document.agent_alias_permissions[0].json
   role   = local.agent_role_name
 }
 
 resource "aws_iam_role_policy" "kb_policy" {
-  count  = local.create_kb && var.create_agent ? 1 : 0
+  count  = var.agent_resource_role_arn == null && local.create_kb && var.create_agent ? 1 : 0
   policy = data.aws_iam_policy_document.knowledge_base_permissions[0].json
   role   = local.agent_role_name
 }
