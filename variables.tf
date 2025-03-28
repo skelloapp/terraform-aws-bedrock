@@ -1517,6 +1517,18 @@ variable "action_group_list" {
         s3_object_key = optional(string)
       }))
     }))
+    function_schema = optional(object({
+      functions = optional(list(object({
+        description          = optional(string)
+        name                 = optional(string)
+        parameters = optional(map(object({
+          description = optional(string)
+          required = optional(bool)
+          type = optional(string)
+        })))
+        require_confirmation = optional(string)
+      })))
+    }))
   }))
   default = []
 }
