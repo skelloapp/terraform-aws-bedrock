@@ -8,4 +8,4 @@ module "bedrock" {
   source = "../.." # local example
   create_default_kb = true
   create_agent = false
-  }
+}
