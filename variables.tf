@@ -859,7 +859,7 @@ variable "create_opensearch_config" {
 variable "allow_opensearch_public_access" {
   description = "Whether or not to allow public access to the OpenSearch collection endpoint and the Dashboards endpoint."
   type        = bool
-  default     = null
+  default     = true
 }
 
 # – Pinecone Configuration –
@@ -1516,6 +1516,18 @@ variable "action_group_list" {
         s3_bucket_name = optional(string)
         s3_object_key = optional(string)
       }))
+    }))
+    function_schema = optional(object({
+      functions = optional(list(object({
+        description          = optional(string)
+        name                 = optional(string)
+        parameters = optional(map(object({
+          description = optional(string)
+          required = optional(bool)
+          type = optional(string)
+        })))
+        require_confirmation = optional(string)
+      })))
     }))
   }))
   default = []

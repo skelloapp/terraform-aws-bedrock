@@ -9,7 +9,7 @@ You can control which features to use with your input variables. The resources a
 
 The main features of the Bedrock module include:
 
-- Agents
+- Bedrock Agents
   - Agent Action Groups
   - Agent Alias
   - Agent Collaborators
@@ -24,7 +24,7 @@ The main features of the Bedrock module include:
 - Custom Models
 - Bedrock Data Automation
 
-## Agents
+## Bedrock Agents
 
 Enable generative AI applications to execute multistep tasks across company systems and data sources.
 
@@ -35,7 +35,7 @@ The following example creates an Agent, where you must define at a minimum the d
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -82,7 +82,7 @@ Example configuration with a supervisor agent and a collaborator agent:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
@@ -119,7 +119,7 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
@@ -157,7 +157,7 @@ Example Kendra Knowledge Base:
 ```
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   create_kendra_config = true
   create_kendra_s3_data_source = true
   create_agent = false
@@ -190,7 +190,7 @@ To use an existing Knowledge Base:
 ```hcl
 module "bedrock_agent" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   # ID of the existing Knowledge Base
   existing_kb     = "kb-abc123"          # Required
   kb_state        = "ENABLED"
@@ -223,7 +223,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -326,7 +326,7 @@ Creating a prompt with a prompt version would look like:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   create_agent = false
 
   # Prompt Management
@@ -385,7 +385,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.14"
+  version = "0.0.15"
   create_agent = false
 
   # Application Inference Profile
@@ -458,7 +458,7 @@ Standard output is pre-defined extraction managed by Bedrock. It can extract inf
 ```hcl
 module "bedrock" {
   source     = "aws-ia/bedrock/aws"
-  version    = "0.0.14"
+  version    = "0.0.15"
   create_agent = false
   create_bda = true
 
@@ -495,7 +495,7 @@ Blueprints allow you to define custom extraction schemas for your specific use c
 ```hcl
 module "bedrock" {
   source     = "aws-ia/bedrock/aws"
-  version    = "0.0.14"
+  version    = "0.0.15"
   create_agent = false
 
   create_blueprint = true
@@ -636,7 +636,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_action_group_description"></a> [action\_group\_description](#input\_action\_group\_description) | Description of the action group. | `string` | `null` | no |
 | <a name="input_action_group_lambda_arns_list"></a> [action\_group\_lambda\_arns\_list](#input\_action\_group\_lambda\_arns\_list) | List of Lambda ARNs for action groups. | `list(string)` | `[]` | no |
 | <a name="input_action_group_lambda_names_list"></a> [action\_group\_lambda\_names\_list](#input\_action\_group\_lambda\_names\_list) | List of Lambda names for action groups. | `list(string)` | `[]` | no |
-| <a name="input_action_group_list"></a> [action\_group\_list](#input\_action\_group\_list) | List of configurations for available action groups. | <pre>list(object({<br>    action_group_name = optional(string)<br>    description = optional(string)<br>    action_group_state = optional(string)<br>    parent_action_group_signature = optional(string)<br>    skip_resource_in_use_check_on_delete = optional(bool)<br>    action_group_executor = optional(object({<br>      custom_control = optional(string)<br>      lambda = optional(string)<br>    }))<br>    api_schema = optional(object({<br>      payload = optional(string)<br>      s3 = optional(object({<br>        s3_bucket_name = optional(string)<br>        s3_object_key = optional(string)<br>      }))<br>    }))<br>  }))</pre> | `[]` | no |
+| <a name="input_action_group_list"></a> [action\_group\_list](#input\_action\_group\_list) | List of configurations for available action groups. | <pre>list(object({<br>    action_group_name = optional(string)<br>    description = optional(string)<br>    action_group_state = optional(string)<br>    parent_action_group_signature = optional(string)<br>    skip_resource_in_use_check_on_delete = optional(bool)<br>    action_group_executor = optional(object({<br>      custom_control = optional(string)<br>      lambda = optional(string)<br>    }))<br>    api_schema = optional(object({<br>      payload = optional(string)<br>      s3 = optional(object({<br>        s3_bucket_name = optional(string)<br>        s3_object_key = optional(string)<br>      }))<br>    }))<br>    function_schema = optional(object({<br>      functions = optional(list(object({<br>        description          = optional(string)<br>        name                 = optional(string)<br>        parameters = optional(map(object({<br>          description = optional(string)<br>          required = optional(bool)<br>          type = optional(string)<br>        })))<br>        require_confirmation = optional(string)<br>      })))<br>    }))<br>  }))</pre> | `[]` | no |
 | <a name="input_action_group_name"></a> [action\_group\_name](#input\_action\_group\_name) | Name of the action group. | `string` | `null` | no |
 | <a name="input_action_group_state"></a> [action\_group\_state](#input\_action\_group\_state) | State of the action group. | `string` | `null` | no |
 | <a name="input_agent_alias_description"></a> [agent\_alias\_description](#input\_agent\_alias\_description) | Description of the agent alias. | `string` | `null` | no |
@@ -647,7 +647,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_agent_id"></a> [agent\_id](#input\_agent\_id) | Agent identifier. | `string` | `null` | no |
 | <a name="input_agent_name"></a> [agent\_name](#input\_agent\_name) | The name of your agent. | `string` | `"TerraformBedrockAgents"` | no |
 | <a name="input_agent_resource_role_arn"></a> [agent\_resource\_role\_arn](#input\_agent\_resource\_role\_arn) | Optional external IAM role ARN for the Bedrock agent resource role. If empty, the module will create one internally. | `string` | `null` | no |
-| <a name="input_allow_opensearch_public_access"></a> [allow\_opensearch\_public\_access](#input\_allow\_opensearch\_public\_access) | Whether or not to allow public access to the OpenSearch collection endpoint and the Dashboards endpoint. | `bool` | `null` | no |
+| <a name="input_allow_opensearch_public_access"></a> [allow\_opensearch\_public\_access](#input\_allow\_opensearch\_public\_access) | Whether or not to allow public access to the OpenSearch collection endpoint and the Dashboards endpoint. | `bool` | `true` | no |
 | <a name="input_api_schema_payload"></a> [api\_schema\_payload](#input\_api\_schema\_payload) | String OpenAPI Payload. | `string` | `null` | no |
 | <a name="input_api_schema_s3_bucket_name"></a> [api\_schema\_s3\_bucket\_name](#input\_api\_schema\_s3\_bucket\_name) | A bucket in S3. | `string` | `null` | no |
 | <a name="input_api_schema_s3_object_key"></a> [api\_schema\_s3\_object\_key](#input\_api\_schema\_s3\_object\_key) | An object key in S3. | `string` | `null` | no |
