@@ -35,7 +35,7 @@ The following example creates an Agent, where you must define at a minimum the d
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -82,7 +82,7 @@ Example configuration with a supervisor agent and a collaborator agent:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   create_agent_alias = true
   foundation_model = "anthropic.claude-3-5-sonnet-20241022-v2:0"
   instruction = "You are an agent. Do what the supervisor tells you to do"
@@ -119,7 +119,7 @@ provider "opensearch" {
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   create_default_kb = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
@@ -157,7 +157,7 @@ Example Kendra Knowledge Base:
 ```
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   create_kendra_config = true
   create_kendra_s3_data_source = true
   create_agent = false
@@ -190,7 +190,7 @@ To use an existing Knowledge Base:
 ```hcl
 module "bedrock_agent" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   # ID of the existing Knowledge Base
   existing_kb     = "kb-abc123"          # Required
   kb_state        = "ENABLED"
@@ -223,7 +223,7 @@ You can create a Guardrail by setting `create_guardrail` to true and passing in 
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   create_guardrail = true
   blocked_input = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
   blocked_output = "I can provide general info about services, but can't fully address your request here. For personalized help or detailed questions, please contact our customer service team directly. For security reasons, avoid sharing sensitive information through this channel. If you have a general product question, feel free to ask without including personal details."
@@ -326,7 +326,7 @@ Creating a prompt with a prompt version would look like:
 ```hcl
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   create_agent = false
 
   # Prompt Management
@@ -385,7 +385,7 @@ data "aws_region" "current" {}
 
 module "bedrock" {
   source  = "aws-ia/bedrock/aws"
-  version = "0.0.15"
+  version = "0.0.16"
   create_agent = false
 
   # Application Inference Profile
@@ -458,7 +458,7 @@ Standard output is pre-defined extraction managed by Bedrock. It can extract inf
 ```hcl
 module "bedrock" {
   source     = "aws-ia/bedrock/aws"
-  version    = "0.0.15"
+  version    = "0.0.16"
   create_agent = false
   create_bda = true
 
@@ -495,7 +495,7 @@ Blueprints allow you to define custom extraction schemas for your specific use c
 ```hcl
 module "bedrock" {
   source     = "aws-ia/bedrock/aws"
-  version    = "0.0.15"
+  version    = "0.0.16"
   create_agent = false
 
   create_blueprint = true
@@ -524,8 +524,8 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.7 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~>5.0 |
-| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | >= 1.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | = 5.93.0 |
+| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | = 1.35.0 |
 | <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | = 2.2.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.6.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.6 |
@@ -534,8 +534,8 @@ See the additional input variables for deploying BDA projects and blueprints [he
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~>5.0 |
-| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | = 5.93.0 |
+| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | = 1.35.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.6.0 |
 | <a name="provider_time"></a> [time](#provider\_time) | ~> 0.6 |
 
@@ -549,85 +549,85 @@ See the additional input variables for deploying BDA projects and blueprints [he
 
 | Name | Type |
 |------|------|
-| [aws_bedrock_custom_model.custom_model](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrock_custom_model) | resource |
-| [aws_bedrockagent_agent.agent_supervisor](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_agent) | resource |
-| [aws_bedrockagent_agent_collaborator.agent_collaborator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_agent_collaborator) | resource |
-| [aws_bedrockagent_data_source.knowledge_base_ds](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/bedrockagent_data_source) | resource |
-| [aws_cloudwatch_log_group.knowledge_base_cwl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
-| [aws_iam_policy.bedrock_kb_kendra](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.bedrock_kb_s3_decryption_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.bedrock_kb_sql](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.bedrock_kb_sql_provisioned](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.bedrock_kb_sql_serverless](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.bedrock_knowledge_base_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.bedrock_knowledge_base_policy_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_role.agent_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.application_inference_profile_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.bedrock_knowledge_base_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role.custom_model_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy.action_group_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.agent_alias_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.agent_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.app_inference_profile_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.bedrock_kb_oss](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.custom_model_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.guardrail_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.guardrail_policy_supervisor_agent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy.kb_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
-| [aws_iam_role_policy_attachment.bedrock_kb_s3_decryption_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.bedrock_knowledge_base_kendra_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_s3_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_provision_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_serverless_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_lambda_permission.allow_bedrock_agent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
-| [aws_opensearchserverless_access_policy.updated_data_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/opensearchserverless_access_policy) | resource |
-| [awscc_bedrock_agent.bedrock_agent](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent) | resource |
-| [awscc_bedrock_agent_alias.bedrock_agent_alias](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_agent_alias) | resource |
-| [awscc_bedrock_application_inference_profile.application_inference_profile](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_application_inference_profile) | resource |
-| [awscc_bedrock_blueprint.bda_blueprint](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_blueprint) | resource |
-| [awscc_bedrock_data_automation_project.bda_project](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_automation_project) | resource |
-| [awscc_bedrock_data_source.knowledge_base_confluence](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
-| [awscc_bedrock_data_source.knowledge_base_salesforce](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
-| [awscc_bedrock_data_source.knowledge_base_sharepoint](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
-| [awscc_bedrock_data_source.knowledge_base_web_crawler](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_source) | resource |
-| [awscc_bedrock_flow_alias.flow_alias](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_flow_alias) | resource |
-| [awscc_bedrock_flow_version.flow_version](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_flow_version) | resource |
-| [awscc_bedrock_guardrail.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_guardrail) | resource |
-| [awscc_bedrock_guardrail_version.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_guardrail_version) | resource |
-| [awscc_bedrock_knowledge_base.knowledge_base_default](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
-| [awscc_bedrock_knowledge_base.knowledge_base_kendra](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
-| [awscc_bedrock_knowledge_base.knowledge_base_mongo](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
-| [awscc_bedrock_knowledge_base.knowledge_base_opensearch](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
-| [awscc_bedrock_knowledge_base.knowledge_base_pinecone](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
-| [awscc_bedrock_knowledge_base.knowledge_base_rds](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
-| [awscc_bedrock_knowledge_base.knowledge_base_sql](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_knowledge_base) | resource |
-| [awscc_bedrock_prompt.prompt](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_prompt) | resource |
-| [awscc_bedrock_prompt_version.prompt_version](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_prompt_version) | resource |
-| [awscc_iam_role.kendra_index_role](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role) | resource |
-| [awscc_iam_role.kendra_s3_datasource_role](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role) | resource |
-| [awscc_iam_role_policy.kendra_role_policy](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iam_role_policy) | resource |
-| [awscc_kendra_data_source.kendra_s3_data_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/kendra_data_source) | resource |
-| [awscc_kendra_index.genai_kendra_index](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/kendra_index) | resource |
-| [awscc_logs_delivery.knowledge_base_log_delivery](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery) | resource |
-| [awscc_logs_delivery_destination.knowledge_base_log_destination](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_destination) | resource |
-| [awscc_logs_delivery_source.knowledge_base_log_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/logs_delivery_source) | resource |
-| [awscc_s3_bucket.custom_model_output](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/s3_bucket) | resource |
-| [awscc_s3_bucket.s3_data_source](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/s3_bucket) | resource |
+| [aws_bedrock_custom_model.custom_model](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrock_custom_model) | resource |
+| [aws_bedrockagent_agent.agent_supervisor](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrockagent_agent) | resource |
+| [aws_bedrockagent_agent_collaborator.agent_collaborator](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrockagent_agent_collaborator) | resource |
+| [aws_bedrockagent_data_source.knowledge_base_ds](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrockagent_data_source) | resource |
+| [aws_cloudwatch_log_group.knowledge_base_cwl](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/cloudwatch_log_group) | resource |
+| [aws_iam_policy.bedrock_kb_kendra](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_kb_s3_decryption_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_kb_sql](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_kb_sql_provisioned](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_kb_sql_serverless](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_knowledge_base_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.bedrock_knowledge_base_policy_s3](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
+| [aws_iam_role.agent_role](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role) | resource |
+| [aws_iam_role.application_inference_profile_role](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role) | resource |
+| [aws_iam_role.bedrock_knowledge_base_role](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role) | resource |
+| [aws_iam_role.custom_model_role](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy.action_group_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.agent_alias_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.agent_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.app_inference_profile_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.bedrock_kb_oss](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.custom_model_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.guardrail_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.guardrail_policy_supervisor_agent](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.kb_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy_attachment.bedrock_kb_s3_decryption_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_kendra_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_policy_s3_attachment](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_provision_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bedrock_knowledge_base_sql_serverless_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_lambda_permission.allow_bedrock_agent](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/lambda_permission) | resource |
+| [aws_opensearchserverless_access_policy.updated_data_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/opensearchserverless_access_policy) | resource |
+| [awscc_bedrock_agent.bedrock_agent](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_agent) | resource |
+| [awscc_bedrock_agent_alias.bedrock_agent_alias](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_agent_alias) | resource |
+| [awscc_bedrock_application_inference_profile.application_inference_profile](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_application_inference_profile) | resource |
+| [awscc_bedrock_blueprint.bda_blueprint](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_blueprint) | resource |
+| [awscc_bedrock_data_automation_project.bda_project](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_automation_project) | resource |
+| [awscc_bedrock_data_source.knowledge_base_confluence](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
+| [awscc_bedrock_data_source.knowledge_base_salesforce](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
+| [awscc_bedrock_data_source.knowledge_base_sharepoint](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
+| [awscc_bedrock_data_source.knowledge_base_web_crawler](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
+| [awscc_bedrock_flow_alias.flow_alias](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_flow_alias) | resource |
+| [awscc_bedrock_flow_version.flow_version](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_flow_version) | resource |
+| [awscc_bedrock_guardrail.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_guardrail) | resource |
+| [awscc_bedrock_guardrail_version.guardrail](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_guardrail_version) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_default](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_kendra](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_mongo](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_opensearch](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_pinecone](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_rds](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_sql](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_prompt.prompt](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_prompt) | resource |
+| [awscc_bedrock_prompt_version.prompt_version](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_prompt_version) | resource |
+| [awscc_iam_role.kendra_index_role](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/iam_role) | resource |
+| [awscc_iam_role.kendra_s3_datasource_role](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/iam_role) | resource |
+| [awscc_iam_role_policy.kendra_role_policy](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/iam_role_policy) | resource |
+| [awscc_kendra_data_source.kendra_s3_data_source](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/kendra_data_source) | resource |
+| [awscc_kendra_index.genai_kendra_index](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/kendra_index) | resource |
+| [awscc_logs_delivery.knowledge_base_log_delivery](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/logs_delivery) | resource |
+| [awscc_logs_delivery_destination.knowledge_base_log_destination](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/logs_delivery_destination) | resource |
+| [awscc_logs_delivery_source.knowledge_base_log_source](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/logs_delivery_source) | resource |
+| [awscc_s3_bucket.custom_model_output](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/s3_bucket) | resource |
+| [awscc_s3_bucket.s3_data_source](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/s3_bucket) | resource |
 | [random_string.solution_prefix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [time_sleep.wait_after_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_after_kendra_index_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_after_kendra_s3_data_source_creation](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [aws_bedrock_foundation_model.model_identifier](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/bedrock_foundation_model) | data source |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.agent_alias_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.agent_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.agent_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.custom_model_trust](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.knowledge_base_permissions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [aws_bedrock_foundation_model.model_identifier](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/bedrock_foundation_model) | data source |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.agent_alias_permissions](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.agent_permissions](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.agent_trust](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.custom_model_trust](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.knowledge_base_permissions](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/partition) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/data-sources/region) | data source |
 
 ## Inputs
 
@@ -872,6 +872,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="output_datasource_identifier"></a> [datasource\_identifier](#output\_datasource\_identifier) | The unique identifier of the data source. |
 | <a name="output_default_collection"></a> [default\_collection](#output\_default\_collection) | Opensearch default collection value. |
 | <a name="output_default_kb_identifier"></a> [default\_kb\_identifier](#output\_default\_kb\_identifier) | The unique identifier of the default knowledge base that was created.  If no default KB was requested, value will be null |
+| <a name="output_knowledge_base_role_name"></a> [knowledge\_base\_role\_name](#output\_knowledge\_base\_role\_name) | The name of the IAM role used by the knowledge base. |
 | <a name="output_mongo_kb_identifier"></a> [mongo\_kb\_identifier](#output\_mongo\_kb\_identifier) | The unique identifier of the MongoDB knowledge base that was created.  If no MongoDB KB was requested, value will be null |
 | <a name="output_opensearch_kb_identifier"></a> [opensearch\_kb\_identifier](#output\_opensearch\_kb\_identifier) | The unique identifier of the OpenSearch knowledge base that was created.  If no OpenSearch KB was requested, value will be null |
 | <a name="output_pinecone_kb_identifier"></a> [pinecone\_kb\_identifier](#output\_pinecone\_kb\_identifier) | The unique identifier of the Pinecone knowledge base that was created.  If no Pinecone KB was requested, value will be null |
