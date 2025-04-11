@@ -38,7 +38,18 @@ locals {
   }
   action_group_result = [for count in local.counter_action_group : local.action_group_value]
 
-  action_group_list = concat(local.action_group_result, var.action_group_list)
+  # Create a map with action_group_name as keys for stable sorting
+  action_group_map = var.action_group_list != null ? {
+    for idx, ag in var.action_group_list :
+    # Use action_group_name as key, or index if name is null
+    coalesce(try(ag.action_group_name, ""), format("%04d", idx)) => ag
+  } : {}
+  
+  # Extract values from the sorted map (Terraform maps are sorted by keys)
+  sorted_action_groups = [for k, v in local.action_group_map : v]
+  
+  # Combine action groups with consistent ordering
+  action_group_list = concat(local.action_group_result, local.sorted_action_groups)
 
   counter_collaborator = var.create_agent && var.create_agent_alias && var.create_collaborator ? 1 : 0
 
