@@ -552,7 +552,6 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | [aws_bedrock_custom_model.custom_model](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrock_custom_model) | resource |
 | [aws_bedrockagent_agent.agent_supervisor](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrockagent_agent) | resource |
 | [aws_bedrockagent_agent_collaborator.agent_collaborator](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrockagent_agent_collaborator) | resource |
-| [aws_bedrockagent_data_source.knowledge_base_ds](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/bedrockagent_data_source) | resource |
 | [aws_cloudwatch_log_group.knowledge_base_cwl](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/cloudwatch_log_group) | resource |
 | [aws_iam_policy.bedrock_kb_kendra](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.bedrock_kb_s3_decryption_policy](https://registry.terraform.io/providers/hashicorp/aws/5.93.0/docs/resources/iam_policy) | resource |
@@ -589,6 +588,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | [awscc_bedrock_blueprint.bda_blueprint](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_blueprint) | resource |
 | [awscc_bedrock_data_automation_project.bda_project](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_automation_project) | resource |
 | [awscc_bedrock_data_source.knowledge_base_confluence](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
+| [awscc_bedrock_data_source.knowledge_base_ds](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
 | [awscc_bedrock_data_source.knowledge_base_salesforce](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
 | [awscc_bedrock_data_source.knowledge_base_sharepoint](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |
 | [awscc_bedrock_data_source.knowledge_base_web_crawler](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_data_source) | resource |

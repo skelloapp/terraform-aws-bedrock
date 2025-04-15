@@ -67,18 +67,19 @@ resource "awscc_s3_bucket" "s3_data_source" {
   }]
 }
 
-resource "aws_bedrockagent_data_source" "knowledge_base_ds" {
+resource "awscc_bedrock_data_source" "knowledge_base_ds" {
   count             = local.create_s3_data_source ? 1 : 0
   knowledge_base_id = var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : var.existing_kb
   name              = "${random_string.solution_prefix.result}-${var.kb_name}DataSource"
-  data_source_configuration {
+  data_source_configuration = {
     type = "S3"
-    s3_configuration {
+    s3_configuration = {
       bucket_arn = var.kb_s3_data_source == null ? awscc_s3_bucket.s3_data_source[0].arn : var.kb_s3_data_source # Create an S3 bucket or reference existing
       bucket_owner_account_id = var.bucket_owner_account_id
       inclusion_prefixes = var.s3_inclusion_prefixes
     }
   }
+  vector_ingestion_configuration = var.create_vector_ingestion_configuration == false ? null : local.vector_ingestion_configuration
 }
 
 resource "aws_cloudwatch_log_group" "knowledge_base_cwl" {
