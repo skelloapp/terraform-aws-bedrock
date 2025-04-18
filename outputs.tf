@@ -29,7 +29,7 @@ output "rds_kb_identifier" {
 }
 
 output "datasource_identifier" {
-  value       = length(aws_bedrockagent_data_source.knowledge_base_ds) > 0 ? aws_bedrockagent_data_source.knowledge_base_ds[0].data_source_id : null
+  value       = length(awscc_bedrock_data_source.knowledge_base_ds) > 0 ? awscc_bedrock_data_source.knowledge_base_ds[0].data_source_id : null
   description = "The unique identifier of the data source."
 }
 
