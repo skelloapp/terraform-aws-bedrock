@@ -7,6 +7,7 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
   partition  = data.aws_partition.current.partition
   create_kb  = var.create_default_kb || var.create_rds_config || var.create_mongo_config || var.create_pinecone_config || var.create_opensearch_config || var.create_kb || var.create_kendra_config
+  foundation_model = var.create_agent ? var.foundation_model : (var.create_supervisor ? var.supervisor_model : null)
 }
 
 data "aws_iam_policy_document" "agent_trust" {
@@ -31,16 +32,16 @@ data "aws_iam_policy_document" "agent_trust" {
 }
 
 data "aws_iam_policy_document" "agent_permissions" {
-  count = var.create_agent ? 1 : 0
+  count = var.create_agent || var.create_supervisor ? 1 : 0
   statement {
     actions = [
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream"
     ]
     resources = [
-      "arn:${local.partition}:bedrock:${local.region}::foundation-model/${var.foundation_model}",
-      "arn:${local.partition}:bedrock:*::foundation-model/${var.foundation_model}",
-      "arn:${local.partition}:bedrock:${local.region}:${local.account_id}:inference-profile/*.${var.foundation_model}",
+      "arn:${local.partition}:bedrock:${local.region}::foundation-model/${local.foundation_model}",
+      "arn:${local.partition}:bedrock:*::foundation-model/${local.foundation_model}",
+      "arn:${local.partition}:bedrock:${local.region}:${local.account_id}:inference-profile/*.${local.foundation_model}",
     ]
   }
 }

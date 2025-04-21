@@ -15,7 +15,7 @@ resource "aws_iam_role" "agent_role" {
 }
 
 resource "aws_iam_role_policy" "agent_policy" {
-  count  = var.agent_resource_role_arn == null && var.create_agent ? 1 : 0
+  count  = var.agent_resource_role_arn == null && (var.create_agent || var.create_supervisor) ? 1 : 0
   policy = data.aws_iam_policy_document.agent_permissions[0].json
   role   = local.agent_role_name
 }
