@@ -543,7 +543,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_oss_knowledgebase"></a> [oss\_knowledgebase](#module\_oss\_knowledgebase) | aws-ia/opensearch-serverless/aws | 0.0.2 |
+| <a name="module_oss_knowledgebase"></a> [oss\_knowledgebase](#module\_oss\_knowledgebase) | aws-ia/opensearch-serverless/aws | 0.0.4 |
 
 ## Resources
 
@@ -880,4 +880,5 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="output_s3_data_source_arn"></a> [s3\_data\_source\_arn](#output\_s3\_data\_source\_arn) | The Amazon Bedrock Data Source for S3. |
 | <a name="output_s3_data_source_name"></a> [s3\_data\_source\_name](#output\_s3\_data\_source\_name) | The name of the Amazon Bedrock Data Source for S3. |
 | <a name="output_supervisor_id"></a> [supervisor\_id](#output\_supervisor\_id) | The identifier of the supervisor agent. |
+| <a name="output_supervisor_role_arn"></a> [supervisor\_role\_arn](#output\_supervisor\_role\_arn) | The ARN of the Bedrock supervisor agent resource role. |
 <!-- END_TF_DOCS -->

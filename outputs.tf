@@ -74,6 +74,11 @@ output "agent_resource_role_name" {
   description = "The name of the Bedrock agent resource role."
 }
 
+output "supervisor_role_arn" {
+  value       = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : (var.create_supervisor ? aws_iam_role.agent_role[0].arn : null)
+  description = "The ARN of the Bedrock supervisor agent resource role."
+}
+
 output "custom_model" {
   value       = var.create_custom_model ? aws_bedrock_custom_model.custom_model[0] : null
   description = "The custom model. If no custom model was requested, value will be null."
