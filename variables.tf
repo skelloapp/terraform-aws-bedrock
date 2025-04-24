@@ -428,6 +428,12 @@ variable "create_s3_data_source" {
   default     = false
 }
 
+variable "use_existing_s3_data_source" {
+  description = "Whether or not to use an existing S3 data source."
+  type        = bool
+  default     = false
+}
+
 variable "kb_s3_data_source" {
   description = "The S3 data source ARN for the knowledge base."
   type        = string
