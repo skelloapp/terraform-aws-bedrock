@@ -41,7 +41,7 @@ locals {
 
 # - Knowledge Base S3 Data Source –
 resource "awscc_s3_bucket" "s3_data_source" {
-  count       = (local.create_s3_data_source || var.create_kendra_s3_data_source) && var.kb_s3_data_source == null ? 1 : 0
+  count       = (local.create_s3_data_source || var.create_kendra_s3_data_source) && var.use_existing_s3_data_source == false ? 1 : 0
   bucket_name = "${random_string.solution_prefix.result}-${var.kb_name}-default-bucket"
 
   public_access_block_configuration = {
