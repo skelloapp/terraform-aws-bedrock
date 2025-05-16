@@ -144,7 +144,7 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
     alias_arn = local.bedrock_agent_alias[0].agent_alias_arn
   }
 
-  depends_on = [awscc_bedrock_agent.bedrock_agent[0], local.bedrock_agent_alias[0]]
+  depends_on = [awscc_bedrock_agent.bedrock_agent[0], local.bedrock_agent_alias]
 }
 
 resource "aws_bedrockagent_agent" "agent_supervisor" {
