@@ -212,6 +212,12 @@ variable "use_aws_provider_alias" {
   default     = false
 }
 
+variable "bedrock_agent_alias_provisioned_throughput" {
+  description = "ARN of the Provisioned Throughput assigned to the agent alias."
+  type        = string
+  default     = null
+}
+
 variable "bedrock_agent_version" {
   description = "Agent version."
   type        = string

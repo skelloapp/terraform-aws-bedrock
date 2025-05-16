@@ -125,6 +125,7 @@ resource "aws_bedrockagent_agent_alias"  "bedrock_agent_alias" {
   routing_configuration = var.bedrock_agent_version == null ? null : [
     {
       agent_version = var.bedrock_agent_version
+      provisioned_throughput = var.bedrock_agent_alias_provisioned_throughput
     }
   ]
   tags = var.agent_alias_tags
