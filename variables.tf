@@ -206,6 +206,18 @@ variable "agent_alias_description" {
   default     = null
 }
 
+variable "use_aws_provider_alias" {
+  description = "Whether or not to use the aws or awscc provider for the agent alias. Defaults to using the awscc provider."
+  type        = bool
+  default     = false
+}
+
+variable "bedrock_agent_alias_provisioned_throughput" {
+  description = "ARN of the Provisioned Throughput assigned to the agent alias."
+  type        = string
+  default     = null
+}
+
 variable "bedrock_agent_version" {
   description = "Agent version."
   type        = string

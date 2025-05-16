@@ -7,6 +7,8 @@ resource "random_string" "solution_prefix" {
 # – Bedrock Agent –
 
 locals {
+  bedrock_agent_alias = var.create_agent_alias && var.use_aws_provider_alias ? aws_bedrockagent_agent_alias.bedrock_agent_alias : awscc_bedrock_agent_alias.bedrock_agent_alias 
+
   counter_kb = local.create_kb || var.existing_kb != null ? [1] : []
   knowledge_base_id = local.create_kb ? (var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : (var.create_mongo_config ? awscc_bedrock_knowledge_base.knowledge_base_mongo[0].id : (var.create_opensearch_config ? awscc_bedrock_knowledge_base.knowledge_base_opensearch[0].id : (var.create_pinecone_config ? awscc_bedrock_knowledge_base.knowledge_base_pinecone[0].id : (var.create_rds_config ? awscc_bedrock_knowledge_base.knowledge_base_rds[0].id : null))))) : null
   knowledge_bases_value = {
@@ -103,13 +105,27 @@ resource "awscc_bedrock_agent" "bedrock_agent" {
 # Agent Alias
 
 resource "awscc_bedrock_agent_alias"  "bedrock_agent_alias" {
-  count            = var.create_agent_alias ? 1 : 0
+  count            = var.create_agent_alias && var.use_aws_provider_alias == false ? 1 : 0
   agent_alias_name = var.agent_alias_name
   agent_id         = var.create_agent ? awscc_bedrock_agent.bedrock_agent[0].id : var.agent_id
   description      = var.agent_alias_description
   routing_configuration = var.bedrock_agent_version == null ? null : [
     {
       agent_version = var.bedrock_agent_version
+    }
+  ]
+  tags = var.agent_alias_tags
+}
+
+resource "aws_bedrockagent_agent_alias"  "bedrock_agent_alias" {
+  count            = var.create_agent_alias && var.use_aws_provider_alias ? 1 : 0
+  agent_alias_name = var.agent_alias_name
+  agent_id         = var.create_agent ? awscc_bedrock_agent.bedrock_agent[0].id : var.agent_id
+  description      = var.agent_alias_description
+  routing_configuration = var.bedrock_agent_version == null ? null : [
+    {
+      agent_version = var.bedrock_agent_version
+      provisioned_throughput = var.bedrock_agent_alias_provisioned_throughput
     }
   ]
   tags = var.agent_alias_tags
@@ -125,10 +141,10 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
   relay_conversation_history = "TO_COLLABORATOR"
 
   agent_descriptor {
-    alias_arn = awscc_bedrock_agent_alias.bedrock_agent_alias[0].agent_alias_arn
+    alias_arn = local.bedrock_agent_alias[0].agent_alias_arn
   }
 
-  depends_on = [awscc_bedrock_agent.bedrock_agent[0], awscc_bedrock_agent_alias.bedrock_agent_alias[0]]
+  depends_on = [awscc_bedrock_agent.bedrock_agent[0], local.bedrock_agent_alias]
 }
 
 resource "aws_bedrockagent_agent" "agent_supervisor" {
