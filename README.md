@@ -121,6 +121,7 @@ module "bedrock" {
   source  = "aws-ia/bedrock/aws"
   version = "0.0.20"
   create_default_kb = true
+  create_s3_data_source = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
 }
@@ -789,6 +790,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_level_configurations_list"></a> [level\_configurations\_list](#input\_level\_configurations\_list) | Token settings for each layer. | `list(object({ max_tokens = number }))` | `null` | no |
 | <a name="input_managed_word_lists_config"></a> [managed\_word\_lists\_config](#input\_managed\_word\_lists\_config) | A config for the list of managed words. | `list(map(string))` | `null` | no |
 | <a name="input_max_length"></a> [max\_length](#input\_max\_length) | The maximum number of tokens to generate in the response. | `number` | `0` | no |
+| <a name="input_memory_configuration"></a> [memory\_configuration](#input\_memory\_configuration) | Configuration for agent memory storage | <pre>object({<br>      enabled_memory_types = optional(list(string))<br>      session_summary_configuration = optional(object({<br>        max_recent_sessions = optional(number)<br>      }))<br>      storage_date = optional(number)<br>  })</pre> | `null` | no |
 | <a name="input_metadata_field"></a> [metadata\_field](#input\_metadata\_field) | The name of the field in which Amazon Bedrock stores metadata about the vector store. | `string` | `"AMAZON_BEDROCK_METADATA"` | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | This value is appended at the beginning of resource names. | `string` | `"BedrockAgents"` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The namespace to be used to write new data to your pinecone database | `string` | `null` | no |
