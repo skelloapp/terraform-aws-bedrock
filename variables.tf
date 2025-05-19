@@ -326,6 +326,20 @@ variable "supervisor_guardrail_version" {
   default     = null
 }
 
+# Memory Configuration 
+
+variable "memory_configuration" {
+  description = "Configuration for agent memory storage"
+  type        = object({
+      enabled_memory_types = optional(list(string))
+      session_summary_configuration = optional(object({
+        max_recent_sessions = optional(number)
+      }))
+      storage_date = optional(number)
+  })
+  default    = null
+}
+
 # – Guardrails –
 
 variable "create_guardrail" {

@@ -100,6 +100,7 @@ resource "awscc_bedrock_agent" "bedrock_agent" {
     guardrail_identifier = awscc_bedrock_guardrail.guardrail[0].id
     guardrail_version    = awscc_bedrock_guardrail_version.guardrail[0].version
   }
+  memory_configuration = var.memory_configuration
 }
 
 # Agent Alias
