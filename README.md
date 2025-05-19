@@ -595,7 +595,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.7 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.93.0 |
-| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | >= 1.40.0 |
+| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | >= 1.35.0 |
 | <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | = 2.2.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.6.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.6 |
@@ -605,7 +605,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.93.0 |
-| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.40.0 |
+| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.35.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 3.6.0 |
 | <a name="provider_time"></a> [time](#provider\_time) | ~> 0.6 |
 
