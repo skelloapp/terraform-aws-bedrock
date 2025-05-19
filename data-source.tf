@@ -41,7 +41,7 @@ locals {
 
 # - Knowledge Base S3 Data Source –
 resource "awscc_s3_bucket" "s3_data_source" {
-  count       = (local.create_s3_data_source || var.create_kendra_s3_data_source) && var.use_existing_s3_data_source == false ? 1 : 0
+  count       = (var.create_s3_data_source || var.create_kendra_s3_data_source) && var.use_existing_s3_data_source == false ? 1 : 0
   bucket_name = "${random_string.solution_prefix.result}-${var.kb_name}-default-bucket"
 
   public_access_block_configuration = {
@@ -68,7 +68,7 @@ resource "awscc_s3_bucket" "s3_data_source" {
 }
 
 resource "awscc_bedrock_data_source" "knowledge_base_ds" {
-  count             = local.create_s3_data_source ? 1 : 0
+  count             = var.create_s3_data_source ? 1 : 0
   knowledge_base_id = var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : var.existing_kb
   name              = "${random_string.solution_prefix.result}-${var.kb_name}DataSource"
   data_source_configuration = {
