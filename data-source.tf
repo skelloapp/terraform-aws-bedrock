@@ -1,7 +1,6 @@
 locals {
   create_cwl      = var.create_default_kb && var.create_kb_log_group
   create_delivery = local.create_cwl || var.kb_monitoring_arn != null
-  create_s3_data_source = var.create_default_kb == true || var.create_s3_data_source == true 
   vector_ingestion_configuration = {
     chunking_configuration = var.chunking_strategy == null ? null : {
       chunking_strategy = var.chunking_strategy
