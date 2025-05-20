@@ -1789,25 +1789,6 @@ variable "text_index_name" {
   default     = null
 }
 
-# – OpenSearch Managed Cluster Configuration –
-variable "create_opensearch_managed_config" {
-  description = "Whether or not to use OpenSearch Managed Cluster configuration"
-  type        = bool
-  default     = false
-}
-
-variable "domain_arn" {
-  description = "The Amazon Resource Name (ARN) of the OpenSearch domain."
-  type        = string
-  default     = null
-}
-
-variable "domain_endpoint" {
-  description = "The endpoint URL the OpenSearch domain."
-  type        = string
-  default     = null
-}
-
 # – Neptune Analytics Configuration –
 variable "create_neptune_analytics_config" {
   description = "Whether or not to use Neptune Analytics configuration"
