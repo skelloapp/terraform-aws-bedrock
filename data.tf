@@ -37,13 +37,20 @@ data "aws_iam_policy_document" "agent_permissions" {
     actions = [
       "bedrock:InvokeModel*",
     ]
-    resources = concat([
-      var.app_inference_profile_model_source,
-      "arn:aws:bedrock:*:*:application-inference-profile/*",
-      awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn,
+    resources = distinct(concat(
+      [
+       "arn:${local.partition}:bedrock:${local.region}::foundation-model/${local.foundation_model}",
+       "arn:${local.partition}:bedrock:*::foundation-model/${local.foundation_model}",
+       "arn:${local.partition}:bedrock:${local.region}:${local.account_id}:inference-profile/*.${local.foundation_model}",
+       "arn:aws:bedrock:*:*:application-inference-profile/*",
       ],
-      awscc_bedrock_application_inference_profile.application_inference_profile[0].models[*].model_arn,
-    )
+      var.create_app_inference_profile ? [
+       var.app_inference_profile_model_source,
+       awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn
+      ] : [],
+      var.create_app_inference_profile ? 
+        awscc_bedrock_application_inference_profile.application_inference_profile[0].models[*].model_arn : []
+    ))
   }
 }
 
