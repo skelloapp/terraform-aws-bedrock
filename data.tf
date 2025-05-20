@@ -38,16 +38,15 @@ data "aws_iam_policy_document" "agent_permissions" {
       "bedrock:InvokeModel*",
     ]
     resources = distinct(concat(
-      [
+      var.create_app_inference_profile ? [
+       var.app_inference_profile_model_source,
+       awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn,
+       "arn:aws:bedrock:*:*:application-inference-profile/*",
+      ] : [
        "arn:${local.partition}:bedrock:${local.region}::foundation-model/${local.foundation_model}",
        "arn:${local.partition}:bedrock:*::foundation-model/${local.foundation_model}",
        "arn:${local.partition}:bedrock:${local.region}:${local.account_id}:inference-profile/*.${local.foundation_model}",
-       "arn:aws:bedrock:*:*:application-inference-profile/*",
       ],
-      var.create_app_inference_profile ? [
-       var.app_inference_profile_model_source,
-       awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn
-      ] : [],
       var.create_app_inference_profile ? 
         awscc_bedrock_application_inference_profile.application_inference_profile[0].models[*].model_arn : []
     ))
@@ -96,6 +95,20 @@ data "aws_iam_policy_document" "custom_model_trust" {
       values   = ["arn:${local.partition}:bedrock:${local.region}:${local.account_id}:model-customization-job/*"]
       variable = "AWS:SourceArn"
     }
+  }
+}
+
+data "aws_iam_policy_document" "app_inference_profile_permission" {
+  count = var.create_app_inference_profile ? 1 : 0
+  statement {
+    actions = [
+      "bedrock:GetInferenceProfile",
+      "bedrock:ListInferenceProfiles",
+    ]
+    resources = [
+      "arn:aws:bedrock:*:*:inference-profile/*",
+      "arn:aws:bedrock:*:*:application-inference-profile/*"
+    ]
   }
 }
 
