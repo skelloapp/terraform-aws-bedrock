@@ -4,7 +4,7 @@ locals {
   vector_ingestion_configuration = {
     chunking_configuration = var.chunking_strategy == null ? null : {
       chunking_strategy = var.chunking_strategy
-      fixed_size_chunking_configuration = {
+      fixed_size_chunking_configuration = var.chunking_strategy_max_tokens == null ? null : {
         max_tokens = var.chunking_strategy_max_tokens
         overlap_percentage = var.chunking_strategy_overlap_percentage
       }
