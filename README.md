@@ -14,7 +14,7 @@ The main features of the Bedrock module include:
   - Agent Alias
   - Agent Collaborators
 - Knowledge Bases
-  - Vector Knowledge Base
+  - Vector Knowledge Base (OpenSearch Serverless, Neptune Analytics, MongoDB Atlas, Pinecone, RDS)
   - Kendra Knowledge Base
   - SQL Knowledge Base
 - Guardrails
@@ -103,11 +103,37 @@ With Knowledge Bases for Amazon Bedrock, you can give FMs and agents contextual 
 
 ### Create a Vector Knowledge Base
 
-A vector index on a vector store is required to create a vector Knowledge Base. This construct currently supports Amazon OpenSearch Serverless, Amazon RDS Aurora PostgreSQL, Pinecone, and MongoDB. By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
+A vector index on a vector store is required to create a vector Knowledge Base. This construct supports multiple vector store options:
+
+- **Amazon OpenSearch Serverless**: Default option with automatic collection and index creation
+- **Neptune Analytics**: For graph database integration
+- **MongoDB Atlas**: For MongoDB vector search
+- **Pinecone**: For Pinecone vector database
+- **Amazon RDS Aurora PostgreSQL**: For PostgreSQL with pgvector
+
+By default, this resource will create an OpenSearch Serverless vector collection and index for each Knowledge Base you create, but you can provide an existing collection to have more control. For other resources you need to have the vector stores already created and credentials stored in AWS Secrets Manager.
 
 The resource accepts an instruction prop that is provided to any Bedrock Agent it is associated with so the agent can decide when to query the Knowledge Base.
 
-To create an OpenSearch Serverless knowledge base, make sure you pass in the appropriate variables and set the `create_default_kb` variable to `true`. To create an RDS, Pinecone, or MongoDB Knowledge Base, set `create_rds_config`, `create_pinecone_config`, or `create_mongo_config` to `true`, respectively.
+To create different types of knowledge bases, set the appropriate variable to `true`:
+
+- OpenSearch Serverless: `create_default_kb = true`
+- Neptune Analytics: `create_neptune_analytics_config = true`
+- MongoDB Atlas: `create_mongo_config = true`
+- Pinecone: `create_pinecone_config = true`
+- RDS: `create_rds_config = true`
+
+#### Advanced Vector Knowledge Base Features
+
+This module supports advanced vector knowledge base features:
+
+- **Embedding Model Configuration**: Fine-tune your embedding model settings with:
+  - `embedding_model_dimensions`: Specify vector dimensions explicitly
+  - `embedding_data_type`: Define the data type for vectors
+
+- **Supplemental Data Storage**: Store additional data alongside vector embeddings:
+  - `create_supplemental_data_storage = true`
+  - `supplemental_data_s3_uri`: S3 URI for supplemental data storage
 
 Example default Opensearch Serverless Agent with Knowledge Base:
 
@@ -124,6 +150,31 @@ module "bedrock" {
   create_s3_data_source = true
   foundation_model = "anthropic.claude-v2"
   instruction = "You are an automotive assisant who can provide detailed information about cars to a customer."
+}
+```
+
+Example using Neptune Analytics with advanced features:
+
+```hcl
+module "bedrock" {
+  source  = "aws-ia/bedrock/aws"
+  version = "0.0.20"
+
+  # Create Neptune Analytics knowledge base
+  create_neptune_analytics_config = true
+  graph_arn = "arn:aws:neptune-graph:us-east-1:123456789012:graph/my-graph"
+
+  # Advanced embedding model configuration
+  embedding_model_dimensions = 1024
+  embedding_data_type = "FLOAT32"
+
+  # Supplemental data storage
+  create_supplemental_data_storage = true
+  supplemental_data_s3_uri = "s3://my-bucket/supplemental-data/"
+
+  # Agent configuration
+  foundation_model = "anthropic.claude-3-sonnet-20240229-v1:0"
+  instruction = "You are a graph database expert who can analyze relationships in data."
 }
 ```
 
@@ -601,6 +652,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | [awscc_bedrock_knowledge_base.knowledge_base_default](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_kendra](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_mongo](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
+| [awscc_bedrock_knowledge_base.knowledge_base_neptune_analytics](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_opensearch](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_pinecone](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
 | [awscc_bedrock_knowledge_base.knowledge_base_rds](https://registry.terraform.io/providers/hashicorp/awscc/1.35.0/docs/resources/bedrock_knowledge_base) | resource |
@@ -708,6 +760,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_create_kendra_config"></a> [create\_kendra\_config](#input\_create\_kendra\_config) | Whether or not to create a Kendra GenAI knowledge base. | `bool` | `false` | no |
 | <a name="input_create_kendra_s3_data_source"></a> [create\_kendra\_s3\_data\_source](#input\_create\_kendra\_s3\_data\_source) | Whether or not to create a Kendra S3 data source. | `bool` | `false` | no |
 | <a name="input_create_mongo_config"></a> [create\_mongo\_config](#input\_create\_mongo\_config) | Whether or not to use MongoDB Atlas configuration | `bool` | `false` | no |
+| <a name="input_create_neptune_analytics_config"></a> [create\_neptune\_analytics\_config](#input\_create\_neptune\_analytics\_config) | Whether or not to use Neptune Analytics configuration | `bool` | `false` | no |
 | <a name="input_create_opensearch_config"></a> [create\_opensearch\_config](#input\_create\_opensearch\_config) | Whether or not to use Opensearch Serverless configuration | `bool` | `false` | no |
 | <a name="input_create_parsing_configuration"></a> [create\_parsing\_configuration](#input\_create\_parsing\_configuration) | Whether or not to create a parsing configuration. | `bool` | `false` | no |
 | <a name="input_create_pinecone_config"></a> [create\_pinecone\_config](#input\_create\_pinecone\_config) | Whether or not to use Pinecone configuration | `bool` | `false` | no |
@@ -720,10 +773,12 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_create_sql_config"></a> [create\_sql\_config](#input\_create\_sql\_config) | Whether or not to create a SQL knowledge base. | `bool` | `false` | no |
 | <a name="input_create_supervisor"></a> [create\_supervisor](#input\_create\_supervisor) | Whether or not to create an agent supervisor. | `bool` | `false` | no |
 | <a name="input_create_supervisor_guardrail"></a> [create\_supervisor\_guardrail](#input\_create\_supervisor\_guardrail) | Whether or not to create a guardrail for the supervisor agent. | `bool` | `false` | no |
+| <a name="input_create_supplemental_data_storage"></a> [create\_supplemental\_data\_storage](#input\_create\_supplemental\_data\_storage) | Whether or not to create supplemental data storage configuration. | `bool` | `false` | no |
 | <a name="input_create_vector_ingestion_configuration"></a> [create\_vector\_ingestion\_configuration](#input\_create\_vector\_ingestion\_configuration) | Whether or not to create a vector ingestion configuration. | `bool` | `false` | no |
 | <a name="input_create_web_crawler"></a> [create\_web\_crawler](#input\_create\_web\_crawler) | Whether or not create a web crawler data source. | `bool` | `false` | no |
 | <a name="input_credentials_secret_arn"></a> [credentials\_secret\_arn](#input\_credentials\_secret\_arn) | The ARN of the secret in Secrets Manager that is linked to your database | `string` | `null` | no |
 | <a name="input_custom_control"></a> [custom\_control](#input\_custom\_control) | Custom control of action execution. | `string` | `null` | no |
+| <a name="input_custom_metadata_field"></a> [custom\_metadata\_field](#input\_custom\_metadata\_field) | The name of the field in which Amazon Bedrock stores custom metadata about the vector store. | `string` | `null` | no |
 | <a name="input_custom_model_hyperparameters"></a> [custom\_model\_hyperparameters](#input\_custom\_model\_hyperparameters) | Parameters related to tuning the custom model. | `map(string)` | <pre>{<br>  "batchSize": "1",<br>  "epochCount": "2",<br>  "learningRate": "0.00001",<br>  "learningRateWarmupSteps": "10"<br>}</pre> | no |
 | <a name="input_custom_model_id"></a> [custom\_model\_id](#input\_custom\_model\_id) | The base model id for a custom model. | `string` | `"amazon.titan-text-express-v1"` | no |
 | <a name="input_custom_model_job_name"></a> [custom\_model\_job\_name](#input\_custom\_model\_job\_name) | A name for the model customization job. | `string` | `"custom-model-job"` | no |
@@ -737,6 +792,8 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_database_name"></a> [database\_name](#input\_database\_name) | Name of the database. | `string` | `null` | no |
 | <a name="input_default_variant"></a> [default\_variant](#input\_default\_variant) | Name for a variant. | `string` | `null` | no |
 | <a name="input_document_metadata_configurations"></a> [document\_metadata\_configurations](#input\_document\_metadata\_configurations) | List of document metadata configurations for Kendra. | <pre>list(object({<br>    name = optional(string)<br>    type = optional(string)<br>    search = optional(object({<br>      facetable = optional(bool)<br>      searchable = optional(bool)<br>      displayable = optional(bool)<br>      sortable = optional(bool)<br>    }))<br>    relevance = optional(object({<br>      duration = optional(string)<br>      freshness = optional(bool)<br>      importance = optional(number)<br>      rank_order = optional(string)<br>      value_importance_items = optional(list(object({<br>        key = optional(string)<br>        value = optional(number)<br>      }))) <br>    }))<br>  }))</pre> | `null` | no |
+| <a name="input_embedding_data_type"></a> [embedding\_data\_type](#input\_embedding\_data\_type) | The data type for the vectors when using a model to convert text into vector embeddings. | `string` | `null` | no |
+| <a name="input_embedding_model_dimensions"></a> [embedding\_model\_dimensions](#input\_embedding\_model\_dimensions) | The dimensions details for the vector configuration used on the Bedrock embeddings model. | `number` | `null` | no |
 | <a name="input_endpoint"></a> [endpoint](#input\_endpoint) | Database endpoint | `string` | `null` | no |
 | <a name="input_endpoint_service_name"></a> [endpoint\_service\_name](#input\_endpoint\_service\_name) | MongoDB Atlas endpoint service name. | `string` | `null` | no |
 | <a name="input_exclusion_filters"></a> [exclusion\_filters](#input\_exclusion\_filters) | A set of regular expression filter patterns for a type of object. | `list(string)` | `[]` | no |
@@ -748,6 +805,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_flow_version"></a> [flow\_version](#input\_flow\_version) | Version of the flow. | `string` | `null` | no |
 | <a name="input_flow_version_description"></a> [flow\_version\_description](#input\_flow\_version\_description) | A description of flow version. | `string` | `null` | no |
 | <a name="input_foundation_model"></a> [foundation\_model](#input\_foundation\_model) | The foundation model for the Bedrock agent. | `string` | `null` | no |
+| <a name="input_graph_arn"></a> [graph\_arn](#input\_graph\_arn) | ARN for Neptune Analytics graph database. | `string` | `null` | no |
 | <a name="input_guardrail_description"></a> [guardrail\_description](#input\_guardrail\_description) | Description of the guardrail. | `string` | `null` | no |
 | <a name="input_guardrail_kms_key_arn"></a> [guardrail\_kms\_key\_arn](#input\_guardrail\_kms\_key\_arn) | KMS encryption key to use for the guardrail. | `string` | `null` | no |
 | <a name="input_guardrail_name"></a> [guardrail\_name](#input\_guardrail\_name) | The name of the guardrail. | `string` | `"TerraformBedrockGuardrail"` | no |
@@ -790,7 +848,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_level_configurations_list"></a> [level\_configurations\_list](#input\_level\_configurations\_list) | Token settings for each layer. | `list(object({ max_tokens = number }))` | `null` | no |
 | <a name="input_managed_word_lists_config"></a> [managed\_word\_lists\_config](#input\_managed\_word\_lists\_config) | A config for the list of managed words. | `list(map(string))` | `null` | no |
 | <a name="input_max_length"></a> [max\_length](#input\_max\_length) | The maximum number of tokens to generate in the response. | `number` | `0` | no |
-| <a name="input_memory_configuration"></a> [memory\_configuration](#input\_memory\_configuration) | Configuration for agent memory storage | <pre>object({<br>      enabled_memory_types = optional(list(string))<br>      session_summary_configuration = optional(object({<br>        max_recent_sessions = optional(number)<br>      }))<br>      storage_date = optional(number)<br>  })</pre> | `null` | no |
+| <a name="input_memory_configuration"></a> [memory\_configuration](#input\_memory\_configuration) | Configuration for agent memory storage | <pre>object({<br>      enabled_memory_types = optional(list(string))<br>      session_summary_configuration = optional(object({<br>        max_recent_sessions = optional(number)<br>      }))<br>      storage_days = optional(number)<br>  })</pre> | `null` | no |
 | <a name="input_metadata_field"></a> [metadata\_field](#input\_metadata\_field) | The name of the field in which Amazon Bedrock stores metadata about the vector store. | `string` | `"AMAZON_BEDROCK_METADATA"` | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | This value is appended at the beginning of resource names. | `string` | `"BedrockAgents"` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The namespace to be used to write new data to your pinecone database | `string` | `null` | no |
@@ -849,11 +907,13 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_supervisor_kms_key_arn"></a> [supervisor\_kms\_key\_arn](#input\_supervisor\_kms\_key\_arn) | KMS encryption key to use for the supervisor agent. | `string` | `null` | no |
 | <a name="input_supervisor_model"></a> [supervisor\_model](#input\_supervisor\_model) | The foundation model for the Bedrock supervisor agent. | `string` | `null` | no |
 | <a name="input_supervisor_name"></a> [supervisor\_name](#input\_supervisor\_name) | The name of the supervisor. | `string` | `"TerraformBedrockAgentSupervisor"` | no |
+| <a name="input_supplemental_data_s3_uri"></a> [supplemental\_data\_s3\_uri](#input\_supplemental\_data\_s3\_uri) | The S3 URI for supplemental data storage. | `string` | `null` | no |
 | <a name="input_table_name"></a> [table\_name](#input\_table\_name) | The name of the table in the database. | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tag bedrock agent resource. | `map(string)` | `null` | no |
 | <a name="input_temperature"></a> [temperature](#input\_temperature) | The likelihood of the model selecting higher-probability options while generating a response. | `number` | `0` | no |
 | <a name="input_tenant_id"></a> [tenant\_id](#input\_tenant\_id) | The identifier of your Microsoft 365 tenant. | `string` | `null` | no |
 | <a name="input_text_field"></a> [text\_field](#input\_text\_field) | The name of the field in which Amazon Bedrock stores the raw text from your data. | `string` | `"AMAZON_BEDROCK_TEXT_CHUNK"` | no |
+| <a name="input_text_index_name"></a> [text\_index\_name](#input\_text\_index\_name) | Name of a MongoDB Atlas text index. | `string` | `null` | no |
 | <a name="input_top_k"></a> [top\_k](#input\_top\_k) | Sample from the k most likely next tokens. | `number` | `50` | no |
 | <a name="input_top_p"></a> [top\_p](#input\_top\_p) | Cumulative probability cutoff for token selection. | `number` | `0.5` | no |
 | <a name="input_topics_config"></a> [topics\_config](#input\_topics\_config) | List of topic configs in topic policy | <pre>list(object({<br>    name       = string<br>    examples   = list(string)<br>    type       = string<br>    definition = string<br>  }))</pre> | `null` | no |

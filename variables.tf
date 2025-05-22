@@ -335,7 +335,7 @@ variable "memory_configuration" {
       session_summary_configuration = optional(object({
         max_recent_sessions = optional(number)
       }))
-      storage_date = optional(number)
+      storage_days = optional(number)
   })
   default    = null
 }
@@ -1778,6 +1778,59 @@ variable "permissions_boundary_arn" {
 
 variable "agent_resource_role_arn" {
   description = "Optional external IAM role ARN for the Bedrock agent resource role. If empty, the module will create one internally."
+  type        = string
+  default     = null
+}
+
+# – MongoDB Atlas Configuration –
+variable "text_index_name" {
+  description = "Name of a MongoDB Atlas text index."
+  type        = string
+  default     = null
+}
+
+# – Neptune Analytics Configuration –
+variable "create_neptune_analytics_config" {
+  description = "Whether or not to use Neptune Analytics configuration"
+  type        = bool
+  default     = false
+}
+
+variable "graph_arn" {
+  description = "ARN for Neptune Analytics graph database."
+  type        = string
+  default     = null
+}
+
+# – RDS Configuration –
+variable "custom_metadata_field" {
+  description = "The name of the field in which Amazon Bedrock stores custom metadata about the vector store."
+  type        = string
+  default     = null
+}
+
+# – Vector Knowledge Base Configuration –
+variable "embedding_model_dimensions" {
+  description = "The dimensions details for the vector configuration used on the Bedrock embeddings model."
+  type        = number
+  default     = null
+}
+
+variable "embedding_data_type" {
+  description = "The data type for the vectors when using a model to convert text into vector embeddings."
+  type        = string
+  default     = null
+}
+
+# – Supplemental Data Storage Configuration –
+variable "create_supplemental_data_storage" {
+  description = "Whether or not to create supplemental data storage configuration."
+  type        = bool
+  default     = false
+}
+
+variable "supplemental_data_s3_uri" {
+  description = "The S3 URI for supplemental data storage."
   type        = string
   default     = null
 }
