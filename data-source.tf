@@ -67,9 +67,10 @@ resource "awscc_s3_bucket" "s3_data_source" {
 }
 
 resource "awscc_bedrock_data_source" "knowledge_base_ds" {
-  count             = var.create_s3_data_source ? 1 : 0
-  knowledge_base_id = var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : var.existing_kb
-  name              = "${random_string.solution_prefix.result}-${var.kb_name}DataSource"
+  count                = var.create_s3_data_source ? 1 : 0
+  knowledge_base_id    = var.create_default_kb ? awscc_bedrock_knowledge_base.knowledge_base_default[0].id : var.existing_kb
+  name                 = "${random_string.solution_prefix.result}-${var.kb_name}DataSource"
+  data_deletion_policy = var.data_deletion_policy
   data_source_configuration = {
     type = "S3"
     s3_configuration = {
