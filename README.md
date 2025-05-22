@@ -753,6 +753,7 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_create_custom_model"></a> [create\_custom\_model](#input\_create\_custom\_model) | Whether or not to create a custom model. | `bool` | `false` | no |
 | <a name="input_create_custom_tranformation_config"></a> [create\_custom\_tranformation\_config](#input\_create\_custom\_tranformation\_config) | Whether or not to create a custom transformation configuration. | `bool` | `false` | no |
 | <a name="input_create_default_kb"></a> [create\_default\_kb](#input\_create\_default\_kb) | Whether or not to create the default knowledge base. | `bool` | `false` | no |
+| <a name="input_data_deletion_policy"></a> [data_deletion_policy](#input_data_deletion_policy) | Policy for deleting data from the data source. Can be either DELETE or RETAIN. | `string` | `"DELETE"` | no |
 | <a name="input_create_flow_alias"></a> [create\_flow\_alias](#input\_create\_flow\_alias) | Whether or not to create a flow alias resource. | `bool` | `false` | no |
 | <a name="input_create_guardrail"></a> [create\_guardrail](#input\_create\_guardrail) | Whether or not to create a guardrail. | `bool` | `false` | no |
 | <a name="input_create_kb"></a> [create\_kb](#input\_create\_kb) | Whether or not to attach a knowledge base. | `bool` | `false` | no |
