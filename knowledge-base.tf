@@ -21,6 +21,22 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_default" {
     type = "VECTOR"
     vector_knowledge_base_configuration = {
       embedding_model_arn = var.kb_embedding_model_arn
+      embedding_model_configuration = var.embedding_model_dimensions != null ? {
+        bedrock_embedding_model_configuration = {
+          dimensions = var.embedding_model_dimensions
+          embedding_data_type = var.embedding_data_type
+        }
+      } : null
+      supplemental_data_storage_configuration = var.create_supplemental_data_storage ? {
+        supplemental_data_storage_locations = [
+          {
+            supplemental_data_storage_location_type = "S3"
+            s3_location = {
+              uri = var.supplemental_data_s3_uri
+            }
+          }
+        ]
+      } : null
     }
   }
   depends_on = [ time_sleep.wait_after_index_creation ]
@@ -45,6 +61,7 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_mongo" {
       database_name          = var.database_name
       endpoint               = var.endpoint
       vector_index_name      = var.vector_index_name
+      text_index_name        = var.text_index_name
       field_mapping = {
         metadata_field = var.metadata_field
         text_field     = var.text_field
@@ -57,11 +74,27 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_mongo" {
     type = var.kb_type
     vector_knowledge_base_configuration = {
       embedding_model_arn = var.kb_embedding_model_arn
+      embedding_model_configuration = var.embedding_model_dimensions != null ? {
+        bedrock_embedding_model_configuration = {
+          dimensions = var.embedding_model_dimensions
+          embedding_data_type = var.embedding_data_type
+        }
+      } : null
+      supplemental_data_storage_configuration = var.create_supplemental_data_storage ? {
+        supplemental_data_storage_locations = [
+          {
+            supplemental_data_storage_location_type = "S3"
+            s3_location = {
+              uri = var.supplemental_data_s3_uri
+            }
+          }
+        ]
+      } : null
     }
   }
 }
 
-# – OpenSearch –
+# – OpenSearch Serverless –
 resource "awscc_bedrock_knowledge_base" "knowledge_base_opensearch" {
   count       = var.create_opensearch_config ? 1 : 0
   name        = "${random_string.solution_prefix.result}-${var.kb_name}"
@@ -85,6 +118,64 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_opensearch" {
     type = var.kb_type
     vector_knowledge_base_configuration = {
       embedding_model_arn = var.kb_embedding_model_arn
+      embedding_model_configuration = var.embedding_model_dimensions != null ? {
+        bedrock_embedding_model_configuration = {
+          dimensions = var.embedding_model_dimensions
+          embedding_data_type = var.embedding_data_type
+        }
+      } : null
+      supplemental_data_storage_configuration = var.create_supplemental_data_storage ? {
+        supplemental_data_storage_locations = [
+          {
+            supplemental_data_storage_location_type = "S3"
+            s3_location = {
+              uri = var.supplemental_data_s3_uri
+            }
+          }
+        ]
+      } : null
+    }
+  }
+}
+
+# – Neptune Analytics –
+resource "awscc_bedrock_knowledge_base" "knowledge_base_neptune_analytics" {
+  count       = var.create_neptune_analytics_config ? 1 : 0
+  name        = "${random_string.solution_prefix.result}-${var.kb_name}"
+  description = var.kb_description
+  role_arn    = var.kb_role_arn != null ? var.kb_role_arn : aws_iam_role.bedrock_knowledge_base_role[0].arn
+  tags        = var.kb_tags
+
+  storage_configuration = {
+    type = "NEPTUNE_ANALYTICS"
+    neptune_analytics_configuration = {
+      graph_arn = var.graph_arn
+      field_mapping = {
+        metadata_field = var.metadata_field
+        text_field     = var.text_field
+      }
+    }
+  }
+  knowledge_base_configuration = {
+    type = var.kb_type
+    vector_knowledge_base_configuration = {
+      embedding_model_arn = var.kb_embedding_model_arn
+      embedding_model_configuration = var.embedding_model_dimensions != null ? {
+        bedrock_embedding_model_configuration = {
+          dimensions = var.embedding_model_dimensions
+          embedding_data_type = var.embedding_data_type
+        }
+      } : null
+      supplemental_data_storage_configuration = var.create_supplemental_data_storage ? {
+        supplemental_data_storage_locations = [
+          {
+            supplemental_data_storage_location_type = "S3"
+            s3_location = {
+              uri = var.supplemental_data_s3_uri
+            }
+          }
+        ]
+      } : null
     }
   }
 }
@@ -113,6 +204,22 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_pinecone" {
     type = var.kb_type
     vector_knowledge_base_configuration = {
       embedding_model_arn = var.kb_embedding_model_arn
+      embedding_model_configuration = var.embedding_model_dimensions != null ? {
+        bedrock_embedding_model_configuration = {
+          dimensions = var.embedding_model_dimensions
+          embedding_data_type = var.embedding_data_type
+        }
+      } : null
+      supplemental_data_storage_configuration = var.create_supplemental_data_storage ? {
+        supplemental_data_storage_locations = [
+          {
+            supplemental_data_storage_location_type = "S3"
+            s3_location = {
+              uri = var.supplemental_data_s3_uri
+            }
+          }
+        ]
+      } : null
     }
   }
 }
@@ -133,10 +240,11 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_rds" {
       resource_arn           = var.resource_arn
       table_name             = var.table_name
       field_mapping = {
-        metadata_field    = var.metadata_field
-        primary_key_field = var.primary_key_field
-        text_field        = var.text_field
-        vector_field      = var.vector_field
+        metadata_field       = var.metadata_field
+        primary_key_field    = var.primary_key_field
+        text_field           = var.text_field
+        vector_field         = var.vector_field
+        custom_metadata_field = var.custom_metadata_field
       }
     }
   }
@@ -144,6 +252,22 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_rds" {
     type = var.kb_type
     vector_knowledge_base_configuration = {
       embedding_model_arn = var.kb_embedding_model_arn
+      embedding_model_configuration = var.embedding_model_dimensions != null ? {
+        bedrock_embedding_model_configuration = {
+          dimensions = var.embedding_model_dimensions
+          embedding_data_type = var.embedding_data_type
+        }
+      } : null
+      supplemental_data_storage_configuration = var.create_supplemental_data_storage ? {
+        supplemental_data_storage_locations = [
+          {
+            supplemental_data_storage_location_type = "S3"
+            s3_location = {
+              uri = var.supplemental_data_s3_uri
+            }
+          }
+        ]
+      } : null
     }
   }
 }
@@ -200,4 +324,3 @@ resource "awscc_bedrock_knowledge_base" "knowledge_base_sql" {
   }
 
 }
-
