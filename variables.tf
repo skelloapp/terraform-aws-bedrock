@@ -446,6 +446,12 @@ variable "create_default_kb" {
   default     = false
 }
 
+variable "data_deletion_policy" {
+  description = "Policy for deleting data from the data source. Can be either DELETE or RETAIN."
+  type        = string
+  default     = "DELETE"
+}
+
 # – S3 Data Source –
 
 variable "create_s3_data_source" {
