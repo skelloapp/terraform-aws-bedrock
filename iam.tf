@@ -35,7 +35,7 @@ resource "aws_iam_role_policy" "kb_policy" {
 resource "aws_iam_role_policy" "app_inference_profile_policy" {
   count  = var.create_app_inference_profile ? 1 : 0
   policy = data.aws_iam_policy_document.app_inference_profile_permission[0].json
-  role   = local.agent_role_name
+  role   = local.agent_role_name != null ? local.agent_role_name : aws_iam_role.application_inference_profile_role[0].id
 }
 
 # Define the IAM role for Amazon Bedrock Knowledge Base

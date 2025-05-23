@@ -36,6 +36,7 @@ data "aws_iam_policy_document" "agent_permissions" {
   statement {
     actions = [
       "bedrock:InvokeModel*",
+      "bedrock:UseInferenceProfile",
     ]
     resources = distinct(concat(
       var.create_app_inference_profile ? [
@@ -104,6 +105,7 @@ data "aws_iam_policy_document" "app_inference_profile_permission" {
     actions = [
       "bedrock:GetInferenceProfile",
       "bedrock:ListInferenceProfiles",
+      "bedrock:UseInferenceProfile",
     ]
     resources = [
       "arn:aws:bedrock:*:*:inference-profile/*",

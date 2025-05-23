@@ -93,3 +93,8 @@ output "knowledge_base_role_name" {
   description = "The name of the IAM role used by the knowledge base."
   value       = try(aws_iam_role.bedrock_knowledge_base_role[0].name, null)
 }
+
+output "application_inference_profile_arn" {
+  description = "The ARN of the application inference profile."
+  value       = var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : null
+}
