@@ -265,4 +265,8 @@ resource "awscc_s3_bucket" "custom_model_output" {
       }
     }]
   }
+  tags = var.custom_model_tags != null ? [for k, v in var.custom_model_tags : { key = k, value = v }] : [{
+    key   = "Name"
+    value = "${random_string.solution_prefix.result}-${var.custom_model_name}-output-bucket"
+  }]
 }
