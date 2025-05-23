@@ -60,7 +60,7 @@ resource "awscc_s3_bucket" "s3_data_source" {
     }]
   }
 
-  tags = [{
+  tags = var.kb_tags != null ? [for k, v in var.kb_tags : { key = k, value = v }] : [{
     key   = "Name"
     value = "S3 Data Source"
   }]
@@ -102,7 +102,7 @@ resource "awscc_logs_delivery_destination" "knowledge_base_log_destination" {
   name                     = "${random_string.solution_prefix.result}-${var.kb_name}-delivery-destination"
   output_format            = "json"
   destination_resource_arn = local.create_cwl ? aws_cloudwatch_log_group.knowledge_base_cwl[0].arn : var.kb_monitoring_arn
-  tags = [{
+  tags = var.kb_tags != null ? [for k, v in var.kb_tags : { key = k, value = v }] : [{
     key   = "Name"
     value = "${random_string.solution_prefix.result}-${var.kb_name}-delivery-destination"
   }]
@@ -112,7 +112,7 @@ resource "awscc_logs_delivery" "knowledge_base_log_delivery" {
   count                    = local.create_delivery ? 1 : 0
   delivery_destination_arn = awscc_logs_delivery_destination.knowledge_base_log_destination[0].arn
   delivery_source_name     = awscc_logs_delivery_source.knowledge_base_log_source[0].name
-  tags = [{
+  tags = var.kb_tags != null ? [for k, v in var.kb_tags : { key = k, value = v }] : [{
     key   = "Name"
     value = "${random_string.solution_prefix.result}-${var.kb_name}-delivery"
   }]
