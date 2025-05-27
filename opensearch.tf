@@ -8,6 +8,7 @@ module "oss_knowledgebase" {
   number_of_shards = var.number_of_shards
   number_of_replicas = var.number_of_replicas
   create_vector_index = true
+  collection_tags = var.kb_tags != null ? [for k, v in var.kb_tags : { key = k, value = v }] : []
   vector_index_mappings = <<-EOF
       {
       "properties": {
