@@ -63,7 +63,9 @@ locals {
 
 # Add a sleep after creating the inference profile to ensure it's fully available
 resource "time_sleep" "wait_for_inference_profile" {
-  count           = var.create_app_inference_profile ? 1 : 0
+  # useless in our case but still tried :
+  count           = var.use_app_inference_profile ? 1 : 0
+  # count           = var.create_app_inference_profile ? 1 : 0
   depends_on      = [awscc_bedrock_application_inference_profile.application_inference_profile[0]]
   create_duration = "5s"
 }
