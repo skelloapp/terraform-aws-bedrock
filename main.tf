@@ -68,6 +68,12 @@ resource "time_sleep" "wait_for_inference_profile" {
   create_duration = "5s"
 }
 
+resource "time_sleep" "wait_for_use_inference_profile_role_policy" {
+  count           = var.use_app_inference_profile ? 1 : 0
+  depends_on      = [aws_iam_role_policy.app_inference_profile_role_policy]
+  create_duration = "10s"
+}
+
 resource "awscc_bedrock_agent" "bedrock_agent" {
   count                       = var.create_agent ? 1 : 0
   agent_name                  = var.agent_name
@@ -77,7 +83,7 @@ resource "awscc_bedrock_agent" "bedrock_agent" {
   idle_session_ttl_in_seconds = var.idle_session_ttl
   agent_resource_role_arn     = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : aws_iam_role.agent_role[0].arn
   
-  depends_on                  = [time_sleep.wait_for_inference_profile]
+  depends_on                  = [time_sleep.wait_for_inference_profile, time_sleep.wait_for_use_inference_profile_role_policy]
 
   customer_encryption_key_arn = var.kms_key_arn
   tags                        = var.tags
@@ -170,8 +176,8 @@ resource "aws_bedrockagent_agent" "agent_supervisor" {
   #checkov:skip=CKV_AWS_383:The user can optionally associate agent with Bedrock guardrails
   guardrail_configuration = local.supervisor_guardrail
   prepare_agent               = false
-  
-  depends_on                  = [time_sleep.wait_for_inference_profile]
+
+  depends_on                  = [time_sleep.wait_for_inference_profile, time_sleep.wait_for_use_inference_profile_role_policy]
 }
 
 # – Guardrail –
