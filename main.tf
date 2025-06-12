@@ -63,9 +63,7 @@ locals {
 
 # Add a sleep after creating the inference profile to ensure it's fully available
 resource "time_sleep" "wait_for_inference_profile" {
-  # useless in our case but still tried :
-  count           = var.use_app_inference_profile ? 1 : 0
-  # count           = var.create_app_inference_profile ? 1 : 0
+  count           = var.create_app_inference_profile ? 1 : 0
   depends_on      = [awscc_bedrock_application_inference_profile.application_inference_profile[0]]
   create_duration = "5s"
 }
@@ -73,8 +71,7 @@ resource "time_sleep" "wait_for_inference_profile" {
 resource "awscc_bedrock_agent" "bedrock_agent" {
   count                       = var.create_agent ? 1 : 0
   agent_name                  = "${random_string.solution_prefix.result}-${var.agent_name}"
-  foundation_model            = var.use_app_inference_profile ? var.app_inference_profile_model_source : var.foundation_model
-  // var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.foundation_model
+  foundation_model            = var.use_app_inference_profile ? var.app_inference_profile_model_source : (var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.foundation_model)
   instruction                 = var.instruction
   description                 = var.agent_description
   idle_session_ttl_in_seconds = var.idle_session_ttl
@@ -167,8 +164,7 @@ resource "aws_bedrockagent_agent" "agent_supervisor" {
 
   agent_collaboration         = var.agent_collaboration
   idle_session_ttl_in_seconds = var.supervisor_idle_session_ttl
-  foundation_model            = var.use_app_inference_profile ? var.app_inference_profile_model_source : var.foundation_model
-  // foundation_model            = var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.supervisor_model
+  foundation_model            = var.use_app_inference_profile ? var.app_inference_profile_model_source : (var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.supervisor_model)
   instruction                 = var.supervisor_instruction
   customer_encryption_key_arn = var.supervisor_kms_key_arn
   #checkov:skip=CKV_AWS_383:The user can optionally associate agent with Bedrock guardrails
