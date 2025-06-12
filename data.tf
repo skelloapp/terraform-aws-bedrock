@@ -35,16 +35,15 @@ data "aws_iam_policy_document" "agent_permissions" {
   count = var.create_agent || var.create_supervisor ? 1 : 0
   statement {
     actions = [
-      "bedrock:InvokeModel*", // FOR "bedrock:InvokeModel" and "bedrock:InvokeModelWithResponseStream",
+      "bedrock:InvokeModel*", // For "bedrock:InvokeModel" & "bedrock:InvokeModelWithResponseStream"
       "bedrock:UseInferenceProfile",
       "bedrock:GetInferenceProfile",
     ]
     resources = distinct(concat(
       var.use_app_inference_profile ? [
         var.app_inference_profile_model_source,
-        // "arn:aws:bedrock:eu-west-1:915193162015:inference-profile/eu.anthropic.claude-3-7-sonnet-20250219-v1:0",
         "arn:aws:bedrock:*:*:inference-profile/*",
-        "arn:aws:bedrock:*::foundation-model/*", // TOO BROAD, but needed 
+        "arn:aws:bedrock:*::foundation-model/*", // Too broad
         "arn:aws:bedrock:*:*:application-inference-profile/*",
       ] : [],
       var.create_app_inference_profile ? [
@@ -110,9 +109,7 @@ data "aws_iam_policy_document" "custom_model_trust" {
 }
 
 data "aws_iam_policy_document" "app_inference_profile_permission" {
-  # Is it needed ?
   count = var.create_app_inference_profile || var.use_app_inference_profile ? 1 : 0
-  # count = var.create_app_inference_profile ? 1 : 0
   statement {
     actions = [
       "bedrock:GetInferenceProfile",

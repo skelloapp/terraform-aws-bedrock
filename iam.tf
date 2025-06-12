@@ -282,7 +282,6 @@ resource "aws_iam_role" "application_inference_profile_role" {
 }
 
 resource "aws_iam_role_policy" "app_inference_profile_role_policy" {
-  # count = var.create_app_inference_profile ? 1 : 0
   count  = var.create_app_inference_profile || var.use_app_inference_profile ? 1 : 0
   policy = jsonencode({
     "Version": "2012-10-17",
