@@ -148,7 +148,7 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
   agent_id                   = var.create_supervisor ? aws_bedrockagent_agent.agent_supervisor[0].agent_id : var.supervisor_id
   collaboration_instruction  = var.collaboration_instruction
   collaborator_name          = "${random_string.solution_prefix.result}-${var.collaborator_name}"
-  relay_conversation_history = "TO_COLLABORATOR"
+  relay_conversation_history = var.relay_conversation_history
 
   agent_descriptor {
     alias_arn = local.bedrock_agent_alias[0].agent_alias_arn
