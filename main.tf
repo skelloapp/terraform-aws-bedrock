@@ -68,16 +68,22 @@ resource "time_sleep" "wait_for_inference_profile" {
   create_duration = "5s"
 }
 
+resource "time_sleep" "wait_for_use_inference_profile_role_policy" {
+  count           = var.use_app_inference_profile ? 1 : 0
+  depends_on      = [aws_iam_role_policy.app_inference_profile_role_policy]
+  create_duration = "10s"
+}
+
 resource "awscc_bedrock_agent" "bedrock_agent" {
   count                       = var.create_agent ? 1 : 0
-  agent_name                  = "${random_string.solution_prefix.result}-${var.agent_name}"
-  foundation_model            = var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.foundation_model
+  agent_name                  = var.agent_name
+  foundation_model            = var.use_app_inference_profile ? var.app_inference_profile_model_source : (var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.foundation_model)
   instruction                 = var.instruction
   description                 = var.agent_description
   idle_session_ttl_in_seconds = var.idle_session_ttl
   agent_resource_role_arn     = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : aws_iam_role.agent_role[0].arn
   
-  depends_on                  = [time_sleep.wait_for_inference_profile]
+  depends_on                  = [time_sleep.wait_for_inference_profile, time_sleep.wait_for_use_inference_profile_role_policy]
 
   customer_encryption_key_arn = var.kms_key_arn
   tags                        = var.tags
@@ -147,7 +153,7 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
   count                      = local.counter_collaborator    
   agent_id                   = var.create_supervisor ? aws_bedrockagent_agent.agent_supervisor[0].agent_id : var.supervisor_id
   collaboration_instruction  = var.collaboration_instruction
-  collaborator_name          = "${random_string.solution_prefix.result}-${var.collaborator_name}"
+  collaborator_name          = var.collaborator_name
   relay_conversation_history = var.relay_conversation_history
 
   agent_descriptor {
@@ -159,26 +165,26 @@ resource "aws_bedrockagent_agent_collaborator" "agent_collaborator" {
 
 resource "aws_bedrockagent_agent" "agent_supervisor" {
   count                       = var.create_supervisor ? 1 : 0
-  agent_name                  = "${random_string.solution_prefix.result}-${var.supervisor_name}"
+  agent_name                  = var.supervisor_name
   agent_resource_role_arn     = var.agent_resource_role_arn != null ? var.agent_resource_role_arn : aws_iam_role.agent_role[0].arn
 
   agent_collaboration         = var.agent_collaboration
   idle_session_ttl_in_seconds = var.supervisor_idle_session_ttl
-  foundation_model            = var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.supervisor_model
+  foundation_model            = var.use_app_inference_profile ? var.app_inference_profile_model_source : (var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.supervisor_model)
   instruction                 = var.supervisor_instruction
   customer_encryption_key_arn = var.supervisor_kms_key_arn
   #checkov:skip=CKV_AWS_383:The user can optionally associate agent with Bedrock guardrails
   guardrail_configuration = local.supervisor_guardrail
   prepare_agent               = false
-  
-  depends_on                  = [time_sleep.wait_for_inference_profile]
+
+  depends_on                  = [time_sleep.wait_for_inference_profile, time_sleep.wait_for_use_inference_profile_role_policy]
 }
 
 # – Guardrail –
 
 resource "awscc_bedrock_guardrail" "guardrail" {
   count                     = var.create_guardrail ? 1 : 0
-  name                      = "${random_string.solution_prefix.result}-${var.guardrail_name}"
+  name                      = var.guardrail_name
   blocked_input_messaging   = var.blocked_input_messaging
   blocked_outputs_messaging = var.blocked_outputs_messaging
   description               = var.guardrail_description
