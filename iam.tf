@@ -217,7 +217,7 @@ resource "aws_iam_role_policy" "guardrail_policy" {
 }
 
 resource "aws_iam_role_policy" "guardrail_policy_supervisor_agent" {
-  count = var.create_collaborator && var.create_supervisor_guardrail ? 1 : 0 
+  count = var.create_supervisor && var.create_supervisor_guardrail ? 1 : 0 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

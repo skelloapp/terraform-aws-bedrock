@@ -55,10 +55,10 @@ locals {
 
   counter_collaborator = var.create_agent && var.create_agent_alias && var.create_collaborator ? 1 : 0
 
-  supervisor_guardrail = var.create_supervisor_guardrail == false || local.counter_collaborator == 0 ? null : [{
-    guardrail_identifier = var.supervisor_guardrail_id
-    guardrail_version    = var.supervisor_guardrail_version
-  }]
+  # supervisor_guardrail = var.create_supervisor_guardrail == false ? null : [{
+  #   guardrail_identifier = var.supervisor_guardrail_id
+  #   guardrail_version    = var.supervisor_guardrail_version
+  # }]
 }
 
 # Add a sleep after creating the inference profile to ensure it's fully available
@@ -173,8 +173,10 @@ resource "aws_bedrockagent_agent" "agent_supervisor" {
   foundation_model            = var.use_app_inference_profile ? var.app_inference_profile_model_source : (var.create_app_inference_profile ? awscc_bedrock_application_inference_profile.application_inference_profile[0].inference_profile_arn : var.supervisor_model)
   instruction                 = var.supervisor_instruction
   customer_encryption_key_arn = var.supervisor_kms_key_arn
-  #checkov:skip=CKV_AWS_383:The user can optionally associate agent with Bedrock guardrails
-  guardrail_configuration = local.supervisor_guardrail
+  guardrail_configuration = var.create_supervisor_guardrail == false ? null : [ {
+    guardrail_identifier = awscc_bedrock_guardrail.guardrail[0].id
+    guardrail_version    = awscc_bedrock_guardrail_version.guardrail[0].version
+  }]
   prepare_agent               = false
 
   depends_on                  = [time_sleep.wait_for_inference_profile, time_sleep.wait_for_use_inference_profile_role_policy]
@@ -183,7 +185,7 @@ resource "aws_bedrockagent_agent" "agent_supervisor" {
 # – Guardrail –
 
 resource "awscc_bedrock_guardrail" "guardrail" {
-  count                     = var.create_guardrail ? 1 : 0
+  count                     = var.create_guardrail || var.create_supervisor_guardrail ? 1 : 0
   name                      = "${random_string.solution_prefix.result}-${var.guardrail_name}"
   blocked_input_messaging   = var.blocked_input_messaging
   blocked_outputs_messaging = var.blocked_outputs_messaging
@@ -208,7 +210,7 @@ resource "awscc_bedrock_guardrail" "guardrail" {
 }
 
 resource "awscc_bedrock_guardrail_version" "guardrail" {
-  count                = var.create_guardrail ? 1 : 0
+  count                = var.create_guardrail || var.create_supervisor_guardrail ? 1 : 0
   guardrail_identifier = awscc_bedrock_guardrail.guardrail[0].guardrail_id
   description          = "Guardrail version"
 }
