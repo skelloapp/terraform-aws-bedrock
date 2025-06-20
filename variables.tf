@@ -250,6 +250,12 @@ variable "collaborator_name" {
   default     = "TerraformBedrockAgentCollaborator"
 }
 
+variable "relay_conversation_history" {
+  description = "Relay conversation history setting will share conversation history to collaborator if enabled."
+  type        = string
+  default     = "TO_COLLABORATOR" # TO_COLLABORATOR or DISABLED
+}
+
 variable "create_supervisor" {
   description = "Whether or not to create an agent supervisor."
   type        = bool
