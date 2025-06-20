@@ -1130,6 +1130,12 @@ variable "create_app_inference_profile" {
   default     = false
 }
 
+variable "use_app_inference_profile" {
+  description = "Whether or not to attach to the app_inference_profile_model_source."
+  type        = bool
+  default     = false
+}
+
 variable "app_inference_profile_name" {
   description = "The name of your application inference profile."
   type        = string
