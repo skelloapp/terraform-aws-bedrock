@@ -384,8 +384,8 @@ variable "filters_config" {
   default     = null
 }
 
-variable "contextual_grounding_policy_config" {
-  description = "The contextual grounding policy config for the guardrail."
+variable "contextual_grounding_policy_filters_config" {
+  description = "The contextual grounding policy filters config for the guardrail."
   type        = list(map(string))
   default     = null
 }
