@@ -386,14 +386,8 @@ variable "filters_config" {
 
 variable "contextual_grounding_policy_config" {
   description = "The contextual grounding policy config for the guardrail."
-  type = object({
-    filters_config = list(object({
-      threshold = number
-      type      = string
-      action    = string
-    }))
-  })
-  default = null
+  type        = list(map(string))
+  default     = null
 }
 
 variable "pii_entities_config" {
