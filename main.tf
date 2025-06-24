@@ -180,7 +180,7 @@ resource "aws_bedrockagent_agent" "agent_supervisor" {
   depends_on = [time_sleep.wait_for_inference_profile, time_sleep.wait_for_use_inference_profile_role_policy]
 }
 
-# – Guardrail –
+# – Guardrail –
 
 resource "awscc_bedrock_guardrail" "guardrail" {
   count                     = var.create_guardrail ? 1 : 0
@@ -191,9 +191,9 @@ resource "awscc_bedrock_guardrail" "guardrail" {
   content_policy_config = {
     filters_config = var.filters_config
   }
-  contextual_grounding_policy_config = {
-    filters_config = var.contextual_grounding_policy_config
-  }
+  contextual_grounding_policy_config = var.contextual_grounding_policy_config != null ? {
+    filters_config = var.contextual_grounding_policy_config.filters_config
+  } : null
   sensitive_information_policy_config = {
     pii_entities_config = var.pii_entities_config
     regexes_config      = var.regexes_config
