@@ -22,7 +22,7 @@ locals {
   counter_action_group = var.create_ag ? [1] : []
   action_group_value = {
     action_group_name                    = var.action_group_name
-    description                          = var.action_group_description
+    description                          = var.parent_action_group_signature != null ? null : var.action_group_description
     action_group_state                   = var.action_group_state
     parent_action_group_signature        = var.parent_action_group_signature
     skip_resource_in_use_check_on_delete = var.skip_resource_in_use
@@ -48,7 +48,10 @@ locals {
   } : {}
 
   # Extract values from the sorted map (Terraform maps are sorted by keys)
-  sorted_action_groups = [for k, v in local.action_group_map : v]
+  # Also handle the description/parent_action_group_signature conflict
+  sorted_action_groups = [for k, v in local.action_group_map : merge(v, {
+    description = try(v.parent_action_group_signature, null) != null ? null : try(v.description, null)
+  })]
 
   # Combine action groups with consistent ordering
   action_group_list = concat(local.action_group_result, local.sorted_action_groups)
@@ -191,9 +194,9 @@ resource "awscc_bedrock_guardrail" "guardrail" {
   content_policy_config = {
     filters_config = var.filters_config
   }
-  contextual_grounding_policy_config = {
+  contextual_grounding_policy_config = var.contextual_grounding_policy_filters_config != null ? {
     filters_config = var.contextual_grounding_policy_filters_config
-  }
+  } : null
   sensitive_information_policy_config = {
     pii_entities_config = var.pii_entities_config
     regexes_config      = var.regexes_config
