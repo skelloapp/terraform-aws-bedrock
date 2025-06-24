@@ -191,9 +191,9 @@ resource "awscc_bedrock_guardrail" "guardrail" {
   content_policy_config = {
     filters_config = var.filters_config
   }
-  contextual_grounding_policy_config = var.contextual_grounding_policy_config != null ? {
-    filters_config = var.contextual_grounding_policy_config.filters_config
-  } : null
+  contextual_grounding_policy_config = {
+    filters_config = var.contextual_grounding_policy_config
+  }
   sensitive_information_policy_config = {
     pii_entities_config = var.pii_entities_config
     regexes_config      = var.regexes_config
