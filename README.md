@@ -792,8 +792,6 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_custom_model_output_uri"></a> [custom\_model\_output\_uri](#input\_custom\_model\_output\_uri) | The S3 URI where the output data is stored for custom model. | `string` | `null` | no |
 | <a name="input_custom_model_tags"></a> [custom\_model\_tags](#input\_custom\_model\_tags) | A map of tag keys and values for the custom model. | `map(string)` | `null` | no |
 | <a name="input_custom_model_training_uri"></a> [custom\_model\_training\_uri](#input\_custom\_model\_training\_uri) | The S3 URI where the training data is stored for custom model. | `string` | `null` | no |
-| <a name="input_custom_orchestration"></a> [custom\_orchestration](#input\_custom\_orchestration) | Whether to enable custom orchestration for the agent. | `bool` | `false` | no |
-| <a name="input_custom_orchestration_lambda"></a> [custom\_orchestration\_lambda](#input\_custom\_orchestration\_lambda) | ARN of the Lambda function to use for custom orchestration. | `string` | `null` | no |
 | <a name="input_customer_encryption_key_arn"></a> [customer\_encryption\_key\_arn](#input\_customer\_encryption\_key\_arn) | A KMS key ARN. | `string` | `null` | no |
 | <a name="input_customization_type"></a> [customization\_type](#input\_customization\_type) | The customization type. Valid values: FINE\_TUNING, CONTINUED\_PRE\_TRAINING. | `string` | `"FINE_TUNING"` | no |
 | <a name="input_data_deletion_policy"></a> [data\_deletion\_policy](#input\_data\_deletion\_policy) | Policy for deleting data from the data source. Can be either DELETE or RETAIN. | `string` | `"DELETE"` | no |
@@ -813,8 +811,6 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_flow_version"></a> [flow\_version](#input\_flow\_version) | Version of the flow. | `string` | `null` | no |
 | <a name="input_flow_version_description"></a> [flow\_version\_description](#input\_flow\_version\_description) | A description of flow version. | `string` | `null` | no |
 | <a name="input_foundation_model"></a> [foundation\_model](#input\_foundation\_model) | The foundation model for the Bedrock agent. | `string` | `null` | no |
-| <a name="input_function_schema_enabled"></a> [function\_schema\_enabled](#input\_function\_schema\_enabled) | Whether to enable function schema support for action groups. | `bool` | `false` | no |
-| <a name="input_function_schema_functions"></a> [function\_schema\_functions](#input\_function\_schema\_functions) | List of function definitions for action groups when using function schema. | <pre>list(object({<br>    name                 = string<br>    description          = optional(string)<br>    require_confirmation = optional(string)<br>    parameters = optional(map(object({<br>      description = optional(string)<br>      required    = optional(bool)<br>      type        = optional(string)<br>    })))<br>  }))</pre> | `[]` | no |
 | <a name="input_graph_arn"></a> [graph\_arn](#input\_graph\_arn) | ARN for Neptune Analytics graph database. | `string` | `null` | no |
 | <a name="input_guardrail_description"></a> [guardrail\_description](#input\_guardrail\_description) | Description of the guardrail. | `string` | `null` | no |
 | <a name="input_guardrail_kms_key_arn"></a> [guardrail\_kms\_key\_arn](#input\_guardrail\_kms\_key\_arn) | KMS encryption key to use for the guardrail. | `string` | `null` | no |
@@ -858,14 +854,12 @@ See the additional input variables for deploying BDA projects and blueprints [he
 | <a name="input_level_configurations_list"></a> [level\_configurations\_list](#input\_level\_configurations\_list) | Token settings for each layer. | `list(object({ max_tokens = number }))` | `null` | no |
 | <a name="input_managed_word_lists_config"></a> [managed\_word\_lists\_config](#input\_managed\_word\_lists\_config) | A config for the list of managed words. | `list(map(string))` | `null` | no |
 | <a name="input_max_length"></a> [max\_length](#input\_max\_length) | The maximum number of tokens to generate in the response. | `number` | `0` | no |
-| <a name="input_max_recent_sessions"></a> [max\_recent\_sessions](#input\_max\_recent\_sessions) | Maximum number of recent sessions to summarize in the memory configuration. | `number` | `null` | no |
 | <a name="input_memory_configuration"></a> [memory\_configuration](#input\_memory\_configuration) | Configuration for agent memory storage | <pre>object({<br>    enabled_memory_types = optional(list(string))<br>    session_summary_configuration = optional(object({<br>      max_recent_sessions = optional(number)<br>    }))<br>    storage_days = optional(number)<br>  })</pre> | `null` | no |
 | <a name="input_metadata_field"></a> [metadata\_field](#input\_metadata\_field) | The name of the field in which Amazon Bedrock stores metadata about the vector store. | `string` | `"AMAZON_BEDROCK_METADATA"` | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | This value is appended at the beginning of resource names. | `string` | `"BedrockAgents"` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The namespace to be used to write new data to your pinecone database | `string` | `null` | no |
 | <a name="input_number_of_replicas"></a> [number\_of\_replicas](#input\_number\_of\_replicas) | The number of replica shards for the OpenSearch index. | `string` | `"1"` | no |
 | <a name="input_number_of_shards"></a> [number\_of\_shards](#input\_number\_of\_shards) | The number of shards for the OpenSearch index. This setting cannot be changed after index creation. | `string` | `"1"` | no |
-| <a name="input_orchestration_type"></a> [orchestration\_type](#input\_orchestration\_type) | The type of orchestration strategy to use for the agent. | `string` | `null` | no |
 | <a name="input_override_lambda_arn"></a> [override\_lambda\_arn](#input\_override\_lambda\_arn) | The ARN of the Lambda function to use when parsing the raw foundation model output in parts of the agent sequence. | `string` | `null` | no |
 | <a name="input_parent_action_group_signature"></a> [parent\_action\_group\_signature](#input\_parent\_action\_group\_signature) | Action group signature for a builtin action. | `string` | `null` | no |
 | <a name="input_parser_mode"></a> [parser\_mode](#input\_parser\_mode) | Specifies whether to override the default parser Lambda function. | `string` | `null` | no |
