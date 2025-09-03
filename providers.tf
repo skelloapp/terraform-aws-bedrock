@@ -7,7 +7,7 @@ terraform {
     }
     awscc = {
       source  = "hashicorp/awscc"
-      version = "= 1.36.0"
+      version = ">= 1.0.0"
     }
     time = {
       source  = "hashicorp/time"
