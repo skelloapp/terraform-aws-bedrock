@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "agent_permissions" {
   count = var.create_agent || var.create_supervisor ? 1 : 0
   statement {
     actions = [
-      "bedrock:InvokeModel*", // For "bedrock:InvokeModel" & "bedrock:InvokeModelWithResponseStream"
+      "bedrock:InvokeModel*", # For "bedrock:InvokeModel" & "bedrock:InvokeModelWithResponseStream"
       "bedrock:UseInferenceProfile",
       "bedrock:GetInferenceProfile",
     ]
@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "agent_permissions" {
       var.use_app_inference_profile ? [
         var.app_inference_profile_model_source,
         "arn:aws:bedrock:*:*:inference-profile/*",
-        "arn:aws:bedrock:*::foundation-model/*", // Too broad
+        "arn:aws:bedrock:*::foundation-model/*", # Too broad
         "arn:aws:bedrock:*:*:application-inference-profile/*",
       ] : [],
       var.create_app_inference_profile ? [
