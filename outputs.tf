@@ -84,6 +84,11 @@ output "supervisor_role_arn" {
   description = "The ARN of the Bedrock supervisor agent resource role."
 }
 
+output "guardrail_identifier" {
+  value       = var.create_guardrail || var.create_supervisor_guardrail  ? awscc_bedrock_guardrail.guardrail[0].guardrail_id : null
+  description = "The identifier of the Bedrock Guardrail."
+}
+
 output "custom_model" {
   value       = var.create_custom_model ? aws_bedrock_custom_model.custom_model[0] : null
   description = "The custom model. If no custom model was requested, value will be null."
